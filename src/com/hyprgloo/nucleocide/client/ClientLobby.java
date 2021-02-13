@@ -6,10 +6,14 @@ public class ClientLobby {
 	
 	public ClientLobby(){
 		game = new ClientGame();
+		
+		// TODO (os_reboot)
 	}
 	
 	public void update(float delta){
 		game.update(delta);
+		
+		// TODO (os_reboot)
 	}
 	
 }

@@ -5,6 +5,6 @@ import java.io.Serializable;
 public class World implements Serializable{
 	private static final long serialVersionUID = -3935483448512019767L;
 
-	// TODO
+	// TODO represent the world data structure here (garrick)
 	
 }

@@ -4,6 +4,6 @@ import com.hyprgloo.nucleocide.common.World;
 
 public abstract class ServerEnemy {
 	
-	public abstract void update(float delta, World world);
+	public abstract void update(float delta, World world); // TODO extend this class and implement basic AI (???)
 
 }

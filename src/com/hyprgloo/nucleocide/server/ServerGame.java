@@ -11,9 +11,9 @@ public class ServerGame {
 	private ArrayList<ServerEnemy> enemies;
 	
 	public ServerGame(){
-		world = WorldGenerator.generate(""); // TODO
+		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		
-		enemies = new ArrayList<>(); // TODO
+		enemies = new ArrayList<>(); // TODO spawn enemies somehow (???)
 	}
 	
 	public void update(float delta){

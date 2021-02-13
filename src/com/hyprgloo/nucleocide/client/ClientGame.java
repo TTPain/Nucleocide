@@ -9,18 +9,18 @@ public class ClientGame {
 	private ClientPlayer player;
 	
 	public ClientGame(){
-		world = WorldGenerator.generate(""); // TODO
+		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		player = new ClientPlayer();
 		
-		// TODO
+		// TODO initialize the client game state here (basset)
 	}
 	
 	public void update(float delta){
-		// TODO
+		// TODO update the client game / client networking here (basset)
 		
 		player.update(delta, world);
 		
-		// TODO
+		// TODO update the client game / client networking here (basset)
 	}
 	
 }
