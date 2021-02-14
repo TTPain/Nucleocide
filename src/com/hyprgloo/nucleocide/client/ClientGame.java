@@ -11,7 +11,7 @@ public class ClientGame {
 	
 	public ClientGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
-		player = new ClientPlayer();
+		player = new ClientPlayer(0, 0, 1);
 		
 		//public PacketPlayerStatus = new PacketPlayerStatus(player.getxPos(), player.playeryPos());
 		
