@@ -21,13 +21,10 @@ public class ClientGame {
 	
 	public ClientBullet initialBullet = new ClientBullet(new HvlCoord());
 	
-	public void initialize() {
-		bulletTotal.add(initialBullet);
-	}
-	
 	public ClientGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		player = new ClientPlayer(new HvlCoord(), 1);
+		bulletTotal.add(initialBullet);
 		// TODO initialize the client game state here (basset)
 	}
 	
