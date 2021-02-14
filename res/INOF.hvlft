@@ -50,7 +50,7 @@
         "key" : "scale",
         "typeName" : "java.lang.Float"
       },
-      1.0
+      0.125
     ],
     [
       {
