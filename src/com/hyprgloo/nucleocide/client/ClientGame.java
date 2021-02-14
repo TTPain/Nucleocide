@@ -13,7 +13,7 @@ import com.osreboot.ridhvl2.HvlCoord;
  */
 public class ClientGame {
 	
-	public static final String KEY_CLIENT = "game.playerstatus";
+	public static final String KEY_CLIENT_STATUS = "game.playerstatus";
 	private World world;
 	private ClientPlayer player;
 	
@@ -34,7 +34,7 @@ public class ClientGame {
 		for(ClientBullet b: bulletTotal) {
 			b.update(delta);
 		}
-		HvlDirect.writeUDP(KEY_CLIENT, new PacketPlayerStatus(player.playerPos, player.health));		
+		HvlDirect.writeUDP(KEY_CLIENT_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
 	}
 	

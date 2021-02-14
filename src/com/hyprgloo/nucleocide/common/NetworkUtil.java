@@ -14,4 +14,7 @@ public class NetworkUtil {
 	
 	public static final int PORT = 25565;
 	
+	public static final String KEY_CLIENT_STATUS = "game.playerstatus";
+	public static final String KEY_ALL_CLIENTS_STATUS = "game.collectiveplayerstatus";
+	
 }
