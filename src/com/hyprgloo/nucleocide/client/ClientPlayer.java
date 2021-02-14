@@ -1,19 +1,18 @@
 package com.hyprgloo.nucleocide.client;
 
 import com.hyprgloo.nucleocide.common.World;
+import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayer {
 	
-	public float xPos;
-	public float yPos;
+	public HvlCoord playerPos = new HvlCoord();
 	public float health;
 	
 	
 
-	public ClientPlayer(float xPosArg, float yPosArg, float healthArg){
+	public ClientPlayer(HvlCoord playerPosArg, float healthArg){
 		
-		xPos = xPosArg;
-		yPos = yPosArg;
+		playerPos = playerPosArg;
 		health = healthArg;
 		
 		// TODO initialize player object here (tristin)
