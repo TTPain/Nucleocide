@@ -12,6 +12,7 @@ import com.osreboot.hvol2.direct.HvlDirect;
 public class ClientLobby {
 
 	private ClientGame game;
+	
 	private final String id;
 	
 	public ClientLobby(){
