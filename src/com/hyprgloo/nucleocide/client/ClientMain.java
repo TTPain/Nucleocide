@@ -20,19 +20,19 @@ public class ClientMain extends HvlTemplateI{
 	public ClientMain(){
 		super(new HvlDisplayWindowed(144, 512, 512, "Temporary Client Window", false));
 	}
-
-	private ClientLobby lobby;
 	
 	@Override
 	public void initialize(){
 		hvlLoad("INOF.hvlft");
 		
-		lobby = new ClientLobby();
+		ClientNetworkManager.initialize();
+		ClientMenuManager.initialize();
 	}
 
 	@Override
 	public void update(float delta){
-		lobby.update(delta);
+		ClientNetworkManager.update(delta);
+		ClientMenuManager.update(delta);
 	}
 	
 }
