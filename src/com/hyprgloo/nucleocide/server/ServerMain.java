@@ -1,11 +1,16 @@
 package com.hyprgloo.nucleocide.server;
 
+import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
+
+import com.osreboot.hvol2.direct.HvlDirect;
+import com.osreboot.ridhvl2.template.HvlChronology;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
 import com.osreboot.ridhvl2.template.HvlTemplateI;
 
 public class ServerMain extends HvlTemplateI{
 
 	public static void main(String[] args){
+		HvlChronology.registerChronology(HvlDirect.class);
 		new ServerMain();
 	}
 	
@@ -17,6 +22,8 @@ public class ServerMain extends HvlTemplateI{
 
 	@Override
 	public void initialize(){
+		hvlLoad("INOF.hvlft");
+		
 		lobby = new ServerLobby();
 	}
 
