@@ -26,13 +26,13 @@ public class ServerGame {
 		//////////////
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			//correct?
-			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_CLIENT_STATUS)) {
+			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
 				//Add to hashmap
 			}
 			
 		}
 		//Send packet containing hashmap
-		//HvlDirect.writeUDP(NetworkUtil.KEY_ALL_CLIENTS_STATUS, new PacketCollectivePlayerStatus(player.playerPos, player.health));	
+		//HvlDirect.writeUDP(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(player.playerPos, player.health));	
 		
 		for(ServerEnemy enemy : enemies){
 			enemy.update(delta, world);
