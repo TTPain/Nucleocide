@@ -19,6 +19,7 @@ public class ClientPlayer {
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
 	private int pixPerSec = 40;
+	private int playerSize = 50;
 	
 	
 
@@ -46,8 +47,6 @@ public class ClientPlayer {
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			playerPos.x += delta*pixPerSec;
 		}
-		hvlDraw(hvlCirclec(playerPos.x,playerPos.y, 25, 25), Color.white);
-		System.out.println(playerPos);
-		
+		hvlDraw(hvlCirclec(playerPos.x,playerPos.y, playerSize, 25), Color.white);
 	}
 }

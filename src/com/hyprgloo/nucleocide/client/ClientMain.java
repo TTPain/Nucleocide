@@ -27,6 +27,7 @@ public class ClientMain extends HvlTemplateI{
 	public void initialize(){
 		hvlLoad("INOF.hvlft");
 		
+		
 		lobby = new ClientLobby();
 	}
 
