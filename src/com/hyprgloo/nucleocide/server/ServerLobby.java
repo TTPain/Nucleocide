@@ -1,5 +1,12 @@
 package com.hyprgloo.nucleocide.server;
 
+import com.hyprgloo.nucleocide.common.NetworkUtil;
+import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
+import com.osreboot.hvol2.direct.HvlDirect;
+
+/**
+ * @author os_reboot
+ */
 public class ServerLobby {
 
 	private ServerGame game;
@@ -7,13 +14,26 @@ public class ServerLobby {
 	public ServerLobby(){
 		game = new ServerGame();
 		
-		// TODO (os_reboot)
+		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentServerAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.PORT));
+		HvlDirect.connect();
+		
+		HvlDirect.bindOnMessageReceived((m, i) -> {
+			return m;
+		});
+		
+		HvlDirect.bindOnRemoteConnection(i -> {
+			System.out.println("Connection - " + i);
+		});
+		
+		HvlDirect.bindOnRemoteDisconnection(i -> {
+			System.out.println("Disconnection - " + i);
+		});
 	}
 	
 	public void update(float delta){
-		game.update(delta);
+		game.update(delta); // TODO separate game update into two methods for more efficient packet handling
 		
-		// TODO (os_reboot)
+		HvlDirect.update(delta);
 	}
 	
 }
