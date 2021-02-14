@@ -2,6 +2,7 @@ package com.hyprgloo.nucleocide.client;
 
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 
 public class ClientGame {
 
@@ -11,6 +12,8 @@ public class ClientGame {
 	public ClientGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		player = new ClientPlayer();
+		
+		//public PacketPlayerStatus = new PacketPlayerStatus(player.getxPos(), player.playeryPos());
 		
 		// TODO initialize the client game state here (basset)
 	}
