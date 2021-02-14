@@ -10,7 +10,7 @@ public class ClientGame {
 	
 	public ClientGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
-		player = new ClientPlayer();
+		player = new ClientPlayer(0, 0, 1);
 		
 		// TODO initialize the client game state here (basset)
 	}
