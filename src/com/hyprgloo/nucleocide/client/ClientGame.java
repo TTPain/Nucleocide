@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.ArrayList;
+
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
@@ -15,6 +17,14 @@ public class ClientGame {
 	private World world;
 	private ClientPlayer player;
 	
+	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
+	
+	public ClientBullet initialBullet = new ClientBullet(new HvlCoord());
+	
+	public void initialize() {
+		bulletTotal.add(initialBullet);
+	}
+	
 	public ClientGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		player = new ClientPlayer(new HvlCoord(), 1);
@@ -24,8 +34,10 @@ public class ClientGame {
 	public void update(float delta){
 		// TODO update the client game / client networking here (basset)
 		player.update(delta, world);
-		HvlDirect.writeUDP(KEY_CLIENT, new PacketPlayerStatus(player.playerPos, player.health));
-		
+		for(ClientBullet b: bulletTotal) {
+			b.update(delta);
+		}
+		HvlDirect.writeUDP(KEY_CLIENT, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
 	}
 	
