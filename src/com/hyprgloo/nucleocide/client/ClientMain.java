@@ -18,7 +18,7 @@ public class ClientMain extends HvlTemplateI{
 	INDEX_FONT = 0;
 	
 	public ClientMain(){
-		super(new HvlDisplayWindowed(144, 512, 512, "Temporary Client Window", false));
+		super(new HvlDisplayWindowed(144, 1280, 720, "Temporary Client Window", false));
 	}
 	
 	@Override

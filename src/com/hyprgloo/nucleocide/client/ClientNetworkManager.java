@@ -1,5 +1,8 @@
 package com.hyprgloo.nucleocide.client;
 
+/**
+ * @author os_reboot
+ */
 public class ClientNetworkManager {
 
 	private ClientNetworkManager(){}
@@ -19,7 +22,16 @@ public class ClientNetworkManager {
 	}
 	
 	public static void disconnect(){
+		if(lobby != null) lobby.disconnect();
 		lobby = null;
+	}
+	
+	public static boolean isConnected(){
+		return lobby != null;
+	}
+	
+	public static ClientLobby getLobby(){
+		return lobby;
 	}
 	
 }
