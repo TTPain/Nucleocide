@@ -3,6 +3,8 @@ package com.hyprgloo.nucleocide.client;
 import static com.osreboot.ridhvl2.HvlStatics.hvlCirclec;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 
+import java.util.ArrayList;
+
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 
@@ -22,6 +24,9 @@ public class ClientPlayer {
 	public float health;
 	protected int pixPerSec = 40;
 	
+	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
+	
+	
 	// TODO initialize player object here (tristin)
 
 	public ClientPlayer(HvlCoord playerPosArg, float healthArg){
@@ -38,5 +43,8 @@ public class ClientPlayer {
 	
 	public void update(float delta, World world){
 		render();
+		for(ClientBullet b: bulletTotal) {
+			b.update(delta, null);
+		}
 	}
 }
