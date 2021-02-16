@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -71,6 +73,12 @@ public class ClientLobby {
 				state = ClientLobbyState.LOBBY;
 			}
 		}else state = ClientLobbyState.CONNECTING;
+	}
+	
+	public Set<String> getAllConnectedPlayers(){
+		if(lastPacketCollectiveLobbyStatus != null)
+			return lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
+		else return new HashSet<>();
 	}
 
 	private void sendPacketLobbyStatus(){
