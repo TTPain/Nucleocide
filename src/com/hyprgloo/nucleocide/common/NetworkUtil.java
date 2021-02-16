@@ -10,6 +10,8 @@ public class NetworkUtil {
 		LOBBY, GAME
 	}
 	
+	public static final boolean DEBUG = true;
+	
 	public static final HvlGameInfo GAME_INFO = new HvlGameInfo("nucleocide_alpha", "1.0");
 	
 	public static final int TICK_RATE = 32;

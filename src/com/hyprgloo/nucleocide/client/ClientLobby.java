@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -42,9 +44,13 @@ public class ClientLobby {
 		updateStatus();
 
 		if(state == ClientLobbyState.GAME){
-			if(game == null) game = new ClientGame();
+			if(game == null) game = new ClientGame(id);
 
-			game.update(delta); // TODO separate game update into two methods for more efficient packet handling
+			Set<String> lobbyPlayers = new HashSet<>();
+			if(lastPacketCollectiveLobbyStatus != null)
+				lobbyPlayers = lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
+			
+			game.update(delta, lobbyPlayers); // TODO separate game update into two methods for more efficient packet handling
 			
 			isReady = false;
 		}else{
@@ -71,6 +77,12 @@ public class ClientLobby {
 				state = ClientLobbyState.LOBBY;
 			}
 		}else state = ClientLobbyState.CONNECTING;
+	}
+	
+	public Set<String> getAllConnectedPlayers(){
+		if(lastPacketCollectiveLobbyStatus != null)
+			return lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
+		else return new HashSet<>();
 	}
 
 	private void sendPacketLobbyStatus(){

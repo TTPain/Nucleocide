@@ -1,11 +1,15 @@
 package com.hyprgloo.nucleocide.server;
 
+import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
+import com.hyprgloo.nucleocide.server.ServerLobbyBinding.BindingMethod;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -18,22 +22,31 @@ public class ServerLobby {
 	private LobbyState state;
 	private HashMap<HvlIdentityAnarchy, PacketLobbyStatus> status;
 
+//	private ArrayList<ServerLobbyBinding> bindings;
+
 	private ServerGame game;
 
 	public ServerLobby(){
 		state = LobbyState.LOBBY;
 		status = new HashMap<>();
 
+//		bindings = new ArrayList<>();
+//		bindings.add(new ServerLobbyBinding("game", (s) -> {
+//			return BindingMethod.PAUSE;
+//		}));
+
 		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentServerAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.PORT));
 		HvlDirect.connect();
 
 		HvlDirect.bindOnMessageReceived((m, i) -> {
+//			for(ServerLobbyBinding binding : bindings)
+//				m = binding.filter((HvlIdentityAnarchy)i, m, state);
 			return m;
 		});
 
 		HvlDirect.bindOnRemoteConnection(i -> {
 			System.out.println("Connection - " + i);
-			status.put((HvlIdentityAnarchy)i, null);
+			status.put((HvlIdentityAnarchy)i, null); // TODO filter based on join ticket instead of accepting all incoming connections
 		});
 
 		HvlDirect.bindOnRemoteDisconnection(i -> {
@@ -51,6 +64,12 @@ public class ServerLobby {
 	}
 
 	public void update(float delta){
+		for(HvlIdentityAnarchy identity : HvlDirect.<HvlIdentityAnarchy>getConnections()){
+			hvlFont(ServerMain.INDEX_FONT).draw(((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(identity) + "", 0, 0, 0.5f);
+		}
+		
+//		bindings.forEach(b -> b.update(delta, status.keySet(), state));
+
 		sendPacketCollectiveLobbyStatus();
 
 		if(state == LobbyState.GAME){
