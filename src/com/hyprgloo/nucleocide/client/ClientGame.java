@@ -36,6 +36,9 @@ public class ClientGame {
 		}
 		HvlDirect.writeUDP(KEY_CLIENT_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
+		
+		//Receive collective player status packet from server
+		//Use the information to render ClientPlayer objects for every other player, skipping the current client's info
 	}
 	
 }
