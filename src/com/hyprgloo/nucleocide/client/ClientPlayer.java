@@ -16,37 +16,27 @@ import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayer {
 	
+	public static final int PLAYER_SIZE = 50;
+	
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
-	private int pixPerSec = 40;
-	private int playerSize = 50;
+	protected int pixPerSec = 40;
 	
-	
+	// TODO initialize player object here (tristin)
 
 	public ClientPlayer(HvlCoord playerPosArg, float healthArg){
-		
 		playerPos = playerPosArg;
 		health = healthArg;
-		
-		// TODO initialize player object here (tristin)
 	}
 	
+	public void render() {
+		hvlDraw(hvlCirclec(playerPos.x,playerPos.y, PLAYER_SIZE, 25), Color.white);
+	}
+	
+	// TODO implement player movement / collision here (tristin)
+	// TODO implement player shooting here (tristin)
+	
 	public void update(float delta, World world){
-		// TODO implement player movement / collision here (tristin)
-		// TODO implement player shooting here (tristin)
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			playerPos.y -= delta*pixPerSec;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			playerPos.y += delta*pixPerSec;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			playerPos.x -= delta*pixPerSec;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			playerPos.x += delta*pixPerSec;
-		}
-		hvlDraw(hvlCirclec(playerPos.x,playerPos.y, playerSize, 25), Color.white);
+		render();
 	}
 }
