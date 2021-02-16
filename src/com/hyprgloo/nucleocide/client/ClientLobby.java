@@ -44,9 +44,10 @@ public class ClientLobby {
 		updateStatus();
 
 		if(state == ClientLobbyState.GAME){
-			if(game == null) game = new ClientGame();
+			if(game == null) game = new ClientGame(id);
 
-			game.update(delta); // TODO separate game update into two methods for more efficient packet handling
+			// TODO separate game update into two methods for more efficient packet handling
+			game.update(delta, lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet());
 			
 			isReady = false;
 		}else{
