@@ -47,7 +47,8 @@ public class ClientLobby {
 			if(game == null) game = new ClientGame(id);
 
 			Set<String> lobbyPlayers = new HashSet<>();
-			if(lastPacketCollectiveLobbyStatus != null) lobbyPlayers = lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
+			if(lastPacketCollectiveLobbyStatus != null)
+				lobbyPlayers = lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
 			
 			game.update(delta, lobbyPlayers); // TODO separate game update into two methods for more efficient packet handling
 			

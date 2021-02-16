@@ -14,6 +14,9 @@ public class ServerMain extends HvlTemplateI{
 		new ServerMain();
 	}
 	
+	public static final int
+	INDEX_FONT = 0;
+	
 	public ServerMain(){
 		super(new HvlDisplayWindowed(144, 512, 512, "Temporary Server Window", false));
 	}
