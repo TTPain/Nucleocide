@@ -57,12 +57,6 @@ public class ClientGame {
 				for(int i = 0; i < packet.collectivePlayerStatus.size(); i++) {
 					
 				}
-				
 			}
-		
-			
-			
-		
 	}
-	
 }
