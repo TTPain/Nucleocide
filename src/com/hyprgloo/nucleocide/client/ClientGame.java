@@ -48,9 +48,12 @@ public class ClientGame {
 			if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
 				packet = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
 				
+				//Detect how many players are connected via their usernames
+				
+				
 				//Use the information to render ClientPlayer objects for every other player, skipping the current client's info
 				for(int i = 0; i < packet.collectivePlayerStatus.size(); i++) {
-					//packet.collectivePlayerStatus.get(i).
+					
 				}
 				
 			}
