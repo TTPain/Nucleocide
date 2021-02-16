@@ -12,26 +12,22 @@ import org.newdawn.slick.Color;
 import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientBullet {
-	private float bulletMagx;
-	private float bulletMagy;
-	private int bulletVelocity = 150;
+	
 	
 	
 	public HvlCoord bulletPos = new HvlCoord();
-	public HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy); 
+	public HvlCoord bulletVelocity = new HvlCoord();
 	
-	public ClientBullet(HvlCoord bulletPosArg) {
+	public ClientBullet(HvlCoord bulletPosArg, HvlCoord bulletVelocityArg) {
 		bulletPos = bulletPosArg;
+		bulletVelocity = bulletVelocityArg;
 	}
 	
 	
-	public void update(float delta) {
-		bulletMagx = Mouse.getX() - (Display.getWidth()/2);
-		bulletMagy = (Display.getHeight() - Mouse.getY()) - (Display.getHeight()/2);
-		bulletDir.normalize();
-		bulletPos.x += bulletDir.x * bulletVelocity;
-		bulletPos.y += bulletDir.y * bulletVelocity;
-		hvlDraw(hvlCirclec(Mouse.getX(), (Display.getHeight() - Mouse.getY()), 10, 10), Color.red);
+	public void update(float delta, ClientPlayer player) {
+		bulletPos.x += bulletVelocity.x;
+		bulletPos.y += bulletVelocity.y;
+		hvlDraw(hvlCirclec(bulletPos.x, bulletPos.y, 20, 50), Color.red);
 	}
 	
 }
