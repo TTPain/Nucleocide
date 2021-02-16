@@ -5,8 +5,12 @@ import com.osreboot.ridhvl2.menu.component.HvlArranger;
 import com.osreboot.ridhvl2.menu.component.HvlButton;
 import com.osreboot.ridhvl2.menu.component.HvlButtonLabeled;
 import com.osreboot.ridhvl2.menu.component.HvlLabel;
+import com.osreboot.ridhvl2.menu.component.HvlRule;
 import com.osreboot.ridhvl2.menu.component.HvlSpacer;
 
+/**
+ * @author os_reboot
+ */
 public abstract class ClientMenu {
 
 	public final String title;
@@ -18,6 +22,15 @@ public abstract class ClientMenu {
 		
 		arranger = HvlArranger.fromDefault();
 		arranger.add(HvlLabel.fromDefault().text(title));
+		arranger.add(HvlRule.fromDefault());
+		
+		ClientMenuManager.menus.add(this);
+	}
+	
+	public ClientMenu(){
+		title = "";
+		
+		arranger = HvlArranger.fromDefault();
 		
 		ClientMenuManager.menus.add(this);
 	}
