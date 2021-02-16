@@ -49,6 +49,8 @@ public class ClientGame {
 				packet = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
 				
 				//Detect how many players are connected via their usernames
+				//Use .getName() to compare to set of Strings
+				//Construct new ClientPlayers, update existing ones, remove ones as needed
 				
 				
 				//Use the information to render ClientPlayer objects for every other player, skipping the current client's info
