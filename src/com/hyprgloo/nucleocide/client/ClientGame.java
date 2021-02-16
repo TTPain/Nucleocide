@@ -13,9 +13,9 @@ import com.osreboot.ridhvl2.HvlCoord;
  */
 public class ClientGame {
 	
-	public static final String KEY_CLIENT_STATUS = "game.playerstatus";
+	public static final String KEY_PLAYER_STATUS = "game.playerstatus";
 	private World world;
-	private ClientPlayer player;
+	private ClientPlayerClient player;
 	
 	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
 	
@@ -34,8 +34,10 @@ public class ClientGame {
 		for(ClientBullet b: bulletTotal) {
 			b.update(delta);
 		}
-		HvlDirect.writeUDP(KEY_CLIENT_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
+		HvlDirect.writeUDP(KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
+		//Receive the collective player packet from the server
+		//Exclude the current client's information and render all other players
 	}
 	
 }
