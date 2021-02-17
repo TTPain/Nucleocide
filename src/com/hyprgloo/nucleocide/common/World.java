@@ -13,7 +13,7 @@ import org.newdawn.slick.Color;
  */
 public class World implements Serializable{
 	private static final long serialVersionUID = -1618208809619562875L;
-	public static final float BLOCK_SIZE = 250;
+	public static final float BLOCK_SIZE = 50;
 	ArrayList<Chunk> chunks = new ArrayList<>();
 	public World(ArrayList<Chunk> a){ 
 		this.chunks = a;
@@ -26,15 +26,9 @@ public class World implements Serializable{
 		for (int i = 0; i < b; i++) {
 			Chunk bucket = new Chunk(0,0);
 			bucket = chunks.get(i);
-			float xr =  BLOCK_SIZE*4 *(float) bucket.chunkx*BLOCK_SIZE;
-			float yr =  BLOCK_SIZE*4 *(float) bucket.chunky*BLOCK_SIZE;
+			float xr =  BLOCK_SIZE*4 *(float) bucket.chunkx;
+			float yr =  BLOCK_SIZE*4 *(float) bucket.chunky;
 			for(int j = 0; j < 16; j ++) {
-				if(j%4 == 3) {
-					yr = yr + BLOCK_SIZE;
-					xr =  BLOCK_SIZE*4 * (float) bucket.chunkx *BLOCK_SIZE;
-				}else {
-					xr = xr + BLOCK_SIZE;
-				}
 				switch(bucket.baset[j]) {
 				case 0:
 					hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.green);
@@ -56,7 +50,12 @@ public class World implements Serializable{
 					break;
 				default:
 					hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.black);
-
+				}
+				if(j%4 == 3) {
+					yr = yr + BLOCK_SIZE;
+					xr =  BLOCK_SIZE*4 * (float) bucket.chunkx;
+				}else {
+					xr = xr + BLOCK_SIZE;
 				}
 			}
 		}
