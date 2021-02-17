@@ -1,7 +1,5 @@
 package com.hyprgloo.nucleocide.common;
 
-import java.util.ArrayList;
-
 import com.osreboot.ridhvl2.HvlConfig;
 
 public class WorldGenerator {
