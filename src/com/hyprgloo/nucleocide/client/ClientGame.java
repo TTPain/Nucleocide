@@ -75,6 +75,8 @@ public class ClientGame {
 				    }  
 				}
 				
+				System.out.println(otherPlayers.size());
+				
 				for (String name : otherPlayers.keySet()){
 					otherPlayers.get(name).update(delta, world);
 				}
