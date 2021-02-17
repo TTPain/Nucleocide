@@ -14,17 +14,16 @@ import org.newdawn.slick.Color;
 public class World implements Serializable{
 	private static final long serialVersionUID = -1618208809619562875L;
 	public static final float BLOCK_SIZE = 50;
-	ArrayList<Chunk> a = new ArrayList<>();
+	ArrayList<Chunk> chunks = new ArrayList<>();
 	public World(ArrayList<Chunk> a){ 
-		this.a = a;
+		this.chunks = a;
 	}
 
 	public void draw (){
-		int b = a.size();
+		int b = chunks.size();
 		for (int i = 0; i < b; i++) {
 			Chunk bucket = new Chunk(0,0);
-			bucket = a.get(i);
-			int c = 0;
+			bucket = chunks.get(i);
 			float xr =  BLOCK_SIZE*4 *(float) bucket.chunkx*BLOCK_SIZE;
 			float yr =  BLOCK_SIZE*4 *(float) bucket.chunky*BLOCK_SIZE;
 			for(int j = 0; j < 16; j ++) {
@@ -70,7 +69,7 @@ public class World implements Serializable{
 		Chunk bucket = new Chunk(0,0);
 		while(xc != bucket.chunkx || yc != bucket.chunky) {
 			i++;
-			bucket = a.get(i);
+			bucket = chunks.get(i);
 			c = bucket.baset[xco+yco*4];
 		}
 		switch(c){

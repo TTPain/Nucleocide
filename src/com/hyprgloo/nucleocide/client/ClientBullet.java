@@ -3,10 +3,6 @@ package com.hyprgloo.nucleocide.client;
 import static com.osreboot.ridhvl2.HvlStatics.hvlCirclec;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 
-import java.util.ArrayList;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
 import com.osreboot.ridhvl2.HvlCoord;

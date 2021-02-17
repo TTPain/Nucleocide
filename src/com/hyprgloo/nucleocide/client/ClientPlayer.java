@@ -5,7 +5,6 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.World;

@@ -1,23 +1,10 @@
 package com.hyprgloo.nucleocide.common;
-import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
-import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
-import static com.osreboot.ridhvl2.HvlStatics.hvlLine;
-import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
-import static com.osreboot.ridhvl2.HvlStatics.hvlScale;
-import static com.osreboot.ridhvl2.HvlStatics.hvlTranslate;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.newdawn.slick.Color;
 
 import com.osreboot.ridhvl2.HvlConfig;
-import com.osreboot.ridhvl2.HvlCoord;
-import com.osreboot.ridhvl2.template.HvlDisplay;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
 import com.osreboot.ridhvl2.template.HvlTemplateI;
 
