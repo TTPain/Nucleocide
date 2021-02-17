@@ -23,8 +23,7 @@ public class ClientGame {
 	private World world;
 	private ClientPlayer player;
 	private String id;
-
-	public HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -53,7 +52,7 @@ public class ClientGame {
 									packet.collectivePlayerStatus.get(name).health,packet.collectivePlayerStatus.get(name).degRot));
 						}
 						//If player is already loaded, update its position and health
-					}else {
+					}else{
 						otherPlayers.get(name).playerPos = packet.collectivePlayerStatus.get(name).location;
 						otherPlayers.get(name).health = packet.collectivePlayerStatus.get(name).health;
 					}
