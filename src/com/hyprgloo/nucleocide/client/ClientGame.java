@@ -30,8 +30,8 @@ public class ClientGame {
 	
 	public void update(float delta, Set<String> lobbyPlayers){
 		// TODO update the client game / client networking here (basset)
-		player.update(delta, world);
 		world.draw();
+		player.update(delta, world);
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
 		
