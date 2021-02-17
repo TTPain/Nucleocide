@@ -54,25 +54,12 @@ public class ClientGame {
 
 			//Looping through all keys in the packet
 			for (String name : packet.collectivePlayerStatus.keySet()){
-				boolean lobbyContainsPlayer = false;
-				System.out.println("Packet key/value pair: " + name + ", " +packet.collectivePlayerStatus.get(name));
-
-
-
-				for(String lobbyPlayer : lobbyPlayers) {
-					if(lobbyPlayer.equals(name)) {
-						//The set of strings contains the player from the packet.
-						System.out.println("PLAYER " + name + " FOUND");
-						lobbyContainsPlayer = true;
-					}
-				}
-
-				if(lobbyContainsPlayer) {
+				
+				if(lobbyPlayers.contains(name)) {
 					//Check if the detected player is already in the HashMap otherPlayers.
 					if(!otherPlayers.containsKey(name)) {
 						//Add the player if not.
 						if(!id.equals(name)) {
-							System.out.println("Attempting to add new player to HashMap...");
 							otherPlayers.put(name, new ClientPlayer(packet.collectivePlayerStatus.get(name).location,
 									packet.collectivePlayerStatus.get(name).health));
 						}
