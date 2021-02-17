@@ -55,6 +55,7 @@ public class ClientGame {
 					}else{
 						otherPlayers.get(name).playerPos = packet.collectivePlayerStatus.get(name).location;
 						otherPlayers.get(name).health = packet.collectivePlayerStatus.get(name).health;
+						otherPlayers.get(name).degRot = packet.collectivePlayerStatus.get(name).degRot;
 					}
 				}
 			}
