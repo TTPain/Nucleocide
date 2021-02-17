@@ -33,9 +33,7 @@ public class MainMapEditor extends HvlTemplateI{
 		
 	
 		ArrayList<Chunk> clistrd = new ArrayList<>();	
-		try {
-		clistrd = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
-		} catch (Exception e) {
+		
 			System.out.println("error in file lode, creating new file at mapout.json"); 
 			Chunk importer = new Chunk(0,0); 
 			for (int i = 0; i < 4; i++) {
@@ -46,7 +44,8 @@ public class MainMapEditor extends HvlTemplateI{
 			}
 			World wrld = new World(clistrd);
 			HvlConfig.PJSON.save(wrld, "res/mapfiles/mapout.json");
-		}
+			
+		
 		//
 		a=0;
 		b=0;
