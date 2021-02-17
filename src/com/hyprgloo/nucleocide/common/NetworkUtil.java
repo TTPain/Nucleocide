@@ -16,7 +16,7 @@ public class NetworkUtil {
 	
 	public static final int TICK_RATE = 32;
 	
-	public static final String IP = "73.239.1.166";
+	public static final String IP = "localhost";
 	
 	public static final int PORT = 25565;
 	

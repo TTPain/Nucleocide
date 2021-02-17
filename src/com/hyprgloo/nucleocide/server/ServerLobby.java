@@ -3,13 +3,11 @@ package com.hyprgloo.nucleocide.server;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 
-import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
-import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
-import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
-import com.hyprgloo.nucleocide.server.ServerLobbyBinding.BindingMethod;
+import com.hyprgloo.nucleocide.server.network.ServerLobbyModule;
+import com.hyprgloo.nucleocide.server.network.ServerLobbyModuleStatus;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -19,48 +17,19 @@ import com.osreboot.hvol2.direct.HvlDirect;
  */
 public class ServerLobby {
 
+	private HashSet<HvlIdentityAnarchy> ids;
 	private LobbyState state;
-	private HashMap<HvlIdentityAnarchy, PacketLobbyStatus> status;
-
-//	private ArrayList<ServerLobbyBinding> bindings;
+	
+	private ArrayList<ServerLobbyModule> modules;
 
 	private ServerGame game;
 
 	public ServerLobby(){
+		ids = new HashSet<>();
 		state = LobbyState.LOBBY;
-		status = new HashMap<>();
-
-//		bindings = new ArrayList<>();
-//		bindings.add(new ServerLobbyBinding("game", (s) -> {
-//			return BindingMethod.PAUSE;
-//		}));
-
-		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentServerAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.PORT));
-		HvlDirect.connect();
-
-		HvlDirect.bindOnMessageReceived((m, i) -> {
-//			for(ServerLobbyBinding binding : bindings)
-//				m = binding.filter((HvlIdentityAnarchy)i, m, state);
-			return m;
-		});
-
-		HvlDirect.bindOnRemoteConnection(i -> {
-			System.out.println("Connection - " + i);
-			status.put((HvlIdentityAnarchy)i, null); // TODO filter based on join ticket instead of accepting all incoming connections
-		});
-
-		HvlDirect.bindOnRemoteDisconnection(i -> {
-			System.out.println("Disconnection - " + i);
-
-			// TODO temp reset game state
-			state = LobbyState.LOBBY;
-			for(HvlIdentityAnarchy identity : status.keySet()){
-				status.put(identity, null);
-				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(identity).clear();
-			}
-
-			status.remove((HvlIdentityAnarchy)i);
-		});
+		
+		modules = new ArrayList<>();
+		modules.add(new ServerLobbyModuleStatus());
 	}
 
 	public void update(float delta){
@@ -68,52 +37,32 @@ public class ServerLobby {
 			hvlFont(ServerMain.INDEX_FONT).draw(((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(identity) + "", 0, 0, 0.5f);
 		}
 		
-//		bindings.forEach(b -> b.update(delta, status.keySet(), state));
-
-		sendPacketCollectiveLobbyStatus();
-
+		for(ServerLobbyModule module : modules)
+			state = module.update(delta, state);
+		
 		if(state == LobbyState.GAME){
 			if(game == null) game = new ServerGame();
 
 			game.update(delta); // TODO separate game update into two methods for more efficient packet handling
 		}else{
 			game = null;
-
-			int countReady = 0;
-			for(HvlIdentityAnarchy identity : status.keySet()){
-				if(status.get(identity) != null && status.get(identity).isReady) countReady++;
-			}
-			if(countReady == status.size() && countReady >= NetworkUtil.MINIMUM_PLAYERS_READY_TO_START){
-				state = LobbyState.GAME;
-			}
 		}
 
 		HvlDirect.update(delta);
 	}
-
-	private void sendPacketCollectiveLobbyStatus(){
-		PacketCollectiveLobbyStatus packetCollectiveLobbyStatus = new PacketCollectiveLobbyStatus(getCollectiveLobbyStatus(), state);
-		for(HvlIdentityAnarchy identity : status.keySet())
-			HvlDirect.writeTCP(identity, NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS, packetCollectiveLobbyStatus);
+	
+	public void onConnect(HvlIdentityAnarchy identity){
+		ids.add(identity);
+		
+		for(ServerLobbyModule module : modules)
+			module.onConnection(identity);
 	}
-
-	private HashMap<String, PacketLobbyStatus> getCollectiveLobbyStatus(){
-		HashMap<String, PacketLobbyStatus> output = new HashMap<>();
-		if(state == LobbyState.LOBBY){
-			for(HvlIdentityAnarchy identity : status.keySet()){
-				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
-					status.put(identity, HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS));
-				}
-				if(status.get(identity) != null){
-					output.put(identity.getName(), status.get(identity));
-				}
-			}
-		}else{
-			for(HvlIdentityAnarchy identity : status.keySet()){
-				output.put(identity.getName(), status.get(identity));
-			}
-		}
-		return output;
+	
+	public void onDisconnect(HvlIdentityAnarchy identity){
+		ids.remove(identity);
+		
+		for(ServerLobbyModule module : modules)
+			module.onDisconnection(identity);
 	}
 
 }

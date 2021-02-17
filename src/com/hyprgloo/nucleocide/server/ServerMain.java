@@ -20,19 +20,17 @@ public class ServerMain extends HvlTemplateI{
 	public ServerMain(){
 		super(new HvlDisplayWindowed(144, 512, 512, "Temporary Server Window", false));
 	}
-	
-	private ServerLobby lobby;
 
 	@Override
 	public void initialize(){
 		hvlLoad("INOF.hvlft");
 		
-		lobby = new ServerLobby();
+		ServerNetworkManager.initialize();
 	}
 
 	@Override
 	public void update(float delta){
-		lobby.update(delta);
+		ServerNetworkManager.update(delta);
 	}
 	
 }
