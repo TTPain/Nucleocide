@@ -1,6 +1,7 @@
 package com.hyprgloo.nucleocide.client;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
+import static com.osreboot.ridhvl2.HvlStatics.hvlLine;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
 
 import org.lwjgl.input.Keyboard;
@@ -10,6 +11,7 @@ import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.World;
 import com.osreboot.ridhvl2.HvlCoord;
+import com.osreboot.ridhvl2.HvlMath;
 
 public class ClientPlayerClient extends ClientPlayer {
 	
@@ -41,9 +43,8 @@ public class ClientPlayerClient extends ClientPlayer {
 		bulletMagx = Mouse.getX() - playerPos.x;
 		bulletMagy = ((Display.getHeight() - Mouse.getY()) - playerPos.y);
 		HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy);
-		
+		bulletDir.normalize();
 		if(Mouse.isButtonDown(0)) {
-			bulletDir.normalize();
 			if(bulletTimer <= 0) {
 			bulletTotal.add(new ClientBullet(new HvlCoord(playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed))));
 			bulletTimer = 40*delta;
@@ -53,6 +54,9 @@ public class ClientPlayerClient extends ClientPlayer {
 		else {
 			bulletTimer = 0;
 		}
-		//hvlDraw(hvlQuadc(bulletMagx, bulletMagy, 6, 20), Color.white);
+		//hvlDraw(hvlQuadc(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y, 6, 200), Color.white);
+		hvlDraw(hvlLine(playerPos.x + 50*bulletDir.x, playerPos.y + 50*bulletDir.y, playerPos.x + bulletDir.x*100, playerPos.y + bulletDir.y*100, 8), Color.red);
+		HvlCoord angle = new HvlCoord(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y);
+		degRot = HvlMath.angle(playerPos, angle);
 	}	
 }
