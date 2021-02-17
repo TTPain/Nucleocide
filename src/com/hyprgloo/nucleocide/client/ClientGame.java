@@ -28,7 +28,7 @@ public class ClientGame {
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
-		player = new ClientPlayerClient(new HvlCoord(), 1);
+		player = new ClientPlayerClient(new HvlCoord(), 1, 0);
 		this.id = id;
 		// TODO initialize the client game state here (basset)
 	}
