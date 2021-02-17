@@ -21,6 +21,7 @@ public class ClientPlayer {
 	
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
+	public float degRot;
 	protected int pixPerSec = 40;
 	
 	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
@@ -28,9 +29,10 @@ public class ClientPlayer {
 	
 	// TODO initialize player object here (tristin)
 
-	public ClientPlayer(HvlCoord playerPosArg, float healthArg){
+	public ClientPlayer(HvlCoord playerPosArg, float healthArg, float degRotArg){
 		playerPos = playerPosArg;
 		health = healthArg;
+		degRot = degRotArg;
 	}
 	
 	public void render() {

@@ -9,10 +9,12 @@ public class PacketPlayerStatus implements Serializable{
 	
 	public HvlCoord location;
 	public float health;
+	public float degRot;
 	
-	public PacketPlayerStatus(HvlCoord locationArg, float healthArg){
+	public PacketPlayerStatus(HvlCoord locationArg, float healthArg, float degRotArg){
 		location = locationArg;
 		health = healthArg;
+		degRot = degRotArg;
 	}
 
 }

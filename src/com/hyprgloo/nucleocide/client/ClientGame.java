@@ -37,7 +37,7 @@ public class ClientGame {
 		// TODO update the client game / client networking here (basset)
 		world.draw();
 		player.update(delta, world);
-		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
+		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
 		// TODO update the client game / client networking here (basset)
 
 		//Receive collective player status packet from server
@@ -61,26 +61,24 @@ public class ClientGame {
 						//Add the player if not.
 						if(!id.equals(name)) {
 							otherPlayers.put(name, new ClientPlayer(packet.collectivePlayerStatus.get(name).location,
-									packet.collectivePlayerStatus.get(name).health));
+									packet.collectivePlayerStatus.get(name).health,packet.collectivePlayerStatus.get(name).degRot));
 						}
 						//If player is already loaded, update its position and health
 					}else {
 						otherPlayers.get(name).playerPos = packet.collectivePlayerStatus.get(name).location;
 						otherPlayers.get(name).health = packet.collectivePlayerStatus.get(name).health;
 					}
-				}else {
-					//The sent string is not included. Server returns the lobby to menu by default
-					if(otherPlayers.containsKey(name)) {
-						otherPlayers.remove(name);
-					}
-				}  
+				}
 			}
-
-			//System.out.println("Detected players in lobby: " +otherPlayers.size());
-			//Use the information to render ClientPlayer objects for every other player, skipping the current client's info
+			
+			//The sent string is not included. Remove the player from the HashMap
+			otherPlayers.keySet().removeIf(p->{
+				return !lobbyPlayers.contains(p);
+			});
+			
+			//Use the information to render ClientPlayer objects and UUID for every other player, skipping the current client's info
 			for (String name : otherPlayers.keySet()){
 				otherPlayers.get(name).update(delta, world);
-				//Draw the UUID for all clients
 				hvlFont(ServerMain.INDEX_FONT).drawc(name, otherPlayers.get(name).playerPos.x,
 						otherPlayers.get(name).playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
 			}
