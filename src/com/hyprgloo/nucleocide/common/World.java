@@ -31,7 +31,7 @@ public class World implements Serializable{
 			for(int j = 0; j < 16; j ++) {
 				switch(bucket.baset[j]) {
 				case 0:
-					hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.green);
+					hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.black);
 					break;
 				case 1:
 					hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.cyan);
@@ -66,14 +66,12 @@ public class World implements Serializable{
 		int yco = y%4;
 		int yc = y/4;
 		int i = 0;
-		int c = 0;
 		Chunk bucket = new Chunk(0,0);
 		while(xc != bucket.chunkx && yc != bucket.chunky && i < 1000) {
 			i++;
 			bucket = chunks.get(i);
-			c = bucket.baset[xco+yco*4];
 		}
-		switch(c){
+		switch(bucket.baset[xco+yco*4]){
 			case(0):
 				return true;
 		
@@ -100,8 +98,8 @@ public class World implements Serializable{
 	public boolean isSolidCord(float x, float y) {
 		int xsol;
 		int ysol;
-		float xs = x/BLOCK_SIZE;
-		float ys = y/BLOCK_SIZE;
+		float xs = x/BLOCK_SIZE +.5f;
+		float ys = y/BLOCK_SIZE +.5f;
 		xsol = (int) xs;
 		ysol = (int) ys;
 		return isSolid(xsol, ysol);
