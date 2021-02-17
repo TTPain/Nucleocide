@@ -58,7 +58,7 @@ public class ClientGame {
 				if(lobbyPlayers.contains(name)) {
 					//Check if the detected player is already in the HashMap otherPlayers.
 					if(!otherPlayers.containsKey(name)) {
-						//Add the player if not.
+						//Add the player if not. Skip the current client.
 						if(!id.equals(name)) {
 							otherPlayers.put(name, new ClientPlayer(packet.collectivePlayerStatus.get(name).location,
 									packet.collectivePlayerStatus.get(name).health,packet.collectivePlayerStatus.get(name).degRot));
@@ -76,7 +76,7 @@ public class ClientGame {
 				return !lobbyPlayers.contains(p);
 			});
 			
-			//Use the information to render ClientPlayer objects and UUID for every other player, skipping the current client's info
+			//Use the information to render ClientPlayer objects and UUIDs for every other player
 			for (String name : otherPlayers.keySet()){
 				otherPlayers.get(name).update(delta, world);
 				hvlFont(ServerMain.INDEX_FONT).drawc(name, otherPlayers.get(name).playerPos.x,
