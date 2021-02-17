@@ -69,7 +69,7 @@ public class World implements Serializable{
 		int i = 0;
 		int c = 0;
 		Chunk bucket = new Chunk(0,0);
-		while(xc != bucket.chunkx || yc != bucket.chunky) {
+		while(xc != bucket.chunkx && yc != bucket.chunky && i < 1000) {
 			i++;
 			bucket = chunks.get(i);
 			c = bucket.baset[xco+yco*4];
