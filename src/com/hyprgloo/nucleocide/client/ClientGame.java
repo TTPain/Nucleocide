@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -18,6 +20,8 @@ public class ClientGame {
 	private World world;
 	private ClientPlayer player;
 	
+	public HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 		player = new ClientPlayerClient(new HvlCoord(), 1);
@@ -26,6 +30,7 @@ public class ClientGame {
 	
 	public void update(float delta, Set<String> lobbyPlayers){
 		// TODO update the client game / client networking here (basset)
+		world.draw();
 		player.update(delta, world);
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health));		
 		// TODO update the client game / client networking here (basset)
@@ -36,7 +41,46 @@ public class ClientGame {
 				packet = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
 				
 				//Detect how many players are connected via their usernames
-				//Use .getName() to compare to set of Strings
+				
+				//Compare the set of strings to the strings contained in the packet
+				//Check if each String in the set is contained in the HashMap as a key.
+				//If it is, check if that player is contained in otherPlayers. If not, create a new ClientPlayer.
+				//If it is not contained, check if it is contained in otherPlayers. If so, remove it.
+				
+				//Looping through all keys in the packet
+				for (String name : packet.collectivePlayerStatus.keySet()){
+					boolean lobbyContainsPlayer = false;
+				    System.out.println(name + " "+packet.collectivePlayerStatus.get(name));
+				    
+				    for(String lobbyPlayer : lobbyPlayers) {
+				    	if(lobbyPlayer == name) {
+				    		//The set of strings contains the player from the packet.
+				    		System.out.println("PLAYER " + name + " FOUND");
+				    		lobbyContainsPlayer = true;
+				    	}
+				    }
+				    
+				    if(lobbyContainsPlayer) {
+				    	//Check if the detected player is already in the HashMap otherPlayers.
+				    	if(!otherPlayers.containsKey(name)) {
+				    		//Add the player if not.
+				    		otherPlayers.put(name, new ClientPlayer(packet.collectivePlayerStatus.get(name).location,
+				    				packet.collectivePlayerStatus.get(name).health));
+				    	}
+				    }else {
+				    	//The sent string is not included.
+				    	if(otherPlayers.containsKey(name)) {
+				    		otherPlayers.remove(name);
+				    	}
+				    }  
+				}
+				
+				System.out.println(otherPlayers.size());
+				
+				for (String name : otherPlayers.keySet()){
+					otherPlayers.get(name).update(delta, world);
+				}
+				
 				//Construct new ClientPlayers, update existing ones, remove ones as needed
 				
 				

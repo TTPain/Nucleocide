@@ -26,4 +26,7 @@ public class Chunk implements Serializable{
 		this.baset = new int[16]; 
 		this.addt = new int[16];
 	} 
+	public Chunk(){ 
+		
+	}
 }

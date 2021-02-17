@@ -41,6 +41,7 @@ public class ClientLobby {
 	}
 
 	public void update(float delta){
+		
 		updateStatus();
 
 		if(state == ClientLobbyState.GAME){
