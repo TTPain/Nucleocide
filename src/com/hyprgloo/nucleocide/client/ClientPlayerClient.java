@@ -35,7 +35,7 @@ public class ClientPlayerClient extends ClientPlayer {
 			float bulletMagy;
 			int bulletSpeed = 5;
 			bulletMagx = Mouse.getX() - playerPos.x;
-			bulletMagy = (Mouse.getY() + Display.getHeight()/2 - playerPos.y);
+			bulletMagy = ((Display.getHeight() - Mouse.getY()) - playerPos.y);
 			System.out.println(Mouse.getY());
 			HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy);
 			bulletDir.normalize();
