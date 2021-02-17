@@ -13,12 +13,14 @@ import org.newdawn.slick.Color;
  */
 public class World implements Serializable{
 	private static final long serialVersionUID = -1618208809619562875L;
-	public static final float BLOCK_SIZE = 50;
+	public static final float BLOCK_SIZE = 250;
 	ArrayList<Chunk> chunks = new ArrayList<>();
 	public World(ArrayList<Chunk> a){ 
 		this.chunks = a;
 	}
-
+	public World() {
+		chunks = new ArrayList<>();
+	}
 	public void draw (){
 		int b = chunks.size();
 		for (int i = 0; i < b; i++) {
