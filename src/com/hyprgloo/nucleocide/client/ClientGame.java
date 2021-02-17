@@ -71,7 +71,7 @@ public class ClientGame {
 				}else {
 					//The sent string is not included. Server returns the lobby to menu by default
 					if(otherPlayers.containsKey(name)) {
-						//otherPlayers.remove(name);
+						otherPlayers.remove(name);
 					}
 				}  
 			}
