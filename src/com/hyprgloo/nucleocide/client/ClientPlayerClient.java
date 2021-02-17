@@ -1,8 +1,12 @@
 package com.hyprgloo.nucleocide.client;
 
+import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
+import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.World;
 import com.osreboot.ridhvl2.HvlCoord;
@@ -11,8 +15,8 @@ public class ClientPlayerClient extends ClientPlayer {
 	
 	private float bulletTimer = 0;
 
-	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg) {
-		super(playerPosArg, healthArg);
+	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg, float degRotArg) {
+		super(playerPosArg, healthArg, degRotArg);
 		// TODO Auto-generated constructor stub
 	}
 	@Override
@@ -30,13 +34,15 @@ public class ClientPlayerClient extends ClientPlayer {
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			playerPos.x += delta*pixPerSec;
 		}
+		
+		float bulletMagx;
+		float bulletMagy;
+		int bulletSpeed = 5;
+		bulletMagx = Mouse.getX() - playerPos.x;
+		bulletMagy = ((Display.getHeight() - Mouse.getY()) - playerPos.y);
+		HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy);
+		
 		if(Mouse.isButtonDown(0)) {
-			float bulletMagx;
-			float bulletMagy;
-			int bulletSpeed = 5;
-			bulletMagx = Mouse.getX() - playerPos.x;
-			bulletMagy = ((Display.getHeight() - Mouse.getY()) - playerPos.y);
-			HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy);
 			bulletDir.normalize();
 			if(bulletTimer <= 0) {
 			bulletTotal.add(new ClientBullet(new HvlCoord(playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed))));
@@ -47,5 +53,6 @@ public class ClientPlayerClient extends ClientPlayer {
 		else {
 			bulletTimer = 0;
 		}
+		//hvlDraw(hvlQuadc(bulletMagx, bulletMagy, 6, 20), Color.white);
 	}	
 }
