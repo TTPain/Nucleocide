@@ -17,12 +17,12 @@ import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayer {
 	
-	public static final int PLAYER_SIZE = 50;
+	public static final int PLAYER_SIZE = 30;
 	
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
 	public float degRot;
-	protected int pixPerSec = 40;
+	protected int pixPerSec = 70;
 	
 	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
 	

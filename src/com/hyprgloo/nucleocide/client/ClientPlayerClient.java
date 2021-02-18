@@ -21,6 +21,8 @@ public class ClientPlayerClient extends ClientPlayer {
 		super(playerPosArg, healthArg, degRotArg);
 		// TODO Auto-generated constructor stub
 	}
+	
+	//Movement for client player, only affects individual clients positions.
 	@Override
 	public void update(float delta, World world) {
 		super.update(delta, world);
@@ -55,8 +57,9 @@ public class ClientPlayerClient extends ClientPlayer {
 			bulletTimer = 0;
 		}
 		//hvlDraw(hvlQuadc(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y, 6, 200), Color.white);
-		hvlDraw(hvlLine(playerPos.x + 50*bulletDir.x, playerPos.y + 50*bulletDir.y, playerPos.x + bulletDir.x*100, playerPos.y + bulletDir.y*100, 8), Color.red);
+		hvlDraw(hvlLine(playerPos.x + 20*bulletDir.x, playerPos.y + 20*bulletDir.y, playerPos.x + bulletDir.x*PLAYER_SIZE, playerPos.y + bulletDir.y*PLAYER_SIZE, 8), Color.red);
 		HvlCoord angle = new HvlCoord(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y);
 		degRot = HvlMath.angle(playerPos, angle);
 	}	
 }
+//make fire rate a variable

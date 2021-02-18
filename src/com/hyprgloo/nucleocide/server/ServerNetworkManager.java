@@ -19,6 +19,11 @@ public class ServerNetworkManager {
 		HvlDirect.connect();
 
 		HvlDirect.bindOnMessageReceived((m, i) -> {
+			if(lobby.getIds().contains(i)){
+				lobby.filter(m, (HvlIdentityAnarchy)i);
+			}else{
+				m.getTable().clear();
+			}
 			return m;
 		});
 
