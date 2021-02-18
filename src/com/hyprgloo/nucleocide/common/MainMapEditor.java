@@ -61,17 +61,22 @@ public class MainMapEditor extends HvlTemplateI{
 	public void initialize() {
 		hvlLoad("INOF.hvlft");
 	
-		clistrd = new ArrayList<>();	
 		
+		Chunk importer = new Chunk(0,0); 
+		try {
+		World clistrdwd = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
+		clistrd = clistrdwd.chunks;
+		System.out.println("file loaded");
+		}catch (Exception e) {
+			clistrd = new ArrayList<>();
 			System.out.println("error in file lode, creating new file at mapout.json"); 
-			Chunk importer = new Chunk(0,0); 
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					importer = new Chunk(i,j); 
 					clistrd.add(importer);
 				}
 			}
-			
+		}	
 		i = 0;
 		u = 0;
 		p = 0;
@@ -132,37 +137,37 @@ public class MainMapEditor extends HvlTemplateI{
 				xr = xr + BLOCK_SIZE;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_1) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_1) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 1;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_2) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_2) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 2;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_3) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_3) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 3;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_4) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_4) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 4;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_5) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_5) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 15){
 			importer.baset[basetcheck] = 5;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_0) && i < 12){
+		if(Keyboard.isKeyDown(Keyboard.KEY_0) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
 			if(basetcheck > -1 && basetcheck < 15){
 			importer.baset[basetcheck] = 0;

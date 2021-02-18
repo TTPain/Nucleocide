@@ -73,7 +73,7 @@ public class World implements Serializable{
 		}
 		switch(bucket.baset[xco+yco*4]){
 			case(0):
-				return true;
+				return false;
 		
 			case(1):
 				return true;
