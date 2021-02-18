@@ -42,7 +42,7 @@ public class ClientPlayer {
 	// TODO implement player movement / collision here (tristin)
 	// TODO implement player shooting here (tristin)
 	
-	public void update(float delta, World world){
+	public void update(float delta, World world, ClientGame game){
 		render();
 		for(ClientBullet b: bulletTotal) {
 			b.update(delta, null);

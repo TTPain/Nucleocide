@@ -28,9 +28,9 @@ public class ClientPlayerClient extends ClientPlayer {
 	
 	//Movement for client player, only affects individual clients positions.
 	@Override
-	public void update(float delta, World world) {
-		super.update(delta, world);
-		weapon.update(delta, this);
+	public void update(float delta, World world, ClientGame game) {
+		super.update(delta, world, game);
+		weapon.update(delta, this, game);
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			playerPos.y -= delta*pixPerSec;
