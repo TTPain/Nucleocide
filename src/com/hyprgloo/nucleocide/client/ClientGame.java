@@ -92,7 +92,7 @@ public class ClientGame {
 	
 	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
 		//Package that will hold bullet update events for the client on this frame.
-		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(new ArrayList<ClientBullet>()));
+		//HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(new ArrayList<ClientBullet>()));
 	}
 	
 }
