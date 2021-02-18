@@ -65,11 +65,15 @@ public class World implements Serializable{
 		int xc = x/4;
 		int yco = y%4;
 		int yc = y/4;
-		int i = 0;
-		Chunk bucket = new Chunk(0,0);
-		while(xc != bucket.chunkx && yc != bucket.chunky && i < 1000) {
-			i++;
-			bucket = chunks.get(i);
+		Chunk bucket = null;
+		for(Chunk chunk : this.chunks){
+			if(xc == chunk.chunkx && yc == chunk.chunky) {
+				bucket = chunk;
+				break;
+			}
+		}
+		if(bucket == null) {
+			return false;
 		}
 		switch(bucket.baset[xco+yco*4]){
 			case(0):
@@ -98,8 +102,8 @@ public class World implements Serializable{
 	public boolean isSolidCord(float x, float y) {
 		int xsol;
 		int ysol;
-		float xs = x/BLOCK_SIZE;
-		float ys = y/BLOCK_SIZE;
+		float ys = x/BLOCK_SIZE;
+		float xs = y/BLOCK_SIZE;
 		xsol = (int) xs;
 		ysol = (int) ys;
 		return isSolid(xsol, ysol);
