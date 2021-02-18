@@ -1,15 +1,15 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
-import com.hyprgloo.nucleocide.common.NetworkUtil;
-import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
+import com.hyprgloo.nucleocide.client.network.ClientLobbyFilter;
+import com.hyprgloo.nucleocide.client.network.ClientLobbyModule;
+import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterGame;
+import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterLobby;
+import com.hyprgloo.nucleocide.client.network.module.ClientLobbyModuleStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
-import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
-import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
-import com.osreboot.hvol2.direct.HvlDirect;
 
 /**
  * @author os_reboot
@@ -26,69 +26,49 @@ public class ClientLobby {
 
 	public ClientLobbyState state;
 
-	public PacketCollectiveLobbyStatus lastPacketCollectiveLobbyStatus;
-
+	private ArrayList<ClientLobbyModule> modules;
+	private HashMap<ClientLobbyState, ClientLobbyFilter> filters;
+	
 	private ClientGame game;
 
-	public ClientLobby(){
-		id = UUID.randomUUID().toString().replace("-", "");
-
+	public HashSet<String> lobbyIds; // TODO better way to do this
+	public PacketCollectiveLobbyStatus lastPacket;
+	
+	public ClientLobby(String idArg){
+		id = idArg;
+		
 		username = "Username";
 		isReady = false;
 		
-		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentClientAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.IP, NetworkUtil.PORT, id));
-		HvlDirect.connect();
+		modules = new ArrayList<>();
+		modules.add(new ClientLobbyModuleStatus());
+		
+		filters = new HashMap<>();
+		filters.put(ClientLobbyState.CONNECTING, new ClientLobbyFilter(){ // TODO
+			@Override
+			protected boolean filterUpdate(String key){
+				return false;
+			}
+		});
+		filters.put(ClientLobbyState.LOBBY, new ClientLobbyFilterLobby());
+		filters.put(ClientLobbyState.GAME, new ClientLobbyFilterGame());
 	}
 
 	public void update(float delta){
-		
-		updateStatus();
+		for(ClientLobbyModule module : modules)
+			state = module.update(delta, this, state);
 
+		filters.get(state).update(delta);
+		
 		if(state == ClientLobbyState.GAME){
 			if(game == null) game = new ClientGame(id);
 
-			Set<String> lobbyPlayers = new HashSet<>();
-			if(lastPacketCollectiveLobbyStatus != null)
-				lobbyPlayers = lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
-			
-			game.update(delta, lobbyPlayers); // TODO separate game update into two methods for more efficient packet handling
+			game.update(delta, lobbyIds); // TODO separate game update into two methods for more efficient packet handling
 			
 			isReady = false;
 		}else{
 			game = null;
-			sendPacketLobbyStatus();
 		}
-
-		HvlDirect.update(delta);
-	}
-	
-	public void disconnect(){
-		HvlDirect.disconnect();
-	}
-
-	private void updateStatus(){
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS)){
-			lastPacketCollectiveLobbyStatus = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS);
-		}
-
-		if(lastPacketCollectiveLobbyStatus != null){
-			if(lastPacketCollectiveLobbyStatus.state == LobbyState.GAME){
-				state = ClientLobbyState.GAME;
-			}else{
-				state = ClientLobbyState.LOBBY;
-			}
-		}else state = ClientLobbyState.CONNECTING;
-	}
-	
-	public Set<String> getAllConnectedPlayers(){
-		if(lastPacketCollectiveLobbyStatus != null)
-			return lastPacketCollectiveLobbyStatus.collectiveLobbyStatus.keySet();
-		else return new HashSet<>();
-	}
-
-	private void sendPacketLobbyStatus(){
-		PacketLobbyStatus packet = new PacketLobbyStatus(username, isReady);
-		HvlDirect.writeTCP(NetworkUtil.KEY_LOBBY_STATUS, packet);
 	}
 
 	public void setUsername(String usernameArg){
