@@ -14,7 +14,7 @@ public class PlayerClientBullet{
 	
 	private float bulletTimer = 0;
 
-	public void update(float delta, ClientPlayer player) {
+	public void update(float delta, ClientPlayer player, ClientGame game) {
 		
 		float bulletMagx;
 		float bulletMagy;
