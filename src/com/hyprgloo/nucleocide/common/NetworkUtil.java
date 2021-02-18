@@ -31,4 +31,6 @@ public class NetworkUtil {
 	public static final String KEY_PLAYER_STATUS = "game.playerstatus";
 	public static final String KEY_COLLECTIVE_PLAYER_STATUS = "game.collectiveplayerstatus";
 	
+	public static final String KEY_PLAYER_BULLET_EVENT = "game.playerbulletevent";
+	
 }

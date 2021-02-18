@@ -6,6 +6,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
 import static com.osreboot.ridhvl2.HvlStatics.hvlRotate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.server.ServerMain;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -88,10 +90,9 @@ public class ClientGame {
 		
 	}
 	
-	public void createClientBulletPackage() {
-		
-		
-		
+	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
+		//Package that will hold bullet update events for the client on this frame.
+		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(new ArrayList<ClientBullet>()));
 	}
 	
 }
