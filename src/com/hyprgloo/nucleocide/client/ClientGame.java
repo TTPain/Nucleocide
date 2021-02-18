@@ -1,10 +1,15 @@
 package com.hyprgloo.nucleocide.client;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlColor;
+import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
+import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
+import static com.osreboot.ridhvl2.HvlStatics.hvlRotate;
 
 import java.util.HashMap;
 import java.util.Set;
+
+import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
@@ -13,6 +18,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.server.ServerMain;
 import com.osreboot.hvol2.direct.HvlDirect;
+import com.osreboot.ridhvl2.HvlAction;
 import com.osreboot.ridhvl2.HvlCoord;
 
 /**
@@ -34,6 +40,8 @@ public class ClientGame {
 	public void update(float delta, Set<String> lobbyPlayers){
 		world.draw();
 		player.update(delta, world);
+		
+		//Send this client's packet to the server.
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
 
 		//Receive collective player status packet from server
@@ -65,11 +73,14 @@ public class ClientGame {
 				return !lobbyPlayers.contains(p);
 			});
 
-			//Use the information to render ClientPlayer objects and UUIDs for every other player.
+			//Use the information to render ClientPlayer representations, UUIDs, and aim indicators for every other player.
 			for (String name : otherPlayers.keySet()){
 				otherPlayers.get(name).update(delta, world);
 				hvlFont(ServerMain.INDEX_FONT).drawc(name, otherPlayers.get(name).playerPos.x,
 						otherPlayers.get(name).playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
+				hvlRotate(otherPlayers.get(name).playerPos.x, otherPlayers.get(name).playerPos.y, otherPlayers.get(name).degRot, ()->{
+					hvlDraw(hvlQuadc(otherPlayers.get(name).playerPos.x+30, otherPlayers.get(name).playerPos.y, 10, 4), Color.gray);
+				});
 			}
 		}
 	}
