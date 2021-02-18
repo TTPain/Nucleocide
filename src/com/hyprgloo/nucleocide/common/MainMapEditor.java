@@ -163,13 +163,13 @@ public class MainMapEditor extends HvlTemplateI{
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_5) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 15){
+			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 5;
 			}
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_0) && i < 16){
 			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 15){
+			if(basetcheck > -1 && basetcheck < 16){
 			importer.baset[basetcheck] = 0;
 			}
 		}
