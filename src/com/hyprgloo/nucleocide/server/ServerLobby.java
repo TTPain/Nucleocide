@@ -58,8 +58,6 @@ public class ServerLobby {
 		}else{
 			game = null;
 		}
-
-		HvlDirect.update(delta);
 	}
 	
 	public void filter(HvlMessage message, HvlIdentityAnarchy identity){

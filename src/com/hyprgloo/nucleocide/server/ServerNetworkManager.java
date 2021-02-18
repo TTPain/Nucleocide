@@ -42,6 +42,8 @@ public class ServerNetworkManager {
 
 	public static void update(float delta){
 		lobby.update(delta);
+		
+		HvlDirect.update(delta);
 	}
 
 }

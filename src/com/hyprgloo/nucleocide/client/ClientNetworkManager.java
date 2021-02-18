@@ -1,5 +1,11 @@
 package com.hyprgloo.nucleocide.client;
 
+import java.util.UUID;
+
+import com.hyprgloo.nucleocide.common.NetworkUtil;
+import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
+import com.osreboot.hvol2.direct.HvlDirect;
+
 /**
  * @author os_reboot
  */
@@ -7,22 +13,30 @@ public class ClientNetworkManager {
 
 	private ClientNetworkManager(){}
 	
+	private static String id;
 	private static ClientLobby lobby;
 	
 	public static void initialize(){
-		
+		id = UUID.randomUUID().toString().replace("-", "");
 	}
 	
-	public static void connect(ClientLobby lobbyArg){
-		lobby = lobbyArg;
+	public static void connect(){
+		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentClientAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.IP, NetworkUtil.PORT, id));
+		HvlDirect.connect();
+		
+		lobby = new ClientLobby(id);
 	}
 	
 	public static void update(float delta){
-		if(lobby != null) lobby.update(delta);
+		if(lobby != null){
+			lobby.update(delta);
+			
+			HvlDirect.update(delta);
+		}
 	}
 	
 	public static void disconnect(){
-		if(lobby != null) lobby.disconnect();
+		HvlDirect.disconnect();
 		lobby = null;
 	}
 	
