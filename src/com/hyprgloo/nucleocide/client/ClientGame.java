@@ -33,7 +33,7 @@ public class ClientGame {
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
-		player = new ClientPlayerClient(new HvlCoord(), 100, 100);
+		player = new ClientPlayerClient(new HvlCoord(100, 100), 1, 0);
 		this.id = id;
 	}
 
