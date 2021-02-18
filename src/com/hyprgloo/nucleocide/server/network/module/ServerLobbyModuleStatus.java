@@ -1,4 +1,4 @@
-package com.hyprgloo.nucleocide.server.network;
+package com.hyprgloo.nucleocide.server.network.module;
 
 import java.util.HashMap;
 
@@ -6,6 +6,7 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
+import com.hyprgloo.nucleocide.server.network.ServerLobbyModule;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 
@@ -47,6 +48,7 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 			if(lobbyStatus.get(identity) != null && lobbyStatus.get(identity).isReady) countReady++;
 		}
 		if(countReady == lobbyStatus.size() && countReady >= NetworkUtil.MINIMUM_PLAYERS_READY_TO_START){
+			lobbyStatus.forEach((k, v) -> v.isReady = false);
 			return LobbyState.GAME;
 		}else return state;
 	}
