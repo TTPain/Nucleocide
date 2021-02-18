@@ -33,13 +33,13 @@ public class ClientGame {
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
-		player = new ClientPlayerClient(new HvlCoord(), 1, 0);
+		player = new ClientPlayerClient(new HvlCoord(100, 100), 1, 0);
 		this.id = id;
 	}
 
 	public void update(float delta, Set<String> lobbyPlayers){
 		world.draw();
-		player.update(delta, world);
+		player.update(delta, world, this);
 		
 		//Send this client's packet to the server.
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
@@ -75,7 +75,7 @@ public class ClientGame {
 
 			//Use the information to render ClientPlayer representations, UUIDs, and aim indicators for every other player.
 			for (String name : otherPlayers.keySet()){
-				otherPlayers.get(name).update(delta, world);
+				otherPlayers.get(name).update(delta, world, this);
 				hvlFont(ServerMain.INDEX_FONT).drawc(name, otherPlayers.get(name).playerPos.x,
 						otherPlayers.get(name).playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
 				hvlRotate(otherPlayers.get(name).playerPos.x, otherPlayers.get(name).playerPos.y, otherPlayers.get(name).degRot, ()->{
@@ -83,6 +83,16 @@ public class ClientGame {
 				});
 			}
 		}
+		
+		//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
+		
 	}
+	
+	public void createClientBulletPackage() {
+		
+		
+		
+	}
+	
 }
 
