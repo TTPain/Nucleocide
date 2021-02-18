@@ -14,18 +14,24 @@ import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
 public class ClientPlayerClient extends ClientPlayer {
-	
-	private float bulletTimer = 0;
 
+	public PlayerClientBullet weapon;
+	
+	
 	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg, float degRotArg) {
 		super(playerPosArg, healthArg, degRotArg);
 		// TODO Auto-generated constructor stub
+		
+		weapon = new PlayerClientBullet();
+		
 	}
 	
 	//Movement for client player, only affects individual clients positions.
 	@Override
 	public void update(float delta, World world) {
 		super.update(delta, world);
+		weapon.update(delta, this);
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			playerPos.y -= delta*pixPerSec;
 		}
@@ -39,27 +45,19 @@ public class ClientPlayerClient extends ClientPlayer {
 			playerPos.x += delta*pixPerSec;
 		}
 		
-		float bulletMagx;
-		float bulletMagy;
-		int bulletSpeed = 5;
-		bulletMagx = Mouse.getX() - playerPos.x;
-		bulletMagy = ((Display.getHeight() - Mouse.getY()) - playerPos.y);
-		HvlCoord bulletDir = new HvlCoord(bulletMagx, bulletMagy);
-		bulletDir.normalize();
-		if(Mouse.isButtonDown(0)) {
-			if(bulletTimer <= 0) {
-			bulletTotal.add(new ClientBullet(new HvlCoord(playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed))));
-			bulletTimer = 40*delta;
-			}
-			bulletTimer -= delta;
+		if(world.isSolidCord(playerPos.x + ClientPlayer.PLAYER_SIZE, playerPos.y)) {
+			playerPos.x -= 1;
 		}
-		else {
-			bulletTimer = 0;
+		if(world.isSolidCord(playerPos.x - ClientPlayer.PLAYER_SIZE, playerPos.y)) {
+			playerPos.x += 1;
 		}
-		//hvlDraw(hvlQuadc(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y, 6, 200), Color.white);
-		hvlDraw(hvlLine(playerPos.x + 20*bulletDir.x, playerPos.y + 20*bulletDir.y, playerPos.x + bulletDir.x*PLAYER_SIZE, playerPos.y + bulletDir.y*PLAYER_SIZE, 8), Color.red);
-		HvlCoord angle = new HvlCoord(playerPos.x + bulletDir.x, playerPos.y + bulletDir.y);
-		degRot = HvlMath.angle(playerPos, angle);
+		if(world.isSolidCord(playerPos.x, playerPos.y - ClientPlayer.PLAYER_SIZE)) {
+			playerPos.y += 1;
+		}
+		if(world.isSolidCord(playerPos.x, playerPos.y + ClientPlayer.PLAYER_SIZE)) {
+			playerPos.y -= 1;
+		}
+		
 	}	
 }
 //make fire rate a variable
