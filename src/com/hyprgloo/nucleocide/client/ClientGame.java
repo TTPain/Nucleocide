@@ -6,6 +6,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
 import static com.osreboot.ridhvl2.HvlStatics.hvlRotate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.server.ServerMain;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -30,6 +32,7 @@ public class ClientGame {
 	private ClientPlayer player;
 	private String id;
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	private ArrayList<ClientBullet> otherPlayerBullets = new ArrayList<ClientBullet>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -82,17 +85,18 @@ public class ClientGame {
 					hvlDraw(hvlQuadc(otherPlayers.get(name).playerPos.x+30, otherPlayers.get(name).playerPos.y, 10, 4), Color.gray);
 				});
 			}
-		}
-		
-		//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
-		
+		}	
 	}
 	
-	public void createClientBulletPackage() {
-		
-		
-		
+	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
+	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
+		//Package that will hold bullet update events for the client on this frame.
+		//To be called in PlayerClientBullet
+		//game.createAndSendClientBulletPackage(arrayList);
+		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
 	}
+	
+	//Receive and update bullets sent from the server, skipping the client's own bullets.
 	
 }
 
