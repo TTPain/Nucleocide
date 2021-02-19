@@ -20,7 +20,7 @@ public class PlayerClientBullet{
 	public void update(float delta, ClientPlayer player, ClientGame game) {
 
 		
-		ArrayList<ClientBullet> bulletsToSend = new ArrayList<>();
+		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
 		float bulletMagx;
 		float bulletMagy;
 		boolean firedThisFrame = false;
