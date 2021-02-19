@@ -20,8 +20,8 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.server.ServerMain;
+import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
-import com.osreboot.ridhvl2.HvlAction;
 import com.osreboot.ridhvl2.HvlCoord;
 
 /**
@@ -56,6 +56,7 @@ public class ClientGame {
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
 			//Initialize the packet of bullet events
 			bulletPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
 			
 			for(String name: bulletPacket.collectivePlayerBulletStatus.keySet()) {
 				if(otherPlayers.containsKey(name)) {
