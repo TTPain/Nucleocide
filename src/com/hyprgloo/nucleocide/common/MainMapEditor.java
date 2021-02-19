@@ -4,6 +4,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
+import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.client.ClientMain;
 import com.osreboot.ridhvl2.HvlConfig;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
 import com.osreboot.ridhvl2.template.HvlTemplateI;
@@ -60,7 +62,13 @@ public class MainMapEditor extends HvlTemplateI{
 	@Override
 	public void initialize() {
 		hvlLoad("INOF.hvlft");
-	
+		hvlLoad("/tileset/tile0.png");
+		hvlLoad("/tileset/tile1.png");
+		hvlLoad("/tileset/tile2.png");
+		hvlLoad("/tileset/tile3.png");
+		hvlLoad("/tileset/tile4.png");
+		hvlLoad("/tileset/tile5.png");
+		hvlLoad("/tileset/tilenotexture.png");
 		
 		Chunk importer = new Chunk(0,0); 
 		try {
@@ -110,25 +118,25 @@ public class MainMapEditor extends HvlTemplateI{
 		for(int j = 0; j < 16; j ++) {			
 			switch(importer.baset[j]) {
 			case 0:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.blue);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(0));
 				break;
 			case 1:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.cyan);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(1));
 				break;
 			case 2:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.white);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(2));
 				break;
 			case 3:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.gray);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(3));
 				break;
 			case 4:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.yellow);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(4));
 				break;
 			case 5:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.red);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(5));
 				break;
 			default:
-				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.black);
+				hvlDraw(hvlQuadc(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(6));
 			}
 			if(j%4 == 3) {
 				yr = yr + BLOCK_SIZE;
