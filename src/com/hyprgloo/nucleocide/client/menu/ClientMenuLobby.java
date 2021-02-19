@@ -40,7 +40,7 @@ public class ClientMenuLobby extends ClientMenu{
 
 			if(ClientNetworkManager.isConnected()){
 				ClientLobby lobby = ClientNetworkManager.getLobby();
-				PacketCollectiveLobbyStatus packet = lobby.lastPacket;
+				PacketCollectiveLobbyStatus packet = lobby.lobbyStatus;
 				HvlFont font = hvlFont(ClientMain.INDEX_FONT);
 				
 				if(packet != null){

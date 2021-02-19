@@ -77,12 +77,13 @@ public class ClientGame {
 			});
 
 			//Use the information to render ClientPlayer representations, UUIDs, and aim indicators for every other player.
-			for (String name : otherPlayers.keySet()){
-				otherPlayers.get(name).update(delta, world, this);
-				hvlFont(ServerMain.INDEX_FONT).drawc(name, otherPlayers.get(name).playerPos.x,
-						otherPlayers.get(name).playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
-				hvlRotate(otherPlayers.get(name).playerPos.x, otherPlayers.get(name).playerPos.y, otherPlayers.get(name).degRot, ()->{
-					hvlDraw(hvlQuadc(otherPlayers.get(name).playerPos.x+30, otherPlayers.get(name).playerPos.y, 10, 4), Color.gray);
+			for (String otherUuid : otherPlayers.keySet()){
+				ClientPlayer otherPlayer = otherPlayers.get(otherUuid);
+				otherPlayers.get(otherUuid).update(delta, world, this);
+				String otherUsername = ClientNetworkManager.getLobby().lobbyStatus.getUsername(otherUuid);
+				hvlFont(ServerMain.INDEX_FONT).drawc(otherUsername, otherPlayer.playerPos.x, otherPlayer.playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
+				hvlRotate(otherPlayer.playerPos.x, otherPlayer.playerPos.y, otherPlayer.degRot, ()->{
+					hvlDraw(hvlQuadc(otherPlayer.playerPos.x+30, otherPlayer.playerPos.y, 10, 4), Color.gray);
 				});
 			}
 		}	

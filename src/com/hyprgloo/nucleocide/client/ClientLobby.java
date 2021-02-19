@@ -2,13 +2,13 @@ package com.hyprgloo.nucleocide.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import com.hyprgloo.nucleocide.client.network.ClientLobbyFilter;
 import com.hyprgloo.nucleocide.client.network.ClientLobbyModule;
 import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterGame;
 import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterLobby;
 import com.hyprgloo.nucleocide.client.network.module.ClientLobbyModuleStatus;
+import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 
 /**
@@ -31,8 +31,7 @@ public class ClientLobby {
 	
 	private ClientGame game;
 
-	public HashSet<String> lobbyIds; // TODO better way to do this
-	public PacketCollectiveLobbyStatus lastPacket; // TODO better way to do this
+	public PacketCollectiveLobbyStatus lobbyStatus;
 	
 	public ClientLobby(String idArg){
 		id = idArg;
@@ -54,6 +53,8 @@ public class ClientLobby {
 		});
 		filters.put(ClientLobbyState.LOBBY, new ClientLobbyFilterLobby());
 		filters.put(ClientLobbyState.GAME, new ClientLobbyFilterGame());
+		
+		lobbyStatus = new PacketCollectiveLobbyStatus(new HashMap<>(), LobbyState.LOBBY);
 	}
 
 	public void update(float delta){
@@ -65,7 +66,8 @@ public class ClientLobby {
 		if(state == ClientLobbyState.GAME){
 			if(game == null) game = new ClientGame(id);
 
-			game.update(delta, lobbyIds); // TODO separate game update into two methods for more efficient packet handling
+			// TODO separate game update into two methods for more efficient packet handling
+			game.update(delta, lobbyStatus.collectiveLobbyStatus.keySet());
 			
 			isReady = false;
 		}else{

@@ -15,5 +15,9 @@ public class PacketCollectiveLobbyStatus implements Serializable{
 		collectiveLobbyStatus = collectiveLobbyStatusArg;
 		state = stateArg;
 	}
+	
+	public String getUsername(String uuid){
+		return collectiveLobbyStatus.get(uuid).username;
+	}
 
 }

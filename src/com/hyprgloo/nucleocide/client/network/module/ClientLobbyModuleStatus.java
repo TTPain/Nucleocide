@@ -1,7 +1,5 @@
 package com.hyprgloo.nucleocide.client.network.module;
 
-import java.util.HashSet;
-
 import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
 import com.hyprgloo.nucleocide.client.network.ClientLobbyModule;
@@ -20,8 +18,7 @@ public class ClientLobbyModuleStatus extends ClientLobbyModule {
 		// Read server packet
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS)){
 			lastPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS);
-			lobby.lobbyIds = new HashSet<>(lastPacket.collectiveLobbyStatus.keySet());
-			lobby.lastPacket = lastPacket;
+			lobby.lobbyStatus = lastPacket;
 		}
 
 		// Write client packet
