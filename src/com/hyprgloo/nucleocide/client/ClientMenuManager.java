@@ -6,11 +6,13 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlEnvironment;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
+import com.hyprgloo.nucleocide.client.menu.ClientMenuConnecting;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuGame;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuLobby;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuMain;
@@ -36,9 +38,9 @@ public class ClientMenuManager {
 	HEIGHT_BUTTON = 32f,
 	WIDTH_BUTTON = 512f;
 
-	protected static ArrayList<ClientMenu> menus;
-	
-	public static ClientMenu main, lobby, game;
+	private static HashMap<ClientLobbyState, HvlArranger> stateMenus;
+
+	public static HvlArranger menuMain, menuConnecting, menuLobby, menuGame;
 
 	public static void initialize(){
 		HvlFont font = hvlFont(ClientMain.INDEX_FONT);
@@ -56,21 +58,27 @@ public class ClientMenuManager {
 		HvlDefault.put(new HvlRule(true, 1f, 2f, new Color(0f, 0f, 0.5f))
 				.align(0.5f, 0.5f).overrideHeight(16f));
 
-		menus = new ArrayList<>();
-
-		main = new ClientMenuMain();
-		lobby = new ClientMenuLobby();
-		game = new ClientMenuGame();
+		menuMain = new ClientMenuMain().arranger;
+		menuConnecting = new ClientMenuConnecting().arranger;
+		menuLobby = new ClientMenuLobby().arranger;
+		menuGame = new ClientMenuGame().arranger;
 		// TODO add other menus here
 
-		HvlMenu.set(menus.get(0).arranger);
+		stateMenus = new HashMap<>();
+		stateMenus.put(ClientLobbyState.CONNECTING, menuConnecting);
+		stateMenus.put(ClientLobbyState.LOBBY, menuLobby);
+		stateMenus.put(ClientLobbyState.GAME, menuGame);
+
+		HvlMenu.set(menuMain);
 	}
 
 	public static void update(float delta){
-		for(ClientMenu menu : menus){
-			if(HvlMenu.get().contains(menu.arranger)){
-				menu.update(delta);
-			}
+		if(ClientNetworkManager.isConnected()){
+			HvlArranger menuTarget = stateMenus.get(ClientNetworkManager.getLobby().state);
+			if(HvlMenu.get().get(0) != menuTarget)
+				HvlMenu.set(menuTarget);
+		}else if(stateMenus.values().contains(HvlMenu.get().get(0))){
+			HvlMenu.set(menuMain); // TODO disconnection error
 		}
 
 		HvlMenu.operate(delta, hvlEnvironment(PADDING_ARRANGER, PADDING_ARRANGER, Display.getWidth() - PADDING_ARRANGER * 2f, Display.getHeight() - PADDING_ARRANGER * 2f));

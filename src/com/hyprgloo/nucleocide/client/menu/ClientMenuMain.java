@@ -16,12 +16,9 @@ public class ClientMenuMain extends ClientMenu{
 		addButton("[TODO] Server Browser", b -> HvlMenu.set(arranger));
 		addButton("[TEMP] Instant Connection", b -> {
 			ClientNetworkManager.connect();
-			HvlMenu.set(ClientMenuManager.lobby.arranger);
+			HvlMenu.set(ClientMenuManager.menuLobby);
 		});
 		addButton("Exit", b -> System.exit(0));
 	}
-
-	@Override
-	public void update(float delta){}
 
 }

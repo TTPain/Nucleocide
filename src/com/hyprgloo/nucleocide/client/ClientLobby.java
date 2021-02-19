@@ -32,13 +32,15 @@ public class ClientLobby {
 	private ClientGame game;
 
 	public HashSet<String> lobbyIds; // TODO better way to do this
-	public PacketCollectiveLobbyStatus lastPacket;
+	public PacketCollectiveLobbyStatus lastPacket; // TODO better way to do this
 	
 	public ClientLobby(String idArg){
 		id = idArg;
 		
 		username = "Username";
 		isReady = false;
+		
+		state = ClientLobbyState.CONNECTING;
 		
 		modules = new ArrayList<>();
 		modules.add(new ClientLobbyModuleStatus());

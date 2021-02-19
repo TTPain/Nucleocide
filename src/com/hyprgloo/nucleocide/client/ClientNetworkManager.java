@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
+import com.osreboot.hvol2.direct.HvlDirect.HvlAgentStatus;
 
 /**
  * @author os_reboot
@@ -32,6 +33,9 @@ public class ClientNetworkManager {
 			lobby.update(delta);
 			
 			HvlDirect.update(delta);
+			
+			if(HvlDirect.getStatus() == HvlAgentStatus.DISCONNECTED)
+				disconnect();
 		}
 	}
 	

@@ -9,7 +9,6 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
 import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientLobby;
-import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
 import com.hyprgloo.nucleocide.client.ClientMain;
 import com.hyprgloo.nucleocide.client.ClientMenu;
 import com.hyprgloo.nucleocide.client.ClientMenuManager;
@@ -69,16 +68,8 @@ public class ClientMenuLobby extends ClientMenu{
 		arranger.<HvlArranger>find("arrangerBottom").add(HvlSpacer.fromDefault());
 		arranger.<HvlArranger>find("arrangerBottom").add(HvlButtonLabeled.fromDefault().text("Disconnect").clicked(b -> {
 			ClientNetworkManager.disconnect();
-			HvlMenu.set(ClientMenuManager.main.arranger);
+			HvlMenu.set(ClientMenuManager.menuMain);
 		}));
-	}
-
-	@Override
-	public void update(float delta){
-		if(ClientNetworkManager.isConnected()){
-			if(ClientNetworkManager.getLobby().state == ClientLobbyState.GAME)
-				HvlMenu.set(ClientMenuManager.game.arranger);
-		}
 	}
 
 }
