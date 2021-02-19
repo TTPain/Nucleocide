@@ -63,7 +63,7 @@ public class PlayerClientBullet{
 			bulletTimer = 0;
 		}
 		if(firedThisFrame) {
-		//game.createAndSendClientBulletPackage(bulletsToSend);
+			game.createAndSendClientBulletPackage(bulletsToSend);
 		}
 	}
 
