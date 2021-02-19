@@ -17,6 +17,15 @@ public class ClientMain extends HvlTemplateI{
 	public static final int
 	INDEX_FONT = 0;
 	
+	public static final int
+	INDEX_TILESET0 = 0,
+	INDEX_TILESET1 = 1,
+	INDEX_TILESET2 = 2,
+	INDEX_TILESET3 = 3,
+	INDEX_TILESET4 = 4,
+	INDEX_TILESET5 = 5,
+	INDEX_TILESETDEF = 6;
+	
 	public ClientMain(){
 		super(new HvlDisplayWindowed(144, 1280, 720, "Temporary Client Window", true));
 	}
@@ -24,6 +33,13 @@ public class ClientMain extends HvlTemplateI{
 	@Override
 	public void initialize(){
 		hvlLoad("INOF.hvlft");
+		hvlLoad("/tileset/tile0.png");
+		hvlLoad("/tileset/tile1.png");
+		hvlLoad("/tileset/tile2.png");
+		hvlLoad("/tileset/tile3.png");
+		hvlLoad("/tileset/tile4.png");
+		hvlLoad("/tileset/tile5.png");
+		hvlLoad("/tileset/tilenotexture.png");
 		
 		ClientNetworkManager.initialize();
 		ClientMenuManager.initialize();

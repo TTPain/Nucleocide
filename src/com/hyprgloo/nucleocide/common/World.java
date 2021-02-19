@@ -2,11 +2,12 @@ package com.hyprgloo.nucleocide.common;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
+import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
+import com.hyprgloo.nucleocide.client.ClientMain;
 
 /**
  * @author RetrogradeBurnHD
@@ -31,25 +32,25 @@ public class World implements Serializable{
 			for(int j = 0; j < 16; j ++) {
 				switch(bucket.baset[j]) {
 				case 0:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.black);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET0));
 					break;
 				case 1:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.cyan);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET1));
 					break;
 				case 2:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.white);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET2));
 					break;
 				case 3:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.gray);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET3));
 					break;
 				case 4:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.yellow);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET4));
 					break;
 				case 5:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.red);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET5));
 					break;
 				default:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), Color.black);
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESETDEF));
 				}
 				if(j%4 == 3) {
 					yr = yr + BLOCK_SIZE;
