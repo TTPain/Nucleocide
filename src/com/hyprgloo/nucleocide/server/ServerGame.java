@@ -30,7 +30,7 @@ public class ServerGame {
 	public void update(float delta){
 		//Create an empty hashmap to hold all playerstatus packets and UUIDs
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
-		ArrayList<PacketPlayerBulletEvent> collectivePlayerBulletEvent = new ArrayList<PacketPlayerBulletEvent>();
+		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
 
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			//Insert all needed data into collectivePlayerStatus
@@ -38,7 +38,7 @@ public class ServerGame {
 				collectivePlayerStatus.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_STATUS));
 			}
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_EVENT)) {
-				collectivePlayerBulletEvent.add(HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
+				collectivePlayerBulletEvent.put(i.getName(),HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
 			}
 		}
 		//Send packets to clients

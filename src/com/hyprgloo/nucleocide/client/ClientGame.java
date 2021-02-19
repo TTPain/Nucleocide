@@ -15,6 +15,7 @@ import org.newdawn.slick.Color;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
@@ -49,6 +50,23 @@ public class ClientGame {
 
 		//Receive collective player status packet from server
 		PacketCollectivePlayerStatus packet;
+		
+		PacketCollectivePlayerBulletEvent bulletPacket;
+		
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
+			//Initialize the packet of bullet events
+			bulletPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
+			
+			for(String name: bulletPacket.collectivePlayerBulletStatus.keySet()) {
+				if(otherPlayers.containsKey(name)) {
+					otherPlayers.get(name).bulletTotal.addAll(bulletPacket.collectivePlayerBulletStatus.get(name).bulletsToFire);
+				}
+			}
+			
+			//Extract, update, and draw the bullets...
+			
+		}
+		
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
 			packet = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
 
