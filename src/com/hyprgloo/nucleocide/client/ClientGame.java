@@ -32,6 +32,7 @@ public class ClientGame {
 	private ClientPlayer player;
 	private String id;
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	private ArrayList<ClientBullet> otherPlayerBullets = new ArrayList<ClientBullet>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -84,16 +85,18 @@ public class ClientGame {
 					hvlDraw(hvlQuadc(otherPlayers.get(name).playerPos.x+30, otherPlayers.get(name).playerPos.y, 10, 4), Color.gray);
 				});
 			}
-		}
-		
-		//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
-		
+		}	
 	}
 	
+	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
 	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
 		//Package that will hold bullet update events for the client on this frame.
-		//HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(new ArrayList<ClientBullet>()));
+		//To be called in PlayerClientBullet
+		//game.createAndSendClientBulletPackage(arrayList);
+		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
 	}
+	
+	//Receive and update bullets sent from the server, skipping the client's own bullets.
 	
 }
 

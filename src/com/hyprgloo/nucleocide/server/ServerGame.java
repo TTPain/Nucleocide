@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.hyprgloo.nucleocide.client.ClientBullet;
 import com.hyprgloo.nucleocide.client.ClientGame;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -27,18 +30,29 @@ public class ServerGame {
 	public void update(float delta){
 		//Create an empty hashmap to hold all playerstatus packets and UUIDs
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
+		ArrayList<PacketPlayerBulletEvent> collectivePlayerBulletEvent = new ArrayList<PacketPlayerBulletEvent>();
 
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
-			//Insert all needed data into hashmap
+			//Insert all needed data into collectivePlayerStatus
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
 				collectivePlayerStatus.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_STATUS));
 			}
-
-
 		}
-		//Send packet containing hashmap
+		//Send packet containing collectivePlayerStatus
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(collectivePlayerStatus));	
+		}
+
+		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
+			//Insert all needed data into collectivePlayerBulletEvent
+			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_EVENT)) {
+				collectivePlayerBulletEvent.add(HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
+			}
+		}
+
+		//Send packet containing collectivePlayerBulletEvent
+		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
+			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));	
 		}
 
 		for(ServerEnemy enemy : enemies){
