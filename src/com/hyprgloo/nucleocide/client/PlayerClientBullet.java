@@ -23,7 +23,6 @@ public class PlayerClientBullet{
 		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
 		float bulletMagx;
 		float bulletMagy;
-		boolean firedThisFrame = false;
 		bulletMagx = Mouse.getX() - player.playerPos.x;
 		bulletMagy = ((Display.getHeight() - Mouse.getY()) - player.playerPos.y);
 		HvlCoord bulletDir = new HvlCoord(bulletMagx, -bulletMagy);
@@ -39,7 +38,6 @@ public class PlayerClientBullet{
 				player.bulletTotal.add(bullet);
 				bulletsToSend.add(bullet);
 				bulletTimer = 40*delta;	
-				firedThisFrame = true;
 			}
 			bulletTimer -= delta;
 			
@@ -55,15 +53,14 @@ public class PlayerClientBullet{
 					bulletsToSend.add(b);
 				}
 				bulletTimer = 120*delta;
-				firedThisFrame = true;
 			}
 			bulletTimer -= delta;
 		}
 		else {
 			bulletTimer = 0;
 		}
-		if(firedThisFrame) {
-			game.createAndSendClientBulletPackage(bulletsToSend);
+		if(bulletsToSend.size()>0) {
+		game.createAndSendClientBulletPackage(bulletsToSend);
 		}
 	}
 
