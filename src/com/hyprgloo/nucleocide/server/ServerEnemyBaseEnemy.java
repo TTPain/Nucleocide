@@ -8,9 +8,10 @@ import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.World;
 import com.osreboot.ridhvl2.HvlCoord;
+import com.osreboot.ridhvl2.HvlMath;
 
 public class ServerEnemyBaseEnemy extends ServerEnemy{
-	
+	private static final long serialVersionUID = 289191286699264122L;
 
 	public ServerEnemyBaseEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
 		super(enemyPosArg, healthArg, textureIDArg, pathfindingIDArg);
@@ -19,7 +20,10 @@ public class ServerEnemyBaseEnemy extends ServerEnemy{
 
 	@Override
 	public void update(float delta, World world) {
-		hvlDraw(hvlQuadc(enemyPos.x, enemyPos.y, 5, 5), Color.blue);
+		
+		//He just spazzes out for now
+		enemyPos.x = HvlMath.randomInt(120, 180);
+		enemyPos.y = HvlMath.randomInt(120, 180);
 		
 	}
 	

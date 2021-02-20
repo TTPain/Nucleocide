@@ -17,8 +17,10 @@ import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
+import com.hyprgloo.nucleocide.server.ServerEnemy;
 import com.hyprgloo.nucleocide.server.ServerMain;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -33,6 +35,7 @@ public class ClientGame {
 	private ClientPlayer player;
 	private String id;
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -43,53 +46,66 @@ public class ClientGame {
 	public void update(float delta, Set<String> lobbyPlayers){
 		world.draw();
 		player.update(delta, world, this);
-		
-		//Send this client's packet to the server.
+
+		PacketCollectivePlayerStatus playerPacket;
+		PacketCollectivePlayerBulletEvent bulletPacket;
+		PacketServerEnemyStatus enemyPacket;
+
+		//Send this client's player packet to the server.
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
 
-		//Receive collective player status packet from server
-		PacketCollectivePlayerStatus packet;
-		
-		PacketCollectivePlayerBulletEvent bulletPacket;
-		
+		//Receive and update server enemy data
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_SERVER_ENEMY_STATUS)) {
+			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
+			//Don't need this line? VVV
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
+			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
+				if(!enemies.containsKey(enemyId)) {
+					enemies.put(enemyId, enemyPacket.collectiveServerEnemyStatus.get(enemyId));
+				}else {
+					enemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
+					enemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
+					enemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
+					enemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
+				}
+			}
+		}
+
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
 			//Initialize the packet of bullet events
 			bulletPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
-			
+
 			for(String name: bulletPacket.collectivePlayerBulletStatus.keySet()) {
 				if(otherPlayers.containsKey(name)) {
 					otherPlayers.get(name).bulletTotal.addAll(bulletPacket.collectivePlayerBulletStatus.get(name).bulletsToFire);
 				}
 			}
-			
-			//Extract, update, and draw the bullets...
-			
 		}
-		
+
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
-			packet = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
+			playerPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
 
 			//Looping through all keys in the packet
-			for (String name : packet.collectivePlayerStatus.keySet()){
+			for (String name : playerPacket.collectivePlayerStatus.keySet()){
 				if(lobbyPlayers.contains(name)) {
 					//Check if the detected player is already in the HashMap otherPlayers.
 					if(!otherPlayers.containsKey(name)) {
 						//Add the player if not. Skip the current client.
 						if(!id.equals(name)) {
-							otherPlayers.put(name, new ClientPlayer(packet.collectivePlayerStatus.get(name).location,
-									packet.collectivePlayerStatus.get(name).health,packet.collectivePlayerStatus.get(name).degRot));
+							otherPlayers.put(name, new ClientPlayer(playerPacket.collectivePlayerStatus.get(name).location,
+									playerPacket.collectivePlayerStatus.get(name).health,playerPacket.collectivePlayerStatus.get(name).degRot));
 						}
-						//If player is already loaded, update its position and health
+						//If player is already loaded, update its parameters.
 					}else{
-						otherPlayers.get(name).playerPos = packet.collectivePlayerStatus.get(name).location;
-						otherPlayers.get(name).health = packet.collectivePlayerStatus.get(name).health;
-						otherPlayers.get(name).degRot = packet.collectivePlayerStatus.get(name).degRot;
+						otherPlayers.get(name).playerPos = playerPacket.collectivePlayerStatus.get(name).location;
+						otherPlayers.get(name).health = playerPacket.collectivePlayerStatus.get(name).health;
+						otherPlayers.get(name).degRot = playerPacket.collectivePlayerStatus.get(name).degRot;
 					}
 				}
 			}
 
-			//If the sent string is not included, remove the player from the HashMap.
+			//Handles player disconnection
 			otherPlayers.keySet().removeIf(p->{
 				return !lobbyPlayers.contains(p);
 			});
@@ -105,17 +121,19 @@ public class ClientGame {
 				});
 			}
 		}	
+		
+		for(String enemyKey : enemies.keySet()){
+			enemies.get(enemyKey).draw();
+		}
+		
 	}
-	
+
 	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
 	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
 		//Package that will hold bullet update events for the client on this frame.
 		//To be called in PlayerClientBullet
-		//game.createAndSendClientBulletPackage(arrayList);
 		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
 	}
-	
-	//Receive and update bullets sent from the server, skipping the client's own bullets.
-	
+
 }
 
