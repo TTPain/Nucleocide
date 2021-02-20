@@ -1,5 +1,6 @@
 package com.hyprgloo.nucleocide.server;
 
+import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.osreboot.ridhvl2.HvlCoord;
 
@@ -9,6 +10,7 @@ public class ServerEnemy {
 	public float health;
 	public int textureID;
 	public int pathfindingID;
+	public String id = NetworkUtil.generateUUID();
 	
 	public ServerEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
 		enemyPos = enemyPosArg;
