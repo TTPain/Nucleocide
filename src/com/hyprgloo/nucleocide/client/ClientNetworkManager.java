@@ -1,7 +1,5 @@
 package com.hyprgloo.nucleocide.client;
 
-import java.util.UUID;
-
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -18,7 +16,7 @@ public class ClientNetworkManager {
 	private static ClientLobby lobby;
 	
 	public static void initialize(){
-		id = UUID.randomUUID().toString().replace("-", "");
+		id = NetworkUtil.generateUUID();
 	}
 	
 	public static void connect(){

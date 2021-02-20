@@ -1,9 +1,24 @@
 package com.hyprgloo.nucleocide.server;
 
+import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
+import com.osreboot.ridhvl2.HvlCoord;
 
-public abstract class ServerEnemy {
+public class ServerEnemy {
 	
-	public abstract void update(float delta, World world); // TODO extend this class and implement basic AI (???)
+	public HvlCoord enemyPos = new HvlCoord();
+	public float health;
+	public int textureID;
+	public int pathfindingID;
+	public String id = NetworkUtil.generateUUID();
+	
+	public ServerEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
+		enemyPos = enemyPosArg;
+		health = healthArg;
+		textureID = textureIDArg;
+		pathfindingID = pathfindingIDArg;
+	}
+	
+	public void update(float delta, World world) {} // TODO extend this class and implement basic AI (???)
 
 }

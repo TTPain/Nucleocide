@@ -2,10 +2,7 @@ package com.hyprgloo.nucleocide.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
-import com.hyprgloo.nucleocide.client.ClientBullet;
-import com.hyprgloo.nucleocide.client.ClientGame;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
@@ -16,6 +13,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
+import com.osreboot.ridhvl2.HvlCoord;
 
 public class ServerGame {
 
@@ -26,6 +24,8 @@ public class ServerGame {
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 
 		enemies = new ArrayList<>(); // TODO spawn enemies somehow (???)
+		enemies.add(new ServerEnemyBaseEnemy(new HvlCoord(150,150), 1, 0, 0));
+		
 	}
 
 	public void update(float delta){

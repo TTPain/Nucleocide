@@ -33,7 +33,6 @@ public class ClientGame {
 	private ClientPlayer player;
 	private String id;
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
-	private ArrayList<ClientBullet> otherPlayerBullets = new ArrayList<ClientBullet>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
