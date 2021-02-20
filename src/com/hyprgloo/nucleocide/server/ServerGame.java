@@ -13,6 +13,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
+import com.osreboot.ridhvl2.HvlCoord;
 
 public class ServerGame {
 
@@ -23,7 +24,7 @@ public class ServerGame {
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 
 		enemies = new ArrayList<>(); // TODO spawn enemies somehow (???)
-		enemies.add(new ServerEnemy(null, 0, 0, 0));
+		enemies.add(new ServerEnemyBaseEnemy(new HvlCoord(150,150), 1, 0, 0));
 		
 	}
 
