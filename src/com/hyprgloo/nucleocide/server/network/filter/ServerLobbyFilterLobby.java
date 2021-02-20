@@ -4,6 +4,9 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.server.network.ServerLobbyFilter;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 
+/**
+ * @author os_reboot
+ */
 public class ServerLobbyFilterLobby extends ServerLobbyFilter{
 
 	@Override

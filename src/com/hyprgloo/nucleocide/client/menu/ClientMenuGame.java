@@ -9,7 +9,4 @@ public class ClientMenuGame extends ClientMenu{
 		super();
 	}
 
-	@Override
-	public void update(float delta){}
-
 }

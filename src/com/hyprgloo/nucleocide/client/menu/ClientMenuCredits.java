@@ -6,6 +6,9 @@ import com.osreboot.ridhvl2.menu.component.HvlArranger;
 import com.osreboot.ridhvl2.menu.component.HvlLabel;
 import com.osreboot.ridhvl2.menu.component.HvlSpacer;
 
+/**
+ * @author os_reboot
+ */
 public class ClientMenuCredits extends ClientMenu{
 
 	public static final float
@@ -23,8 +26,5 @@ public class ClientMenuCredits extends ClientMenu{
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("TTPain").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));
 		addButton("Back", b -> HvlMenu.set(ClientMenuManager.menuMain));
 	}
-	
-	@Override
-	public void update(float delta){}
 
 }

@@ -3,6 +3,9 @@ package com.hyprgloo.nucleocide.server.network;
 import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 
+/**
+ * @author os_reboot
+ */
 public abstract class ServerLobbyModule {
 
 	public abstract LobbyState update(float delta, LobbyState state);

@@ -4,6 +4,9 @@ import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.server.network.ServerLobbyModule;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 
+/**
+ * @author os_reboot
+ */
 public class ServerLobbyModuleTemporaryReset extends ServerLobbyModule{
 
 	private boolean shouldReset = false;

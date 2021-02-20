@@ -9,6 +9,9 @@ import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlAction;
 
+/**
+ * @author os_reboot
+ */
 public abstract class ServerLobbyFilter {
 	
 	private static void removeIf(HvlTable table, HvlAction.A1r<Boolean, String> action){

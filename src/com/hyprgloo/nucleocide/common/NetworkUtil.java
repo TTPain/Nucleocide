@@ -18,11 +18,7 @@ public class NetworkUtil {
 	
 	public static final int TICK_RATE = 32;
 	
-	public static final String IP = "localhost"
-			+ ""
-			+ "";
-	
-	public static final int PORT = 25565;
+	public static final int SERVER_HOST_PORT = 25565;
 	
 	public static final int MINIMUM_PLAYERS_READY_TO_START = 1; // TODO use this for debug only
 	//public static final int MINIMUM_PLAYERS_READY_TO_START = 2;

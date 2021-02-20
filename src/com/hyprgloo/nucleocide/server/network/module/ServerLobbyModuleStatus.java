@@ -10,6 +10,9 @@ import com.hyprgloo.nucleocide.server.network.ServerLobbyModule;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 
+/**
+ * @author os_reboot
+ */
 public class ServerLobbyModuleStatus extends ServerLobbyModule{
 
 	private HashMap<HvlIdentityAnarchy, PacketLobbyStatus> lobbyStatus;

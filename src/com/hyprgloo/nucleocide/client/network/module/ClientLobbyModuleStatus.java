@@ -9,6 +9,9 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
 import com.osreboot.hvol2.direct.HvlDirect;
 
+/**
+ * @author os_reboot
+ */
 public class ClientLobbyModuleStatus extends ClientLobbyModule {
 
 	public PacketCollectiveLobbyStatus lastPacket;

@@ -14,10 +14,12 @@ import org.newdawn.slick.Color;
 import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuConnecting;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuCredits;
+import com.hyprgloo.nucleocide.client.menu.ClientMenuDirectConnect;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuGame;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuLobby;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuMain;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuPopupConnectionSettings;
+import com.hyprgloo.nucleocide.client.menu.ClientMenuUserSettings;
+import com.hyprgloo.nucleocide.client.menu.ClientMenuServerBrowser;
 import com.hyprgloo.nucleocide.common.hvl.HvlField;
 import com.osreboot.ridhvl2.menu.HvlComponent;
 import com.osreboot.ridhvl2.menu.HvlDefault;
@@ -45,8 +47,7 @@ public class ClientMenuManager {
 
 	private static HashMap<ClientLobbyState, HvlArranger> stateMenus;
 
-	public static HvlArranger menuMain, menuCredits, menuConnecting, menuLobby, menuGame;
-	public static HvlArranger menuPopupConnectionSettings;
+	public static HvlArranger menuMain, menuServerBrowser, menuCredits, menuConnecting, menuLobby, menuGame, menuUserSettings, menuDirectConnect;
 
 	public static void initialize(){
 		HvlFont font = hvlFont(ClientMain.INDEX_FONT);
@@ -70,12 +71,14 @@ public class ClientMenuManager {
 		}).offset(8f, 2f).align(0f, 0.5f).overrideSize(WIDTH_BUTTON, HEIGHT_BUTTON));
 
 		menuMain = new ClientMenuMain().arranger;
+		menuServerBrowser = new ClientMenuServerBrowser().arranger;
+		menuDirectConnect = new ClientMenuDirectConnect().arranger;
 		menuCredits = new ClientMenuCredits().arranger;
 		menuConnecting = new ClientMenuConnecting().arranger;
 		menuLobby = new ClientMenuLobby().arranger;
 		menuGame = new ClientMenuGame().arranger;
 		
-		menuPopupConnectionSettings = new ClientMenuPopupConnectionSettings().arranger;
+		menuUserSettings = new ClientMenuUserSettings().arranger;
 		// TODO add other menus here
 
 		stateMenus = new HashMap<>();

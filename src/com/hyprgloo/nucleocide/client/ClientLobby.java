@@ -36,7 +36,7 @@ public class ClientLobby {
 	public ClientLobby(String idArg){
 		id = idArg;
 		
-		username = "Username";
+		username = ClientMain.options.username;
 		isReady = false;
 		
 		state = ClientLobbyState.CONNECTING;

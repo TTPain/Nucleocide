@@ -17,6 +17,9 @@ import com.osreboot.ridhvl2.menu.component.HvlButton;
 import com.osreboot.ridhvl2.menu.component.HvlButtonLabeled;
 import com.osreboot.ridhvl2.template.HvlTemplate;
 
+/**
+ * @author os_reboot
+ */
 public class HvlField extends HvlButtonLabeled{
 	private static final long serialVersionUID = 3524532940445964359L;
 

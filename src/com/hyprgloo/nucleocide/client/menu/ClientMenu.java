@@ -14,15 +14,22 @@ import com.osreboot.ridhvl2.menu.component.HvlSpacer;
  */
 public abstract class ClientMenu {
 
+	public static final String
+	LABEL_TITLE = "labelTitle";
+	
 	public HvlArranger arranger;
 	
 	public ClientMenu(String titleArg){
 		arranger = HvlArranger.fromDefault();
-		arranger.add(HvlLabel.fromDefault().text(titleArg));
+		arranger.add(HvlLabel.fromDefault().text(titleArg).name(LABEL_TITLE));
 		arranger.add(HvlRule.fromDefault());
 		arranger.set(HvlArranger.TAG_UPDATE, (d, e, c) -> {
 			update(d);
 			HvlArranger.DEFAULT_UPDATE.run(d, e, c);
+		});
+		arranger.set(HvlArranger.TAG_DRAW, (d, e, c) -> {
+			HvlArranger.DEFAULT_DRAW.run(d, e, c);
+			draw(d);
 		});
 	}
 	
@@ -32,9 +39,15 @@ public abstract class ClientMenu {
 			update(d);
 			HvlArranger.DEFAULT_UPDATE.run(d, e, c);
 		});
+		arranger.set(HvlArranger.TAG_DRAW, (d, e, c) -> {
+			HvlArranger.DEFAULT_DRAW.run(d, e, c);
+			draw(d);
+		});
 	}
 	
-	public abstract void update(float delta);
+	public void update(float delta){}
+	
+	public void draw(float delta){}
 	
 	protected final void addButton(String buttonName, HvlAction.A1<HvlButton> buttonAction){
 		arranger.add(HvlSpacer.fromDefault());

@@ -70,8 +70,5 @@ public class ClientMenuLobby extends ClientMenu{
 			HvlMenu.set(ClientMenuManager.menuMain);
 		}));
 	}
-	
-	@Override
-	public void update(float delta){}
 
 }
