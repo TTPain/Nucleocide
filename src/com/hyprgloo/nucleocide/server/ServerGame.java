@@ -2,10 +2,7 @@ package com.hyprgloo.nucleocide.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
-import com.hyprgloo.nucleocide.client.ClientBullet;
-import com.hyprgloo.nucleocide.client.ClientGame;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
