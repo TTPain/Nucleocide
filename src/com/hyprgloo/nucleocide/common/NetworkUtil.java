@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.common;
 
+import java.util.UUID;
+
 import com.osreboot.hvol2.base.HvlGameInfo;
 
 public class NetworkUtil {
@@ -17,6 +19,7 @@ public class NetworkUtil {
 	public static final int TICK_RATE = 32;
 	
 	public static final String IP = "localhost"
+			+ ""
 			+ "";
 	
 	public static final int PORT = 25565;
@@ -33,5 +36,9 @@ public class NetworkUtil {
 	public static final String KEY_COLLECTIVE_PLAYER_STATUS = "game.collectiveplayerstatus";
 	public static final String KEY_PLAYER_BULLET_EVENT = "game.playerbulletevent";
 	public static final String KEY_COLLECTIVE_PLAYER_BULLET_EVENT = "game.collectiveplayerbulletevent";
+	
+	public static String generateUUID() {
+		return UUID.randomUUID().toString().replace("-", "");
+	}
 	
 }

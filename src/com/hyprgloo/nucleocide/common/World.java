@@ -76,6 +76,8 @@ public class World implements Serializable{
 		if(bucket == null) {
 			return false;
 		}
+		if(xco < 0 || yco < 0)
+			return false;
 		switch(bucket.baset[xco*4+yco]){
 			case(0):
 				return false;

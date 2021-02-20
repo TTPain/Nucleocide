@@ -57,7 +57,6 @@ public class ClientPlayerClient extends ClientPlayer {
 		if(world.isSolidCord(playerPos.x, playerPos.y + ClientPlayer.PLAYER_SIZE)) {
 			playerPos.y -= 1;
 		}
-		
 	}	
 }
-//make fire rate a variable
+//TODO make fire rate a variable
