@@ -7,6 +7,8 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.Display;
+
 import com.hyprgloo.nucleocide.client.ClientMain;
 
 /**
@@ -29,6 +31,7 @@ public class World implements Serializable{
 			bucket = chunks.get(i);
 			float xr =  BLOCK_SIZE*4 *(float) bucket.chunky;
 			float yr =  BLOCK_SIZE*4 *(float) bucket.chunkx;
+			// for later use with hvlcord for movement, if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xr-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yr-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
 			for(int j = 0; j < 16; j ++) {
 				switch(bucket.baset[j]) {
 				case 0:
