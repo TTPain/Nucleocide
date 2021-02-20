@@ -10,7 +10,6 @@ import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.client.ClientMain;
-import com.hyprgloo.nucleocide.client.ClientMenu;
 import com.hyprgloo.nucleocide.client.ClientMenuManager;
 import com.hyprgloo.nucleocide.client.ClientNetworkManager;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
@@ -71,5 +70,8 @@ public class ClientMenuLobby extends ClientMenu{
 			HvlMenu.set(ClientMenuManager.menuMain);
 		}));
 	}
+	
+	@Override
+	public void update(float delta){}
 
 }
