@@ -23,6 +23,8 @@ public class ServerGame {
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 
 		enemies = new ArrayList<>(); // TODO spawn enemies somehow (???)
+		enemies.add(new ServerEnemy(null, 0, 0, 0));
+		
 	}
 
 	public void update(float delta){
