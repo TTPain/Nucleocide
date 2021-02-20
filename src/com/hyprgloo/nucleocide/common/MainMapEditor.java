@@ -3,7 +3,7 @@ package com.hyprgloo.nucleocide.common;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
-import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
+import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
 import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
-import com.hyprgloo.nucleocide.client.ClientMain;
 import com.osreboot.ridhvl2.HvlConfig;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
 import com.osreboot.ridhvl2.template.HvlTemplateI;
@@ -23,7 +22,7 @@ public class MainMapEditor extends HvlTemplateI{
 	//Test Push
 	public static int SCREEN_MAIN = 1;
 	public static int SCREEN_SETTINGS = 2;
-	public static final float BLOCK_SIZE = 67.5f;
+	public static final float BLOCK_SIZE = 50;
 	static int screen = 1;
 
 
@@ -38,27 +37,82 @@ public class MainMapEditor extends HvlTemplateI{
 	public int block(int x, int y) {
 		return x+y*4;
 	}
-	public int blockFloat(float x, float y) {
-		int xsol;
-		int ysol;
-		float xs = (x-Display.getWidth()/4)/BLOCK_SIZE +.5f;
-		if(xs < 0) {
-			return -1;
-		}
-		System.out.println(xs);
-		float ys = (y-BLOCK_SIZE*6)/BLOCK_SIZE +.5f;
-		System.out.println(ys);
-		xsol = (int) xs;
-		ysol = 4 - (int) ys;
-		if(xsol > 3 || ysol > 3 || xsol < 0 || ysol < 0) {
-			System.out.println("oh no");
-			return -1;
-		}else {
-			return block(xsol, ysol);
+	public void drawWorld (){
+		int size = clistrd.size();
+		for (int i = 0; i < size; i++) {		
+			Chunk bucket = new Chunk(0,0);
+			bucket = clistrd.get(i);
+			float xr =  BLOCK_SIZE*4 *(float) bucket.chunky;
+			float yr =  BLOCK_SIZE*4 *(float) bucket.chunkx;
+			for(int j = 0; j < 16; j ++) {
+				switch(bucket.baset[j]) {
+				case 0:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(0));
+					break;
+				case 1:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(1));
+					break;
+				case 2:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(2));
+					break;
+				case 3:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(3));
+					break;
+				case 4:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(4));
+					break;
+				case 5:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(5));
+					break;
+				default:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(6));
+				}
+				switch(bucket.addt[j]) {
+				case 0:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.transparent);
+					break;
+				case 1:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.cyan);
+					break;
+				case 2:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.blue);
+					break;
+				case 3:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.darkGray);
+					break;
+				case 4:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.green);
+					break;
+				case 5:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.white);
+					break;
+				default:
+					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE/2,BLOCK_SIZE/2), Color.pink);
+				}
+				if(j%4 == 3) {
+					yr = yr + BLOCK_SIZE;
+					xr =  BLOCK_SIZE*4 * (float) bucket.chunky;
+				}else {
+					xr = xr + BLOCK_SIZE;
+				}
+			}
 		}
 	}
-
-
+	public void whatTile(float xmouse, float ymouse) {
+		int xsol;
+		int ysol;
+		float ys = xmouse/BLOCK_SIZE;
+		float xs = ymouse/BLOCK_SIZE;
+		xsol = (int) xs;
+		ysol = (int) ys;
+		whatTileInt(xsol, ysol);
+	}
+	public void whatTileInt(int x, int y) {
+		xchunk = x/4;
+		xoffset = x%4;
+		ychunk = y/4;
+		yoffset = y%4;
+	}
 	@Override
 	public void initialize() {
 		hvlLoad("INOF.hvlft");
@@ -69,17 +123,17 @@ public class MainMapEditor extends HvlTemplateI{
 		hvlLoad("/tileset/tile4.png");
 		hvlLoad("/tileset/tile5.png");
 		hvlLoad("/tileset/tilenotexture.png");
-		
+
 		Chunk importer = new Chunk(0,0); 
 		try {
-		World clistrdwd = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
-		clistrd = clistrdwd.chunks;
-		System.out.println("file loaded");
+			World clistrdwd = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
+			clistrd = clistrdwd.chunks;
+			System.out.println("file loaded");
 		}catch (Exception e) {
 			clistrd = new ArrayList<>();
 			System.out.println("error in file lode, creating new file at mapout.json"); 
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 20; i++) {
+				for (int j = 0; j < 20; j++) {
 					importer = new Chunk(i,j); 
 					clistrd.add(importer);
 				}
@@ -91,29 +145,101 @@ public class MainMapEditor extends HvlTemplateI{
 		d = 0;
 		a = 0;
 		b = 0;
-		
+		xchunk = 0;
+		ychunk = 0;
+		xoffset = 0;
+		yoffset = 0;
+		chunknum = 0;
 	}
 	Chunk importer = new Chunk(0,0);
 	ArrayList<Chunk> clistrd;
+	World clistrdwd;
 	int a;
 	int b;
 	int i;
 	float p;
 	float d;
 	int u;
+	int chunknum;
+	public int xchunk,ychunk,xoffset,yoffset;
 	@Override
 	public void update(float delta) {
-		if(u == 0) {
-		importer = clistrd.get(0);
-		u = 1;
+		whatTile(Mouse.getX(),Display.getHeight()-Mouse.getY());
+		//System.out.println(Mouse.getY());
+		chunknum=0;	
+		Chunk bucket = importer;
+		for(Chunk chunk : clistrd){
+			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
+				importer= chunk;
+				break;
+			}
+			chunknum++;
 		}
-		hvlFont(0).drawc("chunk being edited at x: " + importer.chunkx + " y: " + importer.chunky, Display.getWidth()/2, 100, Color.white, 5f);
+		if(importer == bucket) {
+		}
+		
+		drawWorld();
+	//	
+		hvlFont(0).drawc("tile selected at x: " + (xoffset+importer.chunkx*4) + " y: " + (yoffset+importer.chunky*4), Display.getWidth()/2, 100, Color.white, 5f);
 		if(p > 0) {
 			hvlFont(0).drawc("file saved", Display.getWidth()/2, 200, Color.white, 5f);
 			p = p - delta;
 		}
 		
-		float xr =  Display.getWidth()/4;
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			if(xoffset > -1 && xoffset < 4 && yoffset > -1 && yoffset < 4 && xchunk > -1 && ychunk > -1){
+				if(Keyboard.isKeyDown(Keyboard.KEY_1)){
+					importer.addt[xoffset*4+yoffset] = 1;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_2)){
+					importer.addt[xoffset*4+yoffset] = 2;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_3) ){
+					importer.addt[xoffset*4+yoffset] = 3;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_4)){
+					importer.addt[xoffset*4+yoffset] = 4;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_5)){
+					importer.addt[xoffset*4+yoffset] = 5;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_0)){
+					importer.addt[xoffset*4+yoffset] = 0;
+				}
+			}
+		} else{
+			if(xoffset > -1 && xoffset < 4 && yoffset > -1 && yoffset < 4 && xchunk > -1 && ychunk > -1){
+				if(Keyboard.isKeyDown(Keyboard.KEY_1)){
+					importer.baset[xoffset*4+yoffset] = 1;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_2)){
+					importer.baset[xoffset*4+yoffset] = 2;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_3) ){
+					importer.baset[xoffset*4+yoffset] = 3;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_4)){
+					importer.baset[xoffset*4+yoffset] = 4;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_5)){
+					importer.baset[xoffset*4+yoffset] = 5;
+				}
+				if(Keyboard.isKeyDown(Keyboard.KEY_0)){
+					importer.baset[xoffset*4+yoffset] = 0;
+				}
+			}
+		}
+			clistrd.set(chunknum,importer);
+		if(Keyboard.isKeyDown(Keyboard.KEY_P) && p <= 0){
+			World wrld = new World(clistrd);
+			HvlConfig.PJSON.save(wrld, "res/mapfiles/mapout.json");
+			p = 2;
+		}
+	}
+
+}
+
+/*float xr =  Display.getWidth()/4;
 		float yr =  BLOCK_SIZE*6;
 		for(int j = 0; j < 16; j ++) {			
 			switch(importer.baset[j]) {
@@ -144,72 +270,4 @@ public class MainMapEditor extends HvlTemplateI{
 			}else {
 				xr = xr + BLOCK_SIZE;
 			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_1) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 1;
-			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_2) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 2;
-			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_3) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 3;
-			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_4) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 4;
-			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_5) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 5;
-			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_0) && i < 16){
-			int basetcheck = blockFloat(Mouse.getX(),Mouse.getY());
-			if(basetcheck > -1 && basetcheck < 16){
-			importer.baset[basetcheck] = 0;
-			}
-		}
-		clistrd.set(i,importer);
-		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT) && i > 0 && d <= 0 ){
-			i = i - 1;
-			d = 1;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && i < 15 && d <= 0){
-			i = i + 1;
-			d = 1;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP) && i > 3 && d <= 0){
-			i = i - 4;
-			d = 1;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN) && i < 12 && d <= 0){
-			i = i + 4;
-			d = 1;
-		}
-		if(d > 0) {
-			hvlFont(0).drawc("rrrrrrrrrrrrr", Display.getWidth()/2, 200, Color.white, 5f);
-			if(d == 1f) {
-			importer = clistrd.get(i);
-			}
-			d = d - delta;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_P) && p <= 0){
-			World wrld = new World(clistrd);
-			HvlConfig.PJSON.save(wrld, "res/mapfiles/mapout.json");
-			p = 2;
-		}
-	}
-	
-}
+		}*/
