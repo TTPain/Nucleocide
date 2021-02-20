@@ -26,6 +26,9 @@ public class ClientMain extends HvlTemplateI{
 	INDEX_TILESET5 = 5,
 	INDEX_TILESETDEF = 6;
 	
+	public static final float
+	RENDER_DISTANCE = 5;
+	
 	public ClientMain(){
 		super(new HvlDisplayWindowed(144, 1280, 720, "Temporary Client Window", true));
 	}
