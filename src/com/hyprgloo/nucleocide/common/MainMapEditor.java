@@ -49,63 +49,63 @@ public class MainMapEditor extends HvlTemplateI {
 			for (int i = 0; i < size; i++) {
 				Chunk bucket = new Chunk(0, 0);
 				bucket = chunklistread.get(i);
-				float xr = BLOCK_SIZE * 4 * (float) bucket.chunky;
-				float yr = BLOCK_SIZE * 4 * (float) bucket.chunkx;
-				if (xr - coord.x <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getWidth() / 2
-						&& xr - coord.x >= Display.getWidth() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE - BLOCK_SIZE * 4
-						&& yr - coord.y <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getHeight() / 2
-						&& yr - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
+				float xrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunky;
+				float yrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunkx;
+				if (xrelititve  - coord.x <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getWidth() / 2
+						&& xrelititve  - coord.x >= Display.getWidth() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE - BLOCK_SIZE * 4
+						&& yrelititve  - coord.y <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getHeight() / 2
+						&& yrelititve  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
 						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
 						switch (bucket.baset[j]) {
 						case 0:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(0));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(0));
 							break;
 						case 1:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(1));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(1));
 							break;
 						case 2:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(2));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(2));
 							break;
 						case 3:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(3));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(3));
 							break;
 						case 4:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(4));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(4));
 							break;
 						case 5:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(5));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(5));
 							break;
 						default:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE, BLOCK_SIZE), hvlTexture(6));
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(6));
 						}
 						switch (bucket.addt[j]) {
 						case 0:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.transparent);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.transparent);
 							break;
 						case 1:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.cyan);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.cyan);
 							break;
 						case 2:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.blue);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.blue);
 							break;
 						case 3:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.darkGray);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.darkGray);
 							break;
 						case 4:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.green);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.green);
 							break;
 						case 5:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.white);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.white);
 							break;
 						default:
-							hvlDraw(hvlQuad(xr, yr, BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.pink);
+							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.pink);
 						}
 						if (j % 4 == 3) {
-							yr = yr + BLOCK_SIZE;
-							xr = BLOCK_SIZE * 4 * (float) bucket.chunky;
+							yrelititve  = yrelititve  + BLOCK_SIZE;
+							xrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunky;
 						} else {
-							xr = xr + BLOCK_SIZE;
+							xrelititve  = xrelititve  + BLOCK_SIZE;
 						}
 					}
 				}
