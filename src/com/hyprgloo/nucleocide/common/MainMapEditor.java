@@ -26,6 +26,7 @@ public class MainMapEditor extends HvlTemplateI {
 	public static final float BLOCK_SIZE = 50;
 	public static final float MOVE_SPEED = 500;
 	public static final float RENDER_DISTANCE = 5;
+	public static final int NEW_WORLD_SIZE = 80;
 	static int screen = 1;
 
 	public static void main(String[] args) {
@@ -149,8 +150,8 @@ public class MainMapEditor extends HvlTemplateI {
 		} catch (Exception e) {
 			chunklistread = new ArrayList<>();
 			System.out.println("error in file lode, creating new file at mapout.json");
-			for (int i = 0; i < 80; i++) {
-				for (int j = 0; j < 80; j++) {
+			for (int i = 0; i < NEW_WORLD_SIZE; i++) {
+				for (int j = 0; j < NEW_WORLD_SIZE; j++) {
 					importer = new Chunk(i, j);
 					chunklistread.add(importer);
 				}
