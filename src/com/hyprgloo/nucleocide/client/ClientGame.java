@@ -43,9 +43,9 @@ public class ClientGame {
 		this.id = id;
 	}
 
-	public void update(float delta, Set<String> lobbyPlayers){
+	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInputArg){
 		world.draw(player.playerPos);
-		player.update(delta, world, this);
+		player.update(delta, world, this, true);
 
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
@@ -113,7 +113,7 @@ public class ClientGame {
 			//Use the information to render ClientPlayer representations, UUIDs, and aim indicators for every other player.
 			for (String otherUuid : otherPlayers.keySet()){
 				ClientPlayer otherPlayer = otherPlayers.get(otherUuid);
-				otherPlayers.get(otherUuid).update(delta, world, this);
+				otherPlayers.get(otherUuid).update(delta, world, this, true);
 				String otherUsername = ClientNetworkManager.getLobby().lobbyStatus.getUsername(otherUuid);
 				hvlFont(ServerMain.INDEX_FONT).drawc(otherUsername, otherPlayer.playerPos.x, otherPlayer.playerPos.y-ClientPlayer.PLAYER_SIZE-10, hvlColor(.5f,.5f), 0.5f);
 				hvlRotate(otherPlayer.playerPos.x, otherPlayer.playerPos.y, otherPlayer.degRot, ()->{

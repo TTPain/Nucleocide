@@ -67,7 +67,7 @@ public class ClientLobby {
 			if(game == null) game = new ClientGame(id);
 
 			// TODO separate game update into two methods for more efficient packet handling
-			game.update(delta, lobbyStatus.collectiveLobbyStatus.keySet());
+			game.update(delta, lobbyStatus.collectiveLobbyStatus.keySet(), true);
 			
 			isReady = false;
 		}else{
