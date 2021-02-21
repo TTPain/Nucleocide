@@ -54,7 +54,7 @@ public class MainMapEditor extends HvlTemplateI {
 						&& xr - coord.x >= Display.getWidth() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE - BLOCK_SIZE * 4
 						&& yr - coord.y <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getHeight() / 2
 						&& yr - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
-								- BLOCK_SIZE * 4) {
+						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
 						switch (bucket.baset[j]) {
 						case 0:
