@@ -25,7 +25,7 @@ public class ServerGame {
 	public ServerGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 
-		 // TODO spawn enemies somehow (???)
+		// TODO spawn enemies somehow (???)
 		//Need to generate a real UUID before adding into 'enemies'.
 		ServerEnemyBaseEnemy sampleEnemy = new ServerEnemyBaseEnemy(new HvlCoord(150,150), 1, 0, 0);
 		enemies.put(sampleEnemy.id,sampleEnemy);
@@ -35,7 +35,7 @@ public class ServerGame {
 	public void update(float delta){
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
-		
+
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			//Insert all needed data into collectivePlayerStatus
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
@@ -47,15 +47,16 @@ public class ServerGame {
 
 			}
 		}
-		
+
 		//Send packets to clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(collectivePlayerStatus));
 			if(collectivePlayerBulletEvent.size() > 0) {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));
 			}
-			// VVV WRITING UDP DISCONNECTS THE SERVER! VVV
-			HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
+			if(enemies.size() > 0) {
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
+			}
 		}
 
 		for(String enemyKey : enemies.keySet()){
