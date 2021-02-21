@@ -19,5 +19,9 @@ public class PacketCollectiveLobbyStatus implements Serializable{
 	public String getUsername(String uuid){
 		return collectiveLobbyStatus.get(uuid).username;
 	}
+	
+	public long getPing(String uuid){
+		return collectiveLobbyStatus.get(uuid).ping;
+	}
 
 }

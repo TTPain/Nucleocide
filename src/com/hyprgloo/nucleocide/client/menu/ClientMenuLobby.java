@@ -49,6 +49,7 @@ public class ClientMenuLobby extends ClientMenu{
 						hvlDraw(hvlQuad(e.getX() + 16f, e.getY() + yOffset, WIDTH_LIST_ITEM, HEIGHT_LIST_ITEM), hvlColor(0f, 0f, 0.4f));
 						font.draw(packet.collectiveLobbyStatus.get(id).username, e.getX() + 20f, e.getY() + yOffset + 2f);
 						font.draw("UUID: " + id, e.getX() + 20f, e.getY() + yOffset + 26f, hvlColor(0.25f, 1f));
+						font.draw(packet.collectiveLobbyStatus.get(id).ping + "", e.getX() + WIDTH_LIST_ITEM - 60f, e.getY() + yOffset + 2f);
 						hvlDraw(hvlQuad(e.getX() + WIDTH_LIST_ITEM + 32f, e.getY() + yOffset, HEIGHT_LIST_ITEM, HEIGHT_LIST_ITEM), hvlColor(0f, 0f, 0.4f));
 						if(packet.collectiveLobbyStatus.get(id).isReady)
 							hvlDraw(hvlQuad(e.getX() + WIDTH_LIST_ITEM + 32f + 8f, e.getY() + yOffset + 8f, HEIGHT_LIST_ITEM - 16f, HEIGHT_LIST_ITEM - 16f), Color.white);

@@ -25,9 +25,19 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 	public LobbyState update(float delta, LobbyState state){
 		// Read client packets
 		if(state == LobbyState.LOBBY){
+			// Update all info (lobby)
 			for(HvlIdentityAnarchy identity : lobbyStatus.keySet()){
 				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
 					lobbyStatus.put(identity, HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS));
+				}
+			}
+		}else{
+			// Filter updated into (in-game)
+			for(HvlIdentityAnarchy identity : lobbyStatus.keySet()){
+				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
+					PacketLobbyStatus packetReceived = HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS);
+					PacketLobbyStatus packetExisting = lobbyStatus.get(identity);
+					lobbyStatus.put(identity, new PacketLobbyStatus(packetExisting.username, packetExisting.isReady, packetReceived.ping, packetReceived.pingTimeStart));
 				}
 			}
 		}

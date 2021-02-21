@@ -10,7 +10,7 @@ public class ClientLobbyFilterGame extends ClientLobbyFilter{
 
 	@Override
 	protected boolean filterUpdate(String key){
-		return !key.startsWith(NetworkUtil.PREFIX_KEY_GAME);
+		return !key.startsWith(NetworkUtil.PREFIX_KEY_GAME) && !key.contentEquals(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS);
 	}
 
 }

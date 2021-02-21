@@ -1,5 +1,7 @@
 package com.hyprgloo.nucleocide.client.network.module;
 
+import java.util.Date;
+
 import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
 import com.hyprgloo.nucleocide.client.network.ClientLobbyModule;
@@ -19,13 +21,17 @@ public class ClientLobbyModuleStatus extends ClientLobbyModule {
 	@Override
 	public ClientLobbyState update(float delta, ClientLobby lobby, ClientLobbyState state){
 		// Read server packet
+		long ping = -1;
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS)){
 			lastPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS);
 			lobby.lobbyStatus = lastPacket;
+			if(lobby.lobbyStatus.collectiveLobbyStatus.containsKey(lobby.id))
+				ping = new Date().getTime() - lobby.lobbyStatus.collectiveLobbyStatus.get(lobby.id).pingTimeStart;
 		}
 
 		// Write client packet
 		PacketLobbyStatus packet = new PacketLobbyStatus(lobby.getUsername(), lobby.isReady());
+		if(ping != -1) packet.ping = ping;
 		HvlDirect.writeTCP(NetworkUtil.KEY_LOBBY_STATUS, packet);
 
 		// Update state and players

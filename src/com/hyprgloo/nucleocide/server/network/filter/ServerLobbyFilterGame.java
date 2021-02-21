@@ -11,7 +11,7 @@ public class ServerLobbyFilterGame extends ServerLobbyFilter{
 
 	@Override
 	protected boolean filterMessage(HvlIdentityAnarchy identity, String key){
-		return !key.startsWith(NetworkUtil.PREFIX_KEY_GAME);
+		return !key.startsWith(NetworkUtil.PREFIX_KEY_GAME) && !key.equals(NetworkUtil.KEY_LOBBY_STATUS);
 	}
 
 	@Override
