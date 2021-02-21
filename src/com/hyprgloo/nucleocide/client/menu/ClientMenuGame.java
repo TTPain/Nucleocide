@@ -32,6 +32,12 @@ public class ClientMenuGame extends ClientMenu{
 	public ClientMenuGame(){
 		super();
 	}
+	
+	@Override
+	public void update(float delta){
+		if(HvlMenu.top() == arranger && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+			HvlMenu.push(ClientMenuManager.menuGameEscape);
+	}
 
 	@Override
 	public void draw(float delta){

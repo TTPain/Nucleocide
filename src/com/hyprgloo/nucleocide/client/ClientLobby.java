@@ -10,6 +10,7 @@ import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterLobby;
 import com.hyprgloo.nucleocide.client.network.module.ClientLobbyModuleStatus;
 import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
+import com.osreboot.ridhvl2.menu.HvlMenu;
 
 /**
  * @author os_reboot
@@ -67,7 +68,7 @@ public class ClientLobby {
 			if(game == null) game = new ClientGame(id);
 
 			// TODO separate game update into two methods for more efficient packet handling
-			game.update(delta, lobbyStatus.collectiveLobbyStatus.keySet(), true);
+			game.update(delta, lobbyStatus.collectiveLobbyStatus.keySet(), HvlMenu.top() == ClientMenuManager.menuGame);
 			
 			isReady = false;
 		}else{
