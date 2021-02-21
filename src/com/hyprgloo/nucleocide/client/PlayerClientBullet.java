@@ -48,7 +48,7 @@ public class PlayerClientBullet{
 				player.bulletTotal.add(bullet);
 				bulletsToSend.add(bullet);
 				for(int i = 0; i < 2; i++) {
-					ClientBullet b = createBullet(player, player.degRot, 5);
+					ClientBullet b = createBullet(player, -player.degRot, 5);
 					player.bulletTotal.add(b);
 					bulletsToSend.add(b);
 				}
