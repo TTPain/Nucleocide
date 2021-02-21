@@ -55,7 +55,7 @@ public class ServerGame {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));
 			}
 			if(enemies.size() > 0) {
-				HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
+				HvlDirect.writeUDP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
 			}
 		}
 
