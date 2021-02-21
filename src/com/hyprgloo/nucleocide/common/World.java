@@ -7,8 +7,6 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.Display;
-
 import com.hyprgloo.nucleocide.client.ClientMain;
 import com.osreboot.ridhvl2.HvlCoord;
 
@@ -30,39 +28,39 @@ public class World implements Serializable{
 		for (int i = 0; i < b; i++) {
 			Chunk bucket = new Chunk(0,0);
 			bucket = chunks.get(i);
-			float xr =  BLOCK_SIZE*4 *(float) bucket.chunky;
-			float yr =  BLOCK_SIZE*4 *(float) bucket.chunkx;
-			// for later use with hvlcord for movement, 			if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xr-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yr-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
+			float xrelitive =  BLOCK_SIZE*4 *(float) bucket.chunky;
+			float yrelitive =  BLOCK_SIZE*4 *(float) bucket.chunkx;
+			// for later use with hvlcord for movement, 			if(xrelitive-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xrelitive-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yrelitive-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yrelitive-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
 			//temp player implementation 
-			if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE && xr-coord.x >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE  && yr-coord.y >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
+			if(xrelitive-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE && xrelitive-coord.x >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yrelitive-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE  && yrelitive-coord.y >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
 				for(int j = 0; j < 16; j ++) {
 					switch(bucket.baset[j]) {
 					case 0:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET0));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET0));
 						break;
 					case 1:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET1));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET1));
 						break;
 					case 2:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET2));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET2));
 						break;
 					case 3:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET3));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET3));
 						break;
 					case 4:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET4));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET4));
 						break;
 					case 5:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET5));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET5));
 						break;
 					default:
-						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESETDEF));
+						hvlDraw(hvlQuad(xrelitive,yrelitive,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESETDEF));
 					}
 					if(j%4 == 3) {
-						yr = yr + BLOCK_SIZE;
-						xr =  BLOCK_SIZE*4 * (float) bucket.chunky;
+						yrelitive = yrelitive + BLOCK_SIZE;
+						xrelitive =  BLOCK_SIZE*4 * (float) bucket.chunky;
 					}else {
-						xr = xr + BLOCK_SIZE;
+						xrelitive = xrelitive + BLOCK_SIZE;
 					}
 				}
 			}
@@ -75,22 +73,22 @@ public class World implements Serializable{
 		float xsf = y/BLOCK_SIZE;
 		xsol = (int) xsf;
 		ysol = (int) ysf;
-		int xco = xsol%4;
-		int xc = xsol/4;
-		int yco = ysol%4;
-		int yc = ysol/4;
+		int xchunkoffset = xsol%4;
+		int xchunk = xsol/4;
+		int ychunkoffset = ysol%4;
+		int ychunk = ysol/4;
 		Chunk bucket = null;
 		for(Chunk chunk : this.chunks){
-			if(xc == chunk.chunkx && yc == chunk.chunky) {
+			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
 				bucket = chunk;
 				break;
 			}
 		}
 		if(bucket == null) 
 			return -1;	
-		if(xco < 0 || yco < 0)
+		if(xchunkoffset < 0 || ychunkoffset < 0)
 			return -1;
-		return bucket.baset[xco*4+yco];
+		return bucket.baset[xchunkoffset*4+ychunkoffset];
 	}
 	public int tileHidden(float x, float y) {
 		int xsol;
@@ -99,31 +97,31 @@ public class World implements Serializable{
 		float xsf = y/BLOCK_SIZE;
 		xsol = (int) xsf;
 		ysol = (int) ysf;
-		int xco = xsol%4;
-		int xc = xsol/4;
-		int yco = ysol%4;
-		int yc = ysol/4;
+		int xchunkoffset = xsol%4;
+		int xchunk = xsol/4;
+		int ychunkoffset = ysol%4;
+		int ychunk = ysol/4;
 		Chunk bucket = null;
 		for(Chunk chunk : this.chunks){
-			if(xc == chunk.chunkx && yc == chunk.chunky) {
+			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
 				bucket = chunk;
 				break;
 			}
 		}
 		if(bucket == null) 
 			return -1;	
-		if(xco < 0 || yco < 0)
+		if(xchunkoffset < 0 || ychunkoffset < 0)
 			return -1;
-		return bucket.addt[xco*4+yco];
+		return bucket.addt[xchunkoffset*4+ychunkoffset];
 	}
 	public boolean isSolid(int x, int y) {
-		int xco = x%4;
-		int xc = x/4;
-		int yco = y%4;
-		int yc = y/4;
+		int xchunkoffset = x%4;
+		int xchunk = x/4;
+		int ychunkoffset = y%4;
+		int ychunk = y/4;
 		Chunk bucket = null;
 		for(Chunk chunk : this.chunks){
-			if(xc == chunk.chunkx && yc == chunk.chunky) {
+			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
 				bucket = chunk;
 				break;
 			}
@@ -131,31 +129,31 @@ public class World implements Serializable{
 		if(bucket == null) {
 			return false;
 		}
-		if(xco < 0 || yco < 0)
+		if(xchunkoffset < 0 || ychunkoffset < 0)
 			return false;
-		switch(bucket.baset[xco*4+yco]){
-			case(0):
-				return false;
-		
-			case(1):
-				return true;
-			
-			case(2):
-				return false;	
-			
-			case(3):
-				return false;	
-		
-			case(4):
-				return false;	
-		
-			case(5):
-				return false;		
-		
-			default:
-				return false;
+		switch(bucket.baset[xchunkoffset*4+ychunkoffset]){
+		case(0):
+			return false;
+
+		case(1):
+			return true;
+
+		case(2):
+			return false;	
+
+		case(3):
+			return false;	
+
+		case(4):
+			return false;	
+
+		case(5):
+			return false;		
+
+		default:
+			return false;
 		}
-	 
+
 	}
 	public boolean isSolidCord(float x, float y) {
 		int xsol;
