@@ -67,16 +67,16 @@ public class World implements Serializable{
 		}
 	}
 	public int tileBase(float x, float y) {
-		int xsol;
-		int ysol;
-		float ysf = x/BLOCK_SIZE;
-		float xsf = y/BLOCK_SIZE;
-		xsol = (int) xsf;
-		ysol = (int) ysf;
-		int xchunkoffset = xsol%4;
-		int xchunk = xsol/4;
-		int ychunkoffset = ysol%4;
-		int ychunk = ysol/4;
+		int xtileint;
+		int ytileint;
+		float ytilefloat = x/BLOCK_SIZE;
+		float xtilefloat = y/BLOCK_SIZE;
+		xtileint = (int) xtilefloat;
+		ytileint = (int) ytilefloat;
+		int xchunkoffset = xtileint%4;
+		int xchunk = xtileint/4;
+		int ychunkoffset = ytileint%4;
+		int ychunk = ytileint/4;
 		Chunk bucket = null;
 		for(Chunk chunk : this.chunks){
 			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
@@ -91,16 +91,16 @@ public class World implements Serializable{
 		return bucket.baset[xchunkoffset*4+ychunkoffset];
 	}
 	public int tileHidden(float x, float y) {
-		int xsol;
-		int ysol;
-		float ysf = x/BLOCK_SIZE;
-		float xsf = y/BLOCK_SIZE;
-		xsol = (int) xsf;
-		ysol = (int) ysf;
-		int xchunkoffset = xsol%4;
-		int xchunk = xsol/4;
-		int ychunkoffset = ysol%4;
-		int ychunk = ysol/4;
+		int xtileint;
+		int ytileint;
+		float ytilefloat = x/BLOCK_SIZE;
+		float xtilefloat = y/BLOCK_SIZE;
+		xtileint = (int) xtilefloat;
+		ytileint = (int) ytilefloat;
+		int xchunkoffset = xtileint%4;
+		int xchunk = xtileint/4;
+		int ychunkoffset = ytileint%4;
+		int ychunk = ytileint/4;
 		Chunk bucket = null;
 		for(Chunk chunk : this.chunks){
 			if(xchunk == chunk.chunkx && ychunk == chunk.chunky) {
@@ -156,12 +156,12 @@ public class World implements Serializable{
 
 	}
 	public boolean isSolidCord(float x, float y) {
-		int xsol;
-		int ysol;
-		float ys = x/BLOCK_SIZE;
-		float xs = y/BLOCK_SIZE;
-		xsol = (int) xs;
-		ysol = (int) ys;
-		return isSolid(xsol, ysol);
+		int xtileint;
+		int ytileint;
+		float ytilefloat = x/BLOCK_SIZE;
+		float xtilefloat = y/BLOCK_SIZE;
+		xtileint = (int) xtilefloat;
+		ytileint = (int) ytilefloat;
+		return isSolid(xtileint, ytileint);
 	}
 }
