@@ -43,9 +43,9 @@ public class ClientGame {
 		this.id = id;
 	}
 
-	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInputArg){
+	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInput){
 		world.draw(player.playerPos);
-		player.update(delta, world, this, true);
+		player.update(delta, world, this, acceptInput);
 
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;

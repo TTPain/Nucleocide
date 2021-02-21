@@ -17,9 +17,7 @@ public class PlayerClientBullet{
 	private float bulletTimer = 0;
 	int bulletSpeed = 5;
 
-	public void update(float delta, ClientPlayer player, ClientGame game) {
-
-		
+	public void update(float delta, ClientPlayer player, ClientGame game, boolean acceptInput) {
 		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
 		float bulletMagx;
 		float bulletMagy;
@@ -32,35 +30,38 @@ public class PlayerClientBullet{
 		HvlCoord angle = new HvlCoord(player.playerPos.x + bulletDir.x, player.playerPos.y + bulletDir.y);
 		player.degRot = -HvlMath.angle(player.playerPos, angle);
 
-		if(Mouse.isButtonDown(0)) {
-			if(bulletTimer <= 0) {
-				ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
-				player.bulletTotal.add(bullet);
-				bulletsToSend.add(bullet);
-				bulletTimer = 40*delta;	
-			}
-			bulletTimer -= delta;
-			
-		}
-		else if(Mouse.isButtonDown(1)) {
-			if(bulletTimer <= 0) {
-				ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
-				player.bulletTotal.add(bullet);
-				bulletsToSend.add(bullet);
-				for(int i = 0; i < 2; i++) {
-					ClientBullet b = createBullet(player, -player.degRot, 5);
-					player.bulletTotal.add(b);
-					bulletsToSend.add(b);
+
+		if(acceptInput){ // This freezes player shooting while the pause menu is open
+			if(Mouse.isButtonDown(0)) {
+				if(bulletTimer <= 0) {
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
+					player.bulletTotal.add(bullet);
+					bulletsToSend.add(bullet);
+					bulletTimer = 40*delta;	
 				}
-				bulletTimer = 120*delta;
+				bulletTimer -= delta;
+
 			}
-			bulletTimer -= delta;
-		}
-		else {
-			bulletTimer = 0;
+			else if(Mouse.isButtonDown(1)) {
+				if(bulletTimer <= 0) {
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
+					player.bulletTotal.add(bullet);
+					bulletsToSend.add(bullet);
+					for(int i = 0; i < 2; i++) {
+						ClientBullet b = createBullet(player, player.degRot, 5);
+						player.bulletTotal.add(b);
+						bulletsToSend.add(b);
+					}
+					bulletTimer = 120*delta;
+				}
+				bulletTimer -= delta;
+			}
+			else {
+				bulletTimer = 0;
+			}
 		}
 		if(bulletsToSend.size()>0) {
-		game.createAndSendClientBulletPackage(bulletsToSend);
+			game.createAndSendClientBulletPackage(bulletsToSend);
 		}
 	}
 

@@ -16,6 +16,7 @@ import com.hyprgloo.nucleocide.client.menu.ClientMenuConnecting;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuCredits;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuDirectConnect;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuGame;
+import com.hyprgloo.nucleocide.client.menu.ClientMenuGameEscape;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuLobby;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuMain;
 import com.hyprgloo.nucleocide.client.menu.ClientMenuUserSettings;
@@ -47,7 +48,7 @@ public class ClientMenuManager {
 
 	private static HashMap<ClientLobbyState, HvlArranger> stateMenus;
 
-	public static HvlArranger menuMain, menuServerBrowser, menuCredits, menuConnecting, menuLobby, menuGame, menuUserSettings, menuDirectConnect;
+	public static HvlArranger menuMain, menuServerBrowser, menuCredits, menuConnecting, menuLobby, menuGame, menuGameEscape, menuUserSettings, menuDirectConnect;
 
 	public static void initialize(){
 		HvlFont font = hvlFont(ClientMain.INDEX_FONT);
@@ -77,6 +78,7 @@ public class ClientMenuManager {
 		menuConnecting = new ClientMenuConnecting().arranger;
 		menuLobby = new ClientMenuLobby().arranger;
 		menuGame = new ClientMenuGame().arranger;
+		menuGameEscape = new ClientMenuGameEscape().arranger;
 		
 		menuUserSettings = new ClientMenuUserSettings().arranger;
 		// TODO add other menus here
