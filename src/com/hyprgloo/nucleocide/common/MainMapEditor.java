@@ -45,67 +45,67 @@ public class MainMapEditor extends HvlTemplateI {
 	public void drawWorld() {
 
 		hvlTranslate(-coord.x, -coord.y, () -> {
-			int size = chunklistread.size();
+			int size = chunkListRead.size();
 			for (int i = 0; i < size; i++) {
 				Chunk bucket = new Chunk(0, 0);
-				bucket = chunklistread.get(i);
-				float xrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunky;
-				float yrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunkx;
-				if (xrelititve  - coord.x <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getWidth() / 2
-						&& xrelititve  - coord.x >= Display.getWidth() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE - BLOCK_SIZE * 4
-						&& yrelititve  - coord.y <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getHeight() / 2
-						&& yrelititve  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
+				bucket = chunkListRead.get(i);
+				float xRelative  = BLOCK_SIZE * 4 * (float) bucket.chunky;
+				float yRelative  = BLOCK_SIZE * 4 * (float) bucket.chunkx;
+				if (xRelative  - coord.x <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getWidth() / 2
+						&& xRelative  - coord.x >= Display.getWidth() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE - BLOCK_SIZE * 4
+						&& yRelative  - coord.y <= BLOCK_SIZE * 4 * RENDER_DISTANCE + Display.getHeight() / 2
+						&& yRelative  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
 						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
 						switch (bucket.baset[j]) {
 						case 0:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(0));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(0));
 							break;
 						case 1:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(1));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(1));
 							break;
 						case 2:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(2));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(2));
 							break;
 						case 3:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(3));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(3));
 							break;
 						case 4:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(4));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(4));
 							break;
 						case 5:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(5));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(5));
 							break;
 						default:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(6));
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE, BLOCK_SIZE), hvlTexture(6));
 						}
 						switch (bucket.addt[j]) {
 						case 0:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.transparent);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.transparent);
 							break;
 						case 1:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.cyan);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.cyan);
 							break;
 						case 2:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.blue);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.blue);
 							break;
 						case 3:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.darkGray);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.darkGray);
 							break;
 						case 4:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.green);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.green);
 							break;
 						case 5:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.white);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.white);
 							break;
 						default:
-							hvlDraw(hvlQuad(xrelititve , yrelititve , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.pink);
+							hvlDraw(hvlQuad(xRelative , yRelative , BLOCK_SIZE / 2, BLOCK_SIZE / 2), Color.pink);
 						}
 						if (j % 4 == 3) {
-							yrelititve  = yrelititve  + BLOCK_SIZE;
-							xrelititve  = BLOCK_SIZE * 4 * (float) bucket.chunky;
+							yRelative  = yRelative  + BLOCK_SIZE;
+							xRelative  = BLOCK_SIZE * 4 * (float) bucket.chunky;
 						} else {
-							xrelititve  = xrelititve  + BLOCK_SIZE;
+							xRelative  = xRelative  + BLOCK_SIZE;
 						}
 					}
 				}
@@ -115,20 +115,20 @@ public class MainMapEditor extends HvlTemplateI {
 	}
 
 	public void whatTile(float xmouse, float ymouse) {
-		int xsol;
-		int ysol;
-		float ys = (coord.x + xmouse) / BLOCK_SIZE;
-		float xs = (coord.y + ymouse) / BLOCK_SIZE;
-		xsol = (int) xs;
-		ysol = (int) ys;
-		whatTileInt(xsol, ysol);
+		int xTileInt;
+		int yTileInt;
+		float yTileFloat = (coord.x + xmouse) / BLOCK_SIZE;
+		float xTileFloat = (coord.y + ymouse) / BLOCK_SIZE;
+		xTileInt = (int) xTileFloat;
+		yTileInt = (int) yTileFloat;
+		whatTileInt(xTileInt, yTileInt);
 	}
 
 	public void whatTileInt(int x, int y) {
-		xchunk = x / 4;
-		xoffset = x % 4;
-		ychunk = y / 4;
-		yoffset = y % 4;
+		xChunk = x / 4;
+		xOffset = x % 4;
+		yChunk = y / 4;
+		yOffset = y % 4;
 	}
 
 	@Override
@@ -144,107 +144,107 @@ public class MainMapEditor extends HvlTemplateI {
 		coord = new HvlCoord();
 		Chunk importer = new Chunk(0, 0);
 		try {
-			World worldread = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
-			chunklistread = worldread.chunks;
+			World worldRead = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
+			chunkListRead = worldRead.chunks;
 			System.out.println("file loaded");
 		} catch (Exception e) {
-			chunklistread = new ArrayList<>();
+			chunkListRead = new ArrayList<>();
 			System.out.println("error in file lode, creating new file at mapout.json");
 			for (int i = 0; i < NEW_WORLD_SIZE; i++) {
 				for (int j = 0; j < NEW_WORLD_SIZE; j++) {
 					importer = new Chunk(i, j);
-					chunklistread.add(importer);
+					chunkListRead.add(importer);
 				}
 			}
 		}
-		savemenu = 0;
-		xchunk = 0;
-		ychunk = 0;
-		xoffset = 0;
-		yoffset = 0;
-		chunknum = 0;
-		chunknumold = 0;
+		saveMenu = 0;
+		xChunk = 0;
+		yChunk = 0;
+		xOffset = 0;
+		yOffset = 0;
+		chunkNum = 0;
+		chunkNumOld = 0;
 	}
 
 	Chunk importer = new Chunk(0, 0);
-	ArrayList<Chunk> chunklistread;
-	World worldread;
+	ArrayList<Chunk> chunkListRead;
+	World worldRead;
 	HvlCoord coord;
 
-	float savemenu;
-	int chunknum, chunknumold;
-	public int xchunk, ychunk, xoffset, yoffset;
+	float saveMenu;
+	int chunkNum, chunkNumOld;
+	public int xChunk, yChunk, xOffset, yOffset;
 
 	@Override
 	public void update(float delta) {
-		int size = chunklistread.size();
+		int size = chunkListRead.size();
 		whatTile(Mouse.getX(), Display.getHeight() - Mouse.getY());
 		// System.out.println(Mouse.getY());
-		chunknumold = chunknum;
-		chunknum = 0;
+		chunkNumOld = chunkNum;
+		chunkNum = 0;
 		Chunk bucket = importer;
-		for (Chunk chunk : chunklistread) {
-			if (xchunk == chunk.chunkx && ychunk == chunk.chunky) {
+		for (Chunk chunk : chunkListRead) {
+			if (xChunk == chunk.chunkx && yChunk == chunk.chunky) {
 				importer = chunk;
 				break;
 			}
-			chunknum++;
+			chunkNum++;
 		}
 		if (importer == bucket) {
 		}
-		if (chunknum == size) {
-			chunknum = chunknumold;
+		if (chunkNum == size) {
+			chunkNum = chunkNumOld;
 			importer = bucket;
 		}
 		drawWorld();
 		hvlFont(0).drawc(
-				"tile selected at x: " + (xoffset + importer.chunkx * 4) + " y: " + (yoffset + importer.chunky * 4),
+				"tile selected at x: " + (xOffset + importer.chunkx * 4) + " y: " + (yOffset + importer.chunky * 4),
 				Display.getWidth() / 2, 100, Color.white, 5f);
-		if (savemenu > 0) {
+		if (saveMenu > 0) {
 			hvlFont(0).drawc("file saved", Display.getWidth() / 2, 200, Color.white, 5f);
-			savemenu = savemenu - delta;
+			saveMenu = saveMenu - delta;
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			if (xoffset > -1 && xoffset < 4 && yoffset > -1 && yoffset < 4 && xchunk > -1 && ychunk > -1) {
+			if (xOffset > -1 && xOffset < 4 && yOffset > -1 && yOffset < 4 && xChunk > -1 && yChunk > -1) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
-					importer.addt[xoffset * 4 + yoffset] = 1;
+					importer.addt[xOffset * 4 + yOffset] = 1;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
-					importer.addt[xoffset * 4 + yoffset] = 2;
+					importer.addt[xOffset * 4 + yOffset] = 2;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-					importer.addt[xoffset * 4 + yoffset] = 3;
+					importer.addt[xOffset * 4 + yOffset] = 3;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
-					importer.addt[xoffset * 4 + yoffset] = 4;
+					importer.addt[xOffset * 4 + yOffset] = 4;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_5)) {
-					importer.addt[xoffset * 4 + yoffset] = 5;
+					importer.addt[xOffset * 4 + yOffset] = 5;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-					importer.addt[xoffset * 4 + yoffset] = 0;
+					importer.addt[xOffset * 4 + yOffset] = 0;
 				}
 			}
 		} else {
-			if (xoffset > -1 && xoffset < 4 && yoffset > -1 && yoffset < 4 && xchunk > -1 && ychunk > -1) {
+			if (xOffset > -1 && xOffset < 4 && yOffset > -1 && yOffset < 4 && xChunk > -1 && yChunk > -1) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
-					importer.baset[xoffset * 4 + yoffset] = 1;
+					importer.baset[xOffset * 4 + yOffset] = 1;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
-					importer.baset[xoffset * 4 + yoffset] = 2;
+					importer.baset[xOffset * 4 + yOffset] = 2;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-					importer.baset[xoffset * 4 + yoffset] = 3;
+					importer.baset[xOffset * 4 + yOffset] = 3;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
-					importer.baset[xoffset * 4 + yoffset] = 4;
+					importer.baset[xOffset * 4 + yOffset] = 4;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_5)) {
-					importer.baset[xoffset * 4 + yoffset] = 5;
+					importer.baset[xOffset * 4 + yOffset] = 5;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-					importer.baset[xoffset * 4 + yoffset] = 0;
+					importer.baset[xOffset * 4 + yOffset] = 0;
 				}
 			}
 		}
@@ -260,11 +260,11 @@ public class MainMapEditor extends HvlTemplateI {
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			coord.add(0, MOVE_SPEED * delta);
 		}
-		chunklistread.set(chunknum, importer);
-		if (Keyboard.isKeyDown(Keyboard.KEY_P) && savemenu <= 0) {
-			World wrld = new World(chunklistread);
+		chunkListRead.set(chunkNum, importer);
+		if (Keyboard.isKeyDown(Keyboard.KEY_P) && saveMenu <= 0) {
+			World wrld = new World(chunkListRead);
 			HvlConfig.PJSON.save(wrld, "res/mapfiles/mapout.json");
-			savemenu = 2;
+			saveMenu = 2;
 		}
 	}
 
