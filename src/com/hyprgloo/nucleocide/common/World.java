@@ -28,8 +28,8 @@ public class World implements Serializable{
 		for (int i = 0; i < b; i++) {
 			Chunk bucket = new Chunk(0,0);
 			bucket = chunks.get(i);
-			float xrelitive =  BLOCK_SIZE*4 *(float) bucket.chunky;
-			float yrelitive =  BLOCK_SIZE*4 *(float) bucket.chunkx;
+			float xrelitive =  BLOCK_SIZE*4 * (float) bucket.chunky;
+			float yrelitive =  BLOCK_SIZE*4 * (float) bucket.chunkx;
 			// for later use with hvlcord for movement, 			if(xrelitive-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xrelitive-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yrelitive-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yrelitive-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
 			//temp player implementation 
 			if(xrelitive-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE && xrelitive-coord.x >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yrelitive-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE  && yrelitive-coord.y >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
