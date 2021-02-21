@@ -28,15 +28,22 @@ public class ClientMenuGame extends ClientMenu{
 	PADDING_LIST = ClientMenuManager.PADDING_MENU_POPUP,
 	SPACING_LIST_ITEM = 4f,
 	HEIGHT_LIST_ITEM = 48f;
+	
+	static boolean registeredKeyEscape;
 
 	public ClientMenuGame(){
 		super();
+		registeredKeyEscape = false;
 	}
 	
 	@Override
 	public void update(float delta){
-		if(HvlMenu.top() == arranger && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-			HvlMenu.push(ClientMenuManager.menuGameEscape);
+		if(HvlMenu.top() == arranger){
+			if(!registeredKeyEscape && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+				HvlMenu.push(ClientMenuManager.menuGameEscape);
+				registeredKeyEscape = true;
+			}else if(!Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) registeredKeyEscape = false;
+		}
 	}
 
 	@Override
