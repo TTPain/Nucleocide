@@ -30,7 +30,7 @@ public class PlayerClientBullet{
 		hvlDraw(hvlLine(player.playerPos.x + 20*bulletDir.x, player.playerPos.y + -20*bulletDir.y, player.playerPos.x + bulletDir.x*ClientPlayer.PLAYER_SIZE, player.playerPos.y + -bulletDir.y*ClientPlayer.PLAYER_SIZE, 8), Color.red);
 
 		HvlCoord angle = new HvlCoord(player.playerPos.x + bulletDir.x, player.playerPos.y + bulletDir.y);
-		player.degRot = HvlMath.angle(player.playerPos, angle);
+		player.degRot = -HvlMath.angle(player.playerPos, angle);
 
 		if(Mouse.isButtonDown(0)) {
 			if(bulletTimer <= 0) {
