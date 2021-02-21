@@ -12,7 +12,7 @@ import com.osreboot.ridhvl2.menu.HvlMenu;
 public class ClientMenuGameEscape extends ClientMenuPopup{
 	
 	public ClientMenuGameEscape(){
-		super("Game Actions");
+		super("Actions");
 
 		addButton("Resume", b -> HvlMenu.set(ClientMenuManager.menuGame));
 		addButton("Disconnect", b -> {
