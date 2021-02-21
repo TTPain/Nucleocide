@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.Display;
 
 import com.hyprgloo.nucleocide.client.ClientMain;
+import com.osreboot.ridhvl2.HvlCoord;
 
 /**
  * @author RetrogradeBurnHD
@@ -24,45 +25,96 @@ public class World implements Serializable{
 	public World() {
 		chunks = new ArrayList<>();
 	}
-	public void draw (){
+	public void draw (HvlCoord coord){
 		int b = chunks.size();
 		for (int i = 0; i < b; i++) {
 			Chunk bucket = new Chunk(0,0);
 			bucket = chunks.get(i);
 			float xr =  BLOCK_SIZE*4 *(float) bucket.chunky;
 			float yr =  BLOCK_SIZE*4 *(float) bucket.chunkx;
-			// for later use with hvlcord for movement, if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xr-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yr-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
-			for(int j = 0; j < 16; j ++) {
-				switch(bucket.baset[j]) {
-				case 0:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET0));
-					break;
-				case 1:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET1));
-					break;
-				case 2:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET2));
-					break;
-				case 3:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET3));
-					break;
-				case 4:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET4));
-					break;
-				case 5:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET5));
-					break;
-				default:
-					hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESETDEF));
-				}
-				if(j%4 == 3) {
-					yr = yr + BLOCK_SIZE;
-					xr =  BLOCK_SIZE*4 * (float) bucket.chunky;
-				}else {
-					xr = xr + BLOCK_SIZE;
+			// for later use with hvlcord for movement, 			if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getWidth()/2 && xr-coord.x >= Display.getWidth()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE+Display.getHeight()/2  && yr-coord.y >= Display.getHeight()/2 - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
+			//temp player implementation 
+			if(xr-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE && xr-coord.x >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yr-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE  && yr-coord.y >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
+				for(int j = 0; j < 16; j ++) {
+					switch(bucket.baset[j]) {
+					case 0:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET0));
+						break;
+					case 1:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET1));
+						break;
+					case 2:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET2));
+						break;
+					case 3:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET3));
+						break;
+					case 4:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET4));
+						break;
+					case 5:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESET5));
+						break;
+					default:
+						hvlDraw(hvlQuad(xr,yr,BLOCK_SIZE,BLOCK_SIZE), hvlTexture(ClientMain.INDEX_TILESETDEF));
+					}
+					if(j%4 == 3) {
+						yr = yr + BLOCK_SIZE;
+						xr =  BLOCK_SIZE*4 * (float) bucket.chunky;
+					}else {
+						xr = xr + BLOCK_SIZE;
+					}
 				}
 			}
 		}
+	}
+	public int tileBase(float x, float y) {
+		int xsol;
+		int ysol;
+		float ysf = x/BLOCK_SIZE;
+		float xsf = y/BLOCK_SIZE;
+		xsol = (int) xsf;
+		ysol = (int) ysf;
+		int xco = xsol%4;
+		int xc = xsol/4;
+		int yco = ysol%4;
+		int yc = ysol/4;
+		Chunk bucket = null;
+		for(Chunk chunk : this.chunks){
+			if(xc == chunk.chunkx && yc == chunk.chunky) {
+				bucket = chunk;
+				break;
+			}
+		}
+		if(bucket == null) 
+			return -1;	
+		if(xco < 0 || yco < 0)
+			return -1;
+		return bucket.baset[xco*4+yco];
+	}
+	public int tileHidden(float x, float y) {
+		int xsol;
+		int ysol;
+		float ysf = x/BLOCK_SIZE;
+		float xsf = y/BLOCK_SIZE;
+		xsol = (int) xsf;
+		ysol = (int) ysf;
+		int xco = xsol%4;
+		int xc = xsol/4;
+		int yco = ysol%4;
+		int yc = ysol/4;
+		Chunk bucket = null;
+		for(Chunk chunk : this.chunks){
+			if(xc == chunk.chunkx && yc == chunk.chunky) {
+				bucket = chunk;
+				break;
+			}
+		}
+		if(bucket == null) 
+			return -1;	
+		if(xco < 0 || yco < 0)
+			return -1;
+		return bucket.addt[xco*4+yco];
 	}
 	public boolean isSolid(int x, int y) {
 		int xco = x%4;

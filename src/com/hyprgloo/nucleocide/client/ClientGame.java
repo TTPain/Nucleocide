@@ -44,7 +44,7 @@ public class ClientGame {
 	}
 
 	public void update(float delta, Set<String> lobbyPlayers){
-		world.draw();
+		world.draw(player.playerPos);
 		player.update(delta, world, this);
 
 		PacketCollectivePlayerStatus playerPacket;
