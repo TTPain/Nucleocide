@@ -148,7 +148,7 @@ public class ClientGame {
 				for(String key : enemies.keySet()){
 					
 					//Need to replace with a more precise contact check
-					if(HvlMath.distance(b.bulletPos, enemies.get(key).enemyPos) < 10) {
+					if(HvlMath.distance(b.bulletPos, enemies.get(key).enemyPos) < 20) {
 						System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
 						
 						//If damage has already been registered for this enemy this frame, increase the damage dealt.
