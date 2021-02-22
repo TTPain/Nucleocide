@@ -16,6 +16,7 @@ import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
+import com.osreboot.ridhvl2.HvlMath;
 
 public class ServerGame {
 
@@ -28,15 +29,17 @@ public class ServerGame {
 
 		// TODO spawn enemies somehow (???)
 		//Need to generate a real UUID before adding into 'enemies'.
-		ServerEnemyBaseEnemy sampleEnemy = new ServerEnemyBaseEnemy(new HvlCoord(150,150), 1, 0, 0);
-		enemies.put(sampleEnemy.id,sampleEnemy);
-
+		for(int i = 0; i < 15; i++) {
+			enemies.put("placeholder", new ServerEnemyBaseEnemy(new HvlCoord(HvlMath.randomInt(100, 1000),HvlMath.randomInt(100, 1000)), 1, 0, 0));
+			enemies.put(enemies.get("placeholder").id, enemies.get("placeholder"));
+			enemies.remove("placeholder");
+		}
 	}
 
 	public void update(float delta){
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
-		
+
 		PacketEnemyDamageEvent enemyDamageEventPacket;
 
 		//Receive packets from clients
@@ -49,15 +52,17 @@ public class ServerGame {
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_PLAYER_BULLET_EVENT);
 			}
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT)) {
+				System.out.println("Enemy damage packet received...");
 				enemyDamageEventPacket = HvlDirect.getValue(i, NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
 				for(String enemyKey : enemies.keySet()){
 					for(String damagedEnemy : enemyDamageEventPacket.enemiesHitAndDamageDealt.keySet()){
-						if(enemyKey == damagedEnemy) {
+						if(enemyKey.equals(damagedEnemy)) {
 							enemies.get(enemyKey).health -= enemyDamageEventPacket.enemiesHitAndDamageDealt.get(damagedEnemy);
 							System.out.println("Enemy " + enemyKey + " hit by player " + enemyDamageEventPacket.playerUUID);
 						}
 					}
 				}
+				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
 			}
 		}
 
@@ -72,7 +77,13 @@ public class ServerGame {
 			}
 		}
 
+		System.out.println("numenemies: "+enemies.size());
+
 		//Enemy data updated by server
+		enemies.values().removeIf(e ->{
+			return e.health <= 0;
+		});
+
 		for(String enemyKey : enemies.keySet()){
 			enemies.get(enemyKey).update(delta, world, collectivePlayerStatus);
 		}

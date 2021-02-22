@@ -76,7 +76,11 @@ public class ClientGame {
 				enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
 				//Don't need this line? VVV
 				((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
-				for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
+				
+				//Very crude -- need to debug this further
+				enemies = enemyPacket.collectiveServerEnemyStatus;
+				
+				/*for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
 					if(!enemies.containsKey(enemyId)) {
 						enemies.put(enemyId, enemyPacket.collectiveServerEnemyStatus.get(enemyId));
 					}else {
@@ -85,7 +89,7 @@ public class ClientGame {
 						enemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
 						enemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
 					}
-				}
+				}*/
 			}
 
 			if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
@@ -161,9 +165,12 @@ public class ClientGame {
 			//Write enemy damage event to server if it exists.
 			if(enemyDamageEvents.size() > 0) {
 				HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(id, enemyDamageEvents));
-			}
+			}						
 
 			//Drawing all enemies
+			enemies.values().removeIf(e ->{
+				return e.health <= 0;
+			});
 			for(String enemyKey : enemies.keySet()){
 				enemies.get(enemyKey).draw();
 			}
