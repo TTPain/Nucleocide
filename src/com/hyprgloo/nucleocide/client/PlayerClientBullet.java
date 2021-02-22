@@ -67,7 +67,7 @@ public class PlayerClientBullet{
 
 	public ClientBullet createBullet(ClientPlayer player, float degRot, float spread) {
 		degRot += HvlMath.map((float)Math.random(), 0, 1, -spread, spread);
-		HvlCoord unitCir = new HvlCoord((float) (Math.cos(HvlMath.toRadians(degRot))), (float) -(Math.sin(HvlMath.toRadians(degRot))));
+		HvlCoord unitCir = new HvlCoord((float) (Math.cos(HvlMath.toRadians(degRot))), (float) (Math.sin(HvlMath.toRadians(degRot))));
 		return new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((unitCir.x*bulletSpeed), (unitCir.y*bulletSpeed)));
 	}
 }
