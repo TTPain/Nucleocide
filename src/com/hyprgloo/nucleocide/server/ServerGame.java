@@ -74,7 +74,7 @@ public class ServerGame {
 
 		//Enemy data updated by server
 		for(String enemyKey : enemies.keySet()){
-			enemies.get(enemyKey).update(delta, world);
+			enemies.get(enemyKey).update(delta, world, collectivePlayerStatus);
 		}
 
 	}
