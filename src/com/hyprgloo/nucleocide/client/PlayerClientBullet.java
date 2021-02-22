@@ -21,9 +21,9 @@ public class PlayerClientBullet{
 		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
 		float bulletMagx;
 		float bulletMagy;
-		bulletMagx = Mouse.getX() - player.playerPos.x;
-		bulletMagy = ((Display.getHeight() - Mouse.getY()) - player.playerPos.y);
-		HvlCoord bulletDir = new HvlCoord(bulletMagx, -bulletMagy);
+		bulletMagx = Display.getWidth() / 2 - Mouse.getX();
+		bulletMagy = Display.getHeight() / 2 - (Display.getHeight() - Mouse.getY());
+		HvlCoord bulletDir = new HvlCoord(-bulletMagx, bulletMagy);
 		bulletDir.normalize();
 		hvlDraw(hvlLine(player.playerPos.x + 20*bulletDir.x, player.playerPos.y + -20*bulletDir.y, player.playerPos.x + bulletDir.x*ClientPlayer.PLAYER_SIZE, player.playerPos.y + -bulletDir.y*ClientPlayer.PLAYER_SIZE, 8), Color.red);
 
