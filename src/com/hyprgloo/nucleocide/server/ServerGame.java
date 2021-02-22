@@ -60,7 +60,7 @@ public class ServerGame {
 		}
 
 		for(String enemyKey : enemies.keySet()){
-			enemies.get(enemyKey).update(delta, world);
+			enemies.get(enemyKey).update(delta, world, collectivePlayerStatus);
 		}
 
 	}

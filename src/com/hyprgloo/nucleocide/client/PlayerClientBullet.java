@@ -15,7 +15,7 @@ import com.osreboot.ridhvl2.HvlMath;
 public class PlayerClientBullet{
 
 	private float bulletTimer = 0;
-	int bulletSpeed = 5;
+	int bulletSpeed = 50;
 
 	public void update(float delta, ClientPlayer player, ClientGame game, boolean acceptInput) {
 		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
@@ -23,18 +23,18 @@ public class PlayerClientBullet{
 		float bulletMagy;
 		bulletMagx = Display.getWidth() / 2 - Mouse.getX();
 		bulletMagy = Display.getHeight() / 2 - (Display.getHeight() - Mouse.getY());
-		HvlCoord bulletDir = new HvlCoord(-bulletMagx, bulletMagy);
+		HvlCoord bulletDir = new HvlCoord(-bulletMagx, -bulletMagy);
 		bulletDir.normalize();
-		hvlDraw(hvlLine(player.playerPos.x + 20*bulletDir.x, player.playerPos.y + -20*bulletDir.y, player.playerPos.x + bulletDir.x*ClientPlayer.PLAYER_SIZE, player.playerPos.y + -bulletDir.y*ClientPlayer.PLAYER_SIZE, 8), Color.red);
+		hvlDraw(hvlLine(player.playerPos.x + 20*bulletDir.x, player.playerPos.y + 20*bulletDir.y, player.playerPos.x + bulletDir.x*ClientPlayer.PLAYER_SIZE, player.playerPos.y + bulletDir.y*ClientPlayer.PLAYER_SIZE, 8), Color.red);
 
 		HvlCoord angle = new HvlCoord(player.playerPos.x + bulletDir.x, player.playerPos.y + bulletDir.y);
-		player.degRot = -HvlMath.angle(player.playerPos, angle);
+		player.degRot = HvlMath.angle(player.playerPos, angle);
 
 
 		if(acceptInput){ // This freezes player shooting while the pause menu is open
 			if(Mouse.isButtonDown(0)) {
 				if(bulletTimer <= 0) {
-					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)));
 					player.bulletTotal.add(bullet);
 					bulletsToSend.add(bullet);
 					bulletTimer = 40*delta;	
@@ -44,7 +44,7 @@ public class PlayerClientBullet{
 			}
 			else if(Mouse.isButtonDown(1)) {
 				if(bulletTimer <= 0) {
-					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (-bulletDir.y*bulletSpeed)));
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)));
 					player.bulletTotal.add(bullet);
 					bulletsToSend.add(bullet);
 					for(int i = 0; i < 2; i++) {
@@ -62,6 +62,17 @@ public class PlayerClientBullet{
 		}
 		if(bulletsToSend.size()>0) {
 			game.createAndSendClientBulletPackage(bulletsToSend);
+		}
+		if(player.bulletTotal.size() > 0) {
+			for(ClientBullet b: player.bulletTotal) {
+				b.bulletLifespan-=delta;
+			}
+			player.bulletTotal.removeIf(stinkybullet ->{
+				return HvlMath.distance(stinkybullet.bulletPos, player.playerPos)> 1000000;
+			});
+			player.bulletTotal.removeIf(stinkybullet ->{
+				return stinkybullet.bulletLifespan <= 0;
+			});
 		}
 	}
 
