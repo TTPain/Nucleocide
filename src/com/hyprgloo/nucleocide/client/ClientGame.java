@@ -19,6 +19,7 @@ import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
@@ -27,11 +28,21 @@ import com.hyprgloo.nucleocide.server.ServerMain;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
+import com.osreboot.ridhvl2.HvlMath;
 
 /**
  * @author basset
  */
 public class ClientGame {
+
+	/**
+	 * TODO
+	 * All bullets must despawn when they touch a wall or enemy.
+	 * If this client's bullet touches an enemy, create and send an enemy damage event packet to the server.
+	 * Enemy damage packet must contain the UUID of the enemy hit, the amount of damage to deal, and the UUID of the player.
+	 * If this client's player touches an enemy, reduce this player's health. Send a player damage event packet to the server.
+	 * 
+	 */
 
 	private World world;
 	private ClientPlayer player;
@@ -53,6 +64,9 @@ public class ClientGame {
 			PacketCollectivePlayerStatus playerPacket;
 			PacketCollectivePlayerBulletEvent bulletPacket;
 			PacketServerEnemyStatus enemyPacket;
+			
+			
+			HashMap<String, Float> enemyDamageEvents = new HashMap<String, Float>();
 
 			//Send this client's player packet to the server.
 			HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
@@ -125,6 +139,31 @@ public class ClientGame {
 				}
 			}	
 
+			//Creation of EnemyDamageEvent packet
+			for(ClientBullet b : player.bulletTotal) {
+				for(String key : enemies.keySet()){
+					
+					//Need to replace with a more precise contact check
+					if(HvlMath.distance(b.bulletPos, enemies.get(key).enemyPos) < 10) {
+						System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
+						
+						//If damage has already been registered for this enemy this frame, increase the damage dealt.
+						if(enemyDamageEvents.containsKey(key)) {
+							enemyDamageEvents.put(key, enemyDamageEvents.get(key) + 5);
+						//If not, create the damage event.
+						}else {
+							enemyDamageEvents.put(key, 5f);
+						}
+					}
+				}
+			}
+			
+			//Write enemy damage event to server if it exists.
+			if(enemyDamageEvents.size() > 0) {
+				HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(id, enemyDamageEvents));
+			}
+
+			//Drawing all enemies
 			for(String enemyKey : enemies.keySet()){
 				enemies.get(enemyKey).draw();
 			}

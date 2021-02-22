@@ -8,6 +8,7 @@ import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
@@ -35,16 +36,28 @@ public class ServerGame {
 	public void update(float delta){
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
+		
+		PacketEnemyDamageEvent enemyDamageEventPacket;
 
+		//Receive packets from clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
-			//Insert all needed data into collectivePlayerStatus
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
 				collectivePlayerStatus.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_STATUS));
 			}
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_EVENT)) {
 				collectivePlayerBulletEvent.put(i.getName(),HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_PLAYER_BULLET_EVENT);
-
+			}
+			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT)) {
+				enemyDamageEventPacket = HvlDirect.getValue(i, NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
+				for(String enemyKey : enemies.keySet()){
+					for(String damagedEnemy : enemyDamageEventPacket.enemiesHitAndDamageDealt.keySet()){
+						if(enemyKey == damagedEnemy) {
+							enemies.get(enemyKey).health -= enemyDamageEventPacket.enemiesHitAndDamageDealt.get(damagedEnemy);
+							System.out.println("Enemy " + enemyKey + " hit by player " + enemyDamageEventPacket.playerUUID);
+						}
+					}
+				}
 			}
 		}
 
@@ -59,6 +72,7 @@ public class ServerGame {
 			}
 		}
 
+		//Enemy data updated by server
 		for(String enemyKey : enemies.keySet()){
 			enemies.get(enemyKey).update(delta, world);
 		}

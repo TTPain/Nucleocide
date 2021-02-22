@@ -33,6 +33,7 @@ public class NetworkUtil {
 	public static final String KEY_PLAYER_BULLET_EVENT = "game.playerbulletevent";
 	public static final String KEY_COLLECTIVE_PLAYER_BULLET_EVENT = "game.collectiveplayerbulletevent";
 	public static final String KEY_SERVER_ENEMY_STATUS = "game.serverenemystatus";
+	public static final String KEY_ENEMY_DAMAGE_EVENT = "game.enemydamageevent";
 	
 	public static String generateUUID() {
 		return UUID.randomUUID().toString().replace("-", "");
