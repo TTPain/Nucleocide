@@ -58,7 +58,7 @@ public class ClientGame {
 
 	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInput){
 		hvlTranslate(-player.playerPos.x + Display.getWidth() / 2, -player.playerPos.y + Display.getHeight() / 2, () -> {
-			world.draw(player.playerPos);
+			world.draw(delta, player.playerPos);
 			player.update(delta, world, this, acceptInput);
 
 			PacketCollectivePlayerStatus playerPacket;
