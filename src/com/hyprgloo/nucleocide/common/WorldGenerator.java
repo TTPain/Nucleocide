@@ -7,7 +7,7 @@ public class WorldGenerator {
 	private WorldGenerator(){}
 	
 	public static World generate(String seed){
-		World chunklistread = HvlConfig.PJSON.load("res/mapfiles/mapout.json");
+		World chunklistread = HvlConfig.RAW.load("res/mapfiles/mapout.json");
 		return chunklistread; // TODO implement world generation or loading here (garrick)
 		
 	}
