@@ -77,8 +77,6 @@ public class ServerGame {
 			}
 		}
 
-		System.out.println("numenemies: "+enemies.size());
-
 		//Enemy data updated by server
 		enemies.values().removeIf(e ->{
 			return e.health <= 0;
