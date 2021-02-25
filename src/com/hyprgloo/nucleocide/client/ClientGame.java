@@ -64,8 +64,8 @@ public class ClientGame {
 			PacketCollectivePlayerStatus playerPacket;
 			PacketCollectivePlayerBulletEvent bulletPacket;
 			PacketServerEnemyStatus enemyPacket;
-			
-			
+
+
 			HashMap<String, Float> enemyDamageEvents = new HashMap<String, Float>();
 
 			//Send this client's player packet to the server.
@@ -74,13 +74,10 @@ public class ClientGame {
 			//Receive and update server enemy data
 			if(HvlDirect.getKeys().contains(NetworkUtil.KEY_SERVER_ENEMY_STATUS)) {
 				enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
-				//Don't need this line? VVV
 				((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
-				
-				//Very crude -- need to debug this further
-				enemies = enemyPacket.collectiveServerEnemyStatus;
-				
-				/*for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
+
+				for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
+
 					if(!enemies.containsKey(enemyId)) {
 						enemies.put(enemyId, enemyPacket.collectiveServerEnemyStatus.get(enemyId));
 					}else {
@@ -89,7 +86,12 @@ public class ClientGame {
 						enemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
 						enemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
 					}
-				}*/
+				}
+
+				enemies.keySet().removeIf(e->{
+					return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
+				});
+
 			}
 
 			if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
@@ -146,22 +148,22 @@ public class ClientGame {
 			//Creation of EnemyDamageEvent packet
 			for(ClientBullet b : player.bulletTotal) {
 				for(String key : enemies.keySet()){
-					
+
 					//Need to replace with a more precise contact check
 					if(HvlMath.distance(b.bulletPos, enemies.get(key).enemyPos) < 20) {
 						System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
-						
+
 						//If damage has already been registered for this enemy this frame, increase the damage dealt.
 						if(enemyDamageEvents.containsKey(key)) {
 							enemyDamageEvents.put(key, enemyDamageEvents.get(key) + 5);
-						//If not, create the damage event.
+							//If not, create the damage event.
 						}else {
 							enemyDamageEvents.put(key, 5f);
 						}
 					}
 				}
 			}
-			
+
 			//Write enemy damage event to server if it exists.
 			if(enemyDamageEvents.size() > 0) {
 				HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(id, enemyDamageEvents));
