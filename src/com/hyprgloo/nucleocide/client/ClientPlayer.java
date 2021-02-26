@@ -1,12 +1,8 @@
 package com.hyprgloo.nucleocide.client;
 
-import static com.osreboot.ridhvl2.HvlStatics.hvlCirclec;
-import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
-
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
-
+import com.hyprgloo.nucleocide.client.render.entity.ClientRenderablePlayer;
 import com.hyprgloo.nucleocide.common.World;
 import com.osreboot.ridhvl2.HvlCoord;
 
@@ -19,13 +15,16 @@ public class ClientPlayer {
 	
 	public static final int PLAYER_SIZE = 30;
 	
+	protected int pixPerSec = 70;
+	
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
 	public float degRot;
-	protected int pixPerSec = 70;
+	public String username;
 	
 	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
 	
+	private transient ClientRenderablePlayer renderable;
 	
 	// TODO initialize player object here (tristin)
 
@@ -33,10 +32,13 @@ public class ClientPlayer {
 		playerPos = playerPosArg;
 		health = healthArg;
 		degRot = degRotArg;
+		username = "";
+		
+		renderable = new ClientRenderablePlayer(this);
 	}
 	
-	public void render() {
-		hvlDraw(hvlCirclec(playerPos.x,playerPos.y, PLAYER_SIZE, 25), Color.white);
+	public final void render() {
+		renderable.enqueue();
 	}
 	
 	// TODO implement player movement / collision here (tristin)

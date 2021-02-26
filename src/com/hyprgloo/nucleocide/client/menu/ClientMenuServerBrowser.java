@@ -4,8 +4,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlColor;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
 
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
-import com.hyprgloo.nucleocide.client.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.osreboot.ridhvl2.menu.HvlEnvironmentMutable;
 import com.osreboot.ridhvl2.menu.HvlMenu;
 import com.osreboot.ridhvl2.menu.component.HvlArranger;

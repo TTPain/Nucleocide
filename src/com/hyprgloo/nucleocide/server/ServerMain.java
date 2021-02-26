@@ -2,6 +2,7 @@ package com.hyprgloo.nucleocide.server;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
 
+import com.hyprgloo.nucleocide.server.network.ServerNetworkManager;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.template.HvlChronology;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;

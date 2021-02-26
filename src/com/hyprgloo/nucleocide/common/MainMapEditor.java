@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
 import com.hyprgloo.nucleocide.common.tile.TileDoor;
 import com.hyprgloo.nucleocide.common.tile.TileFloor;
 import com.hyprgloo.nucleocide.common.tile.TileWall;
@@ -36,7 +37,6 @@ public class MainMapEditor extends HvlTemplateI {
 
 	public MainMapEditor() {
 		super(new HvlDisplayWindowed(144, 1920, 1080, "Gird Time", true));
-		// TODO Auto-generated constructor stub
 	}
 
 	public int block(int x, int y) {
@@ -44,7 +44,6 @@ public class MainMapEditor extends HvlTemplateI {
 	}
 
 	public void drawWorld(float delta) {
-
 		hvlTranslate(-coord.x, -coord.y, () -> {
 			int size = chunkListRead.size();
 			for (int i = 0; i < size; i++) {
@@ -58,7 +57,7 @@ public class MainMapEditor extends HvlTemplateI {
 						&& yRelative  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
 						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
-						bucket.tiles[j].draw(delta);
+						bucket.tiles[j].renderable.draw(delta, Channel.BASE_COLOR);
 					}
 				}
 			}

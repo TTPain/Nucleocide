@@ -4,7 +4,6 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlColor;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 
 import com.hyprgloo.nucleocide.client.ClientMain;
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
 import com.hyprgloo.nucleocide.common.hvl.HvlField;
 import com.osreboot.ridhvl2.menu.HvlFont;
 import com.osreboot.ridhvl2.menu.HvlMenu;

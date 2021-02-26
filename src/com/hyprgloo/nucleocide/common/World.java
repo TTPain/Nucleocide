@@ -21,6 +21,14 @@ public class World implements Serializable{
 		chunks = new ArrayList<>();
 	}
 
+	public void initializeRenderables(){
+		for(Chunk chunk : chunks){
+			for(Tile tile : chunk.tiles){
+				tile.initializeRenderable();
+			}
+		}
+	}
+	
 	public void draw (float delta,HvlCoord coord){
 		for (int i = 0; i < chunks.size(); i++) {
 			Chunk bucket = new Chunk(0,0);
@@ -31,8 +39,7 @@ public class World implements Serializable{
 			//temp player implementation 
 			if(xRelitive-coord.x <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE && xRelitive-coord.x >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4 && yRelitive-coord.y <= BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE  && yRelitive-coord.y >= 0f - BLOCK_SIZE*4*ClientMain.RENDER_DISTANCE - BLOCK_SIZE*4) {
 				for(int j = 0; j < 16; j ++) {
-					bucket.tiles[j].draw(delta);
-
+					bucket.tiles[j].renderable.enqueue();
 				}
 			}
 		}

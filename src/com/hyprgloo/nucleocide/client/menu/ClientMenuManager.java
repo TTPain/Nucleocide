@@ -1,4 +1,4 @@
-package com.hyprgloo.nucleocide.client;
+package com.hyprgloo.nucleocide.client.menu;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlColor;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
@@ -12,15 +12,8 @@ import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientLobby.ClientLobbyState;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuConnecting;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuCredits;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuDirectConnect;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuGame;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuGameEscape;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuLobby;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuMain;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuUserSettings;
-import com.hyprgloo.nucleocide.client.menu.ClientMenuServerBrowser;
+import com.hyprgloo.nucleocide.client.ClientMain;
+import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.hyprgloo.nucleocide.common.hvl.HvlField;
 import com.osreboot.ridhvl2.menu.HvlComponent;
 import com.osreboot.ridhvl2.menu.HvlDefault;
@@ -36,7 +29,7 @@ import com.osreboot.ridhvl2.menu.component.HvlSpacer;
 /**
  * @author os_reboot
  */
-public class ClientMenuManager {
+public final class ClientMenuManager {
 
 	private ClientMenuManager(){}
 

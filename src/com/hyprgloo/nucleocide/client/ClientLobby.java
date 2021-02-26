@@ -3,6 +3,7 @@ package com.hyprgloo.nucleocide.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.hyprgloo.nucleocide.client.menu.ClientMenuManager;
 import com.hyprgloo.nucleocide.client.network.ClientLobbyFilter;
 import com.hyprgloo.nucleocide.client.network.ClientLobbyModule;
 import com.hyprgloo.nucleocide.client.network.filter.ClientLobbyFilterGame;

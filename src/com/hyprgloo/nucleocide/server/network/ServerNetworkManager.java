@@ -1,6 +1,7 @@
-package com.hyprgloo.nucleocide.server;
+package com.hyprgloo.nucleocide.server.network;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
+import com.hyprgloo.nucleocide.server.ServerLobby;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -8,7 +9,7 @@ import com.osreboot.hvol2.direct.HvlDirect;
 /**
  * @author os_reboot
  */
-public class ServerNetworkManager {
+public final class ServerNetworkManager {
 
 	private ServerNetworkManager(){}
 

@@ -10,8 +10,7 @@ import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.client.ClientMain;
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
-import com.hyprgloo.nucleocide.client.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.osreboot.ridhvl2.menu.HvlFont;
 import com.osreboot.ridhvl2.menu.HvlMenu;

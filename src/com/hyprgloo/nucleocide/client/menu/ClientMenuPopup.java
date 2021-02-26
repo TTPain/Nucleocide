@@ -2,8 +2,6 @@ package com.hyprgloo.nucleocide.client.menu;
 
 import org.lwjgl.opengl.Display;
 
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
-
 /**
  * @author os_reboot
  */

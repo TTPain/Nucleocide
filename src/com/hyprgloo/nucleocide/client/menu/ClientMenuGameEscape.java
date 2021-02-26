@@ -2,8 +2,7 @@ package com.hyprgloo.nucleocide.client.menu;
 
 import org.lwjgl.input.Keyboard;
 
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
-import com.hyprgloo.nucleocide.client.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.osreboot.ridhvl2.menu.HvlMenu;
 
 /**

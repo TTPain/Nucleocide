@@ -1,5 +1,6 @@
-package com.hyprgloo.nucleocide.client;
+package com.hyprgloo.nucleocide.client.network;
 
+import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -8,7 +9,7 @@ import com.osreboot.hvol2.direct.HvlDirect.HvlAgentStatus;
 /**
  * @author os_reboot
  */
-public class ClientNetworkManager {
+public final class ClientNetworkManager {
 
 	private ClientNetworkManager(){}
 	

@@ -1,8 +1,7 @@
 package com.hyprgloo.nucleocide.client.menu;
 
 import com.hyprgloo.nucleocide.client.ClientMain;
-import com.hyprgloo.nucleocide.client.ClientMenuManager;
-import com.hyprgloo.nucleocide.client.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.hyprgloo.nucleocide.common.hvl.HvlField;
 import com.osreboot.ridhvl2.menu.HvlMenu;
 
