@@ -17,12 +17,14 @@ public class ClientBullet implements Serializable{
 	public HvlCoord bulletVelocity = new HvlCoord();
 	public float bulletLifespan = 15;
 
+	//Defining the bullet object and specifying it's specific attributes
 	public ClientBullet(HvlCoord bulletPosArg, HvlCoord bulletVelocityArg) {
 		bulletPos = bulletPosArg;
 		bulletVelocity = bulletVelocityArg;
 	}
 
 
+	//Updating bullet positions and drawing them every frame.
 	public void update(float delta, ClientPlayer player) {
 
 

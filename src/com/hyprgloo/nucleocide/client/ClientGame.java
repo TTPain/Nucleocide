@@ -33,6 +33,7 @@ public class ClientGame {
 	 * Enemy damage packet must contain the UUID of the enemy hit, the amount of damage to deal, and the UUID of the player.
 	 * If this client's player touches an enemy, reduce this player's health. Send a player damage event packet to the server.
 	 * 
+	 * Add UUIDs to bullets, use a BulletRemovalEvent package to despawn bullets client-side.
 	 */
 
 	private World world;

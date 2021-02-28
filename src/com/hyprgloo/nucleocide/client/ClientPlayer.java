@@ -28,6 +28,7 @@ public class ClientPlayer {
 	
 	// TODO initialize player object here (tristin)
 
+	//Defines player object and it's specific attributes.
 	public ClientPlayer(HvlCoord playerPosArg, float healthArg, float degRotArg){
 		playerPos = playerPosArg;
 		health = healthArg;
@@ -37,12 +38,11 @@ public class ClientPlayer {
 		renderable = new ClientRenderablePlayer(this);
 	}
 	
+	//Draws players
 	public final void render() {
 		renderable.enqueue();
 	}
 	
-	// TODO implement player movement / collision here (tristin)
-	// TODO implement player shooting here (tristin)
 	
 	public void update(float delta, World world, ClientGame game, boolean acceptInput){
 		render();
