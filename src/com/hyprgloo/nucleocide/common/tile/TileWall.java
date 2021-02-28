@@ -1,6 +1,6 @@
 package com.hyprgloo.nucleocide.common.tile;
 
-import com.hyprgloo.nucleocide.client.ClientMain;
+import com.hyprgloo.nucleocide.client.ClientLoader;
 import com.hyprgloo.nucleocide.common.Tile;
 
 public class TileWall extends Tile {
@@ -21,7 +21,7 @@ public class TileWall extends Tile {
 	
 	@Override
 	public int getTextureIndex() {
-		return ClientMain.INDEX_TILESET1;
+		return ClientLoader.INDEX_MATERIAL_WALL_C;
 	}
 
 	@Override

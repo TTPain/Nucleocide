@@ -164,7 +164,8 @@ public class ClientGame {
 			enemies.get(enemyKey).draw();
 		}
 
-		ClientRenderManager.draw(delta, player.playerPos);
+		ClientRenderManager.update(delta);
+		ClientRenderManager.draw(delta, world, player.playerPos);
 	}
 
 	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
