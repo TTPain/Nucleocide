@@ -41,7 +41,7 @@ public class ClientRenderablePlayer extends ClientRenderable{
 
 	@Override
 	public List<Light> getLights(){
-		return Collections.singletonList(new Light(player.playerPos, Color.orange, 512f));
+		return Collections.singletonList(new Light(player.playerPos, hvlColor(1f, 1f, 1f, 0.2f), 256));
 	}
 
 }
