@@ -7,7 +7,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
 import static com.osreboot.ridhvl2.HvlStatics.hvlRotate;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -41,7 +41,11 @@ public class ClientRenderablePlayer extends ClientRenderable{
 
 	@Override
 	public List<Light> getLights(){
-		return Collections.singletonList(new Light(player.playerPos, hvlColor(1f, 1f, 1f, 0.2f), 256));
+		ArrayList<Light> lights = new ArrayList<>();
+		lights.add(new Light(player.playerPos, hvlColor(0f, 0f, 1f, 0.6f), 256f));
+//		for(ClientBullet bullet : player.bulletTotal)
+//			lights.add(new Light(bullet.bulletPos, new Color(1f, 0f, 0f, 0.6f), 128f));
+		return lights;
 	}
 
 }

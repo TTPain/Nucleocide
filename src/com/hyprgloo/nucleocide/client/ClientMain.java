@@ -4,6 +4,7 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
 
 import com.hyprgloo.nucleocide.client.menu.ClientMenuManager;
 import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.render.ClientRenderManager;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlConfig;
 import com.osreboot.ridhvl2.template.HvlChronology;
@@ -42,6 +43,7 @@ public class ClientMain extends HvlTemplateI{
 			options = new ClientOptions();
 		}else options = HvlConfig.PJSON.load(PATH_OPTIONS);
 
+		ClientRenderManager.initialize();
 		ClientNetworkManager.initialize();
 		ClientMenuManager.initialize();
 	}

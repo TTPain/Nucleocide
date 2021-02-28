@@ -6,6 +6,8 @@ import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 
 import java.util.List;
 
+import org.newdawn.slick.Color;
+
 import com.hyprgloo.nucleocide.client.render.ClientRenderable;
 import com.hyprgloo.nucleocide.common.Tile;
 import com.hyprgloo.nucleocide.common.World;
@@ -25,6 +27,10 @@ public class ClientRenderableTile extends ClientRenderable{
 	public void draw(Channel channel){
 		if(channel == Channel.BASE_COLOR){
 			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.getTextureIndex()));
+		}else if(channel == Channel.OCCLUSION){
+			if(tile.isSolid()){
+				hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), Color.white);
+			}
 		}
 	}
 
