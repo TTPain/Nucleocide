@@ -81,6 +81,18 @@ public class MainMapEditor extends HvlTemplateI {
 		xOffset = x % 4;
 		yChunk = y / 4;
 		yOffset = y % 4;
+		if(xChunk < 0) {
+			xChunk = 0;
+		}
+		if(xOffset < 0) {
+			xOffset = 0;
+		}
+		if(yChunk < 0) {
+			yChunk = 0;
+		}
+		if(yOffset < 0) {
+			yOffset = 0;
+		}
 		//System.out.println(xOffset);
 	}
 
@@ -98,6 +110,7 @@ public class MainMapEditor extends HvlTemplateI {
 		Chunk importer = new Chunk(0, 0);
 		try {
 			World worldRead = HvlConfig.RAW.load("res/mapfiles/mapout.json");
+			worldRead.initializeRenderables();
 			chunkListRead = worldRead.chunks;
 			System.out.println("file loaded");
 		} catch (Exception e) {
