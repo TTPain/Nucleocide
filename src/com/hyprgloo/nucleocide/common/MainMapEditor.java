@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.client.ClientLoader;
 import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
 import com.hyprgloo.nucleocide.common.tile.TileDoor;
 import com.hyprgloo.nucleocide.common.tile.TileFloor;
@@ -57,7 +58,7 @@ public class MainMapEditor extends HvlTemplateI {
 						&& yRelative  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
 						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
-						bucket.tiles[j].renderable.draw(delta, Channel.BASE_COLOR);
+						bucket.tiles[j].renderable.draw(Channel.BASE_COLOR);
 					}
 				}
 			}
@@ -99,13 +100,9 @@ public class MainMapEditor extends HvlTemplateI {
 	@Override
 	public void initialize() {
 		hvlLoad("INOF.hvlft");
-		hvlLoad("/tileset/tile0.png");
-		hvlLoad("/tileset/tile1.png");
-		hvlLoad("/tileset/tile2.png");
-		hvlLoad("/tileset/tile3.png");
-		hvlLoad("/tileset/tile4.png");
-		hvlLoad("/tileset/tile5.png");
-		hvlLoad("/tileset/tilenotexture.png");
+
+		ClientLoader.loadTextures();
+		
 		coord = new HvlCoord();
 		Chunk importer = new Chunk(0, 0);
 		try {

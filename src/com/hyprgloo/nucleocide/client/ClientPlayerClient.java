@@ -39,6 +39,7 @@ public class ClientPlayerClient extends ClientPlayer {
 			}
 		}
 
+		//Basic wall collision code, needs to be perfected in the future.
 		if(world.isSolidCord(playerPos.x + ClientPlayer.PLAYER_SIZE, playerPos.y)) {
 			playerPos.x -= 1;
 		}

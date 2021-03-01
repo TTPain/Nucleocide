@@ -1,6 +1,6 @@
 package com.hyprgloo.nucleocide.common.tile;
 
-import com.hyprgloo.nucleocide.client.ClientMain;
+import com.hyprgloo.nucleocide.client.ClientLoader;
 import com.hyprgloo.nucleocide.common.Tile;
 
 public class TileFallback extends Tile {
@@ -21,7 +21,7 @@ public class TileFallback extends Tile {
 	
 	@Override
 	public int getTextureIndex() {
-		return ClientMain.INDEX_TILESETDEF;
+		return ClientLoader.INDEX_TILESETDEF;
 	}
 	
 	@Override
