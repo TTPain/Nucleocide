@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.hyprgloo.nucleocide.client.ClientMain;
+import com.hyprgloo.nucleocide.common.tile.TileFallback;
 import com.osreboot.ridhvl2.HvlCoord;
 
 /**
@@ -73,5 +74,54 @@ public class World implements Serializable{
 		xTileInt = (int) xTileFloat;
 		yTileInt = (int) yTileFloat;
 		return isSolid(xTileInt, yTileInt);
+	}
+	
+	public HvlCoord toTileCoord(float x, float y) {
+		HvlCoord tilehvl = new HvlCoord(0,0);
+		int xTileInt;
+		int yTileInt;
+		float xTileFloat = x/BLOCK_SIZE;
+		float yTileFloat = y/BLOCK_SIZE;
+		xTileInt = (int) xTileFloat;
+		yTileInt = (int) yTileFloat;
+		if(xTileInt > -1 && yTileInt > -1) {
+		tilehvl.x = xTileInt;
+		tilehvl.y = yTileInt;
+		}
+		return tilehvl;
+	}
+	
+	public HvlCoord toWorldCoord(int x, int y) {
+		HvlCoord tilehvl = new HvlCoord(0,0);
+		tilehvl.x = tilehvl.x * BLOCK_SIZE;
+		tilehvl.y = tilehvl.y * BLOCK_SIZE;
+		return tilehvl;
+	}
+	
+	public Tile getTile(int x, int y) {
+		Tile tileTemp;
+		int xChunkOffset = x%4;
+		int xChunk = x/4;
+		int yChunkOffset = y%4;
+		int yChunk = y/4;
+		Chunk bucket = null;
+		for(Chunk chunk : this.chunks){
+			if(xChunk == chunk.chunkx && yChunk == chunk.chunky) {
+				bucket = chunk;
+				break;
+			}
+		}
+		if(bucket == null) {
+			bucket = this.chunks.get(0);
+			tileTemp = bucket.tiles[0];
+			return tileTemp;
+		}
+		if(xChunkOffset < 0 || yChunkOffset < 0) {
+			bucket = this.chunks.get(0);
+			tileTemp = bucket.tiles[0];
+			return tileTemp;
+		}
+		tileTemp = bucket.tiles[xChunkOffset+yChunkOffset*4];
+		return tileTemp;
 	}
 }
