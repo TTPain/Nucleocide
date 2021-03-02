@@ -58,7 +58,7 @@ public class MainMapEditor extends HvlTemplateI {
 						&& yRelative  - coord.y >= Display.getHeight() / 2 - BLOCK_SIZE * 4 * RENDER_DISTANCE
 						- BLOCK_SIZE * 4) {
 					for (int j = 0; j < 16; j++) {
-						bucket.tiles[j].renderable.draw(Channel.BASE_COLOR);
+						bucket.tiles[j].renderable.draw(Channel.COLOR);
 					}
 				}
 			}

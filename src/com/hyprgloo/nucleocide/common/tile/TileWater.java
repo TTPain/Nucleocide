@@ -21,7 +21,7 @@ public class TileWater extends Tile {
 	
 	@Override
 	public int getTextureIndex() {
-		return this.type == 0 ? ClientLoader.INDEX_TILESET2 : ClientLoader.INDEX_TILESET5;
+		return ClientLoader.INDEX_MATERIAL_STONE_C; // TODO this.type == 0 ? ClientLoader.INDEX_TILESET2 : ClientLoader.INDEX_TILESET5;
 	}
 	
 	@Override

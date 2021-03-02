@@ -16,7 +16,7 @@ public class TileDoor extends Tile {
 	
 	@Override
 	public int getTextureIndex() {
-		return ClientLoader.INDEX_TILESET3;
+		return ClientLoader.INDEX_MATERIAL_WALL_C; // TODO ClientLoader.INDEX_TILESET3;
 	}
 	
 	@Override

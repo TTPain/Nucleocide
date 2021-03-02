@@ -12,7 +12,7 @@ import com.osreboot.ridhvl2.HvlCoord;
 public abstract class ClientRenderable {
 
 	public enum Channel {
-		BASE_COLOR, OCCLUSION
+		COLOR, OCCLUSION, NORMAL
 	}
 
 	public ClientRenderable(){}

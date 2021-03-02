@@ -25,12 +25,14 @@ public class ClientRenderableTile extends ClientRenderable{
 	
 	@Override
 	public void draw(Channel channel){
-		if(channel == Channel.BASE_COLOR){
+		if(channel == Channel.COLOR){
 			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.getTextureIndex()));
 		}else if(channel == Channel.OCCLUSION){
 			if(tile.isSolid()){
 				hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), Color.white);
 			}
+		}else if(channel == Channel.NORMAL){
+			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.getTextureIndex() + 1));
 		}
 	}
 
