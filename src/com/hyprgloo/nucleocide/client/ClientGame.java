@@ -13,6 +13,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.server.ServerEnemy;
@@ -170,10 +171,14 @@ public class ClientGame {
 	}
 
 	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
-	public void createAndSendClientBulletPackage(ArrayList<ClientBullet> bulletsToFireArg) {
+	public void createAndSendPlayerBulletEventPackage(ArrayList<ClientBullet> bulletsToFireArg) {
 		//Package that will hold bullet update events for the client on this frame.
 		//To be called in PlayerClientBullet
 		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
+	}
+	
+	public void createAndSendPlayerBulletRemovalPackage(ArrayList<ClientBullet> bulletsToRemoveArg) {
+		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemoveArg));
 	}
 
 }

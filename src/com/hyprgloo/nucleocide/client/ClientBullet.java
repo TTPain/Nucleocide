@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
@@ -16,8 +17,10 @@ public class ClientBullet implements Serializable{
 	public HvlCoord bulletPos = new HvlCoord();
 	public HvlCoord bulletVelocity = new HvlCoord();
 	public float bulletLifespan = 15;
+	//TODO: Need to incorporate bullet UUIDs with server communication
+	public String uuid = NetworkUtil.generateUUID();
 
-	//Defining the bullet object and specifying it's specific attributes
+	//Defining the bullet object and specifying its specific attributes
 	public ClientBullet(HvlCoord bulletPosArg, HvlCoord bulletVelocityArg) {
 		bulletPos = bulletPosArg;
 		bulletVelocity = bulletVelocityArg;

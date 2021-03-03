@@ -70,7 +70,7 @@ public class PlayerClientBullet{
 		}
 		//If there are bullets to be sent to the server, create and send a packet.
 		if(bulletsToSend.size()>0) {
-			game.createAndSendClientBulletPackage(bulletsToSend);
+			game.createAndSendPlayerBulletEventPackage(bulletsToSend);
 		}
 		
 		//Remove bullets after a specified decay time, or if they reach a certain distance from the player.

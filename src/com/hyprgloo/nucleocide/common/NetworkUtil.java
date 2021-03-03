@@ -31,6 +31,8 @@ public class NetworkUtil {
 	public static final String KEY_PLAYER_STATUS = "game.playerstatus";
 	public static final String KEY_COLLECTIVE_PLAYER_STATUS = "game.collectiveplayerstatus";
 	public static final String KEY_PLAYER_BULLET_EVENT = "game.playerbulletevent";
+	public static final String KEY_PLAYER_BULLET_REMOVAL_EVENT = "game.playerbulletremovalevent";
+	public static final String KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT = "game.collectiveplayerbulletremovalevent";
 	public static final String KEY_COLLECTIVE_PLAYER_BULLET_EVENT = "game.collectiveplayerbulletevent";
 	public static final String KEY_SERVER_ENEMY_STATUS = "game.serverenemystatus";
 	public static final String KEY_ENEMY_DAMAGE_EVENT = "game.enemydamageevent";
