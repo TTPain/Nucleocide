@@ -31,7 +31,7 @@ public final class ClientRenderManager {
 
 	private static HvlCoord lastDisplaySize;
 
-	private static HvlRenderFrame renderFrameBase, renderFrameOcclusion, renderFrameNormal;
+	private static HvlRenderFrame renderFrameOcclusion, renderFrameNormal;
 	private static HvlShader shaderLight;
 
 	public static void initialize(){
@@ -43,7 +43,6 @@ public final class ClientRenderManager {
 	private static void initializeRenderFrames(){
 		lastDisplaySize = new HvlCoord(Display.getWidth(), Display.getHeight());
 
-		renderFrameBase = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 		renderFrameOcclusion = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 		renderFrameNormal = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 	}
@@ -62,12 +61,10 @@ public final class ClientRenderManager {
 	}
 
 	public static void draw(float delta, World world, HvlCoord locationCamera){
-		renderFrameBase.doCapture(() -> {
-			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
-				renderables.forEach(r -> r.draw(Channel.COLOR));
-			});
-			hvlDraw(hvlQuad(0, 0, Display.getWidth(), Display.getHeight()), hvlColor(0f, 0.7f));
+		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+			renderables.forEach(r -> r.draw(Channel.COLOR));
 		});
+		hvlDraw(hvlQuad(0, 0, Display.getWidth(), Display.getHeight()), hvlColor(0f, 0.7f));
 
 		renderFrameOcclusion.doCapture(() -> {
 			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
@@ -93,8 +90,7 @@ public final class ClientRenderManager {
 
 		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
 			shaderLight.doShade(() -> {
-				shaderLight.send("textureOcclusion", 1, renderFrameOcclusion);
-				shaderLight.send("textureNormal", 2, renderFrameNormal);
+				shaderLight.send("textureNormal", 1, renderFrameNormal);
 				shaderLight.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
 				shaderLight.send("lightsSize", lights.size());
 				
@@ -109,7 +105,7 @@ public final class ClientRenderManager {
 					shaderLight.send("lights[" + i + "].location", locationLight);
 				}
 
-				hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFrameBase.getTexture());
+				hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFrameOcclusion.getTexture());
 			});
 		});
 

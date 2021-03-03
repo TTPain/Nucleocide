@@ -1,6 +1,7 @@
 #version 120
 
 #define PI 3.14159
+#define LIGHT_INTENSITY 1.5
 #define LIGHTS_MAX 32
 
 struct Light{
@@ -10,7 +11,6 @@ struct Light{
 };
 
 uniform sampler2D texture1;
-uniform sampler2D textureOcclusion;
 uniform sampler2D textureNormal;
 uniform vec2 resolution;
 
@@ -24,6 +24,7 @@ float map(float x, float inMin, float inMax, float outMin, float outMax){
 // Shadow casting algorithm derived (loosely) from: https://github.com/mattdesl/lwjgl-basics/wiki/2D-Pixel-Perfect-Shadows
 void main(){
 	vec4 colorFinal = vec4(0.0);
+	float finalAlpha = 0.0;
 	
 	for(int indexLight = 0; indexLight < lightsSize; indexLight++){
 		Light light = lights[indexLight];
@@ -56,7 +57,7 @@ void main(){
 			// Ray-tracing from light source to current pixel for shadows
 			for(float sDistanceTest = 0.0; sDistanceTest < sDistanceLight; sDistanceTest += 1.0 / resolution.x){
 				vec2 coordTest = sLocationLight - (sNormalLight * sDistanceTest);
-				vec4 colorTest = texture2D(textureOcclusion, coordTest);
+				vec4 colorTest = texture2D(texture1, coordTest);
 				colorLightVolume = min(colorLightVolume, 1.0 - colorTest);
 			}
 			
@@ -71,13 +72,18 @@ void main(){
 		
 			// === FINAL COLOR ============================================
 			
-			vec4 colorAdd = vec4(colorLightVolume.rgb, multiplierLightSurface * colorLightVolume.a);
-			colorAdd.rgb = colorAdd.rgb * colorAdd.a;
+			vec4 colorAdd = vec4(colorLightVolume.rgb, multiplierLightSurface * colorLightVolume.a * LIGHT_INTENSITY);
+			//colorAdd.rgb = colorAdd.rgb * colorAdd.a;
 			colorAdd = clamp(colorAdd, 0.0, 1.0);
 			
-			colorFinal = clamp(colorFinal + colorAdd, 0.0, 1.0);
+			float newAlpha = colorFinal.a + colorAdd.a;
+			colorFinal = mix(colorFinal, colorAdd, colorAdd.a / (colorAdd.a + finalAlpha));
+			colorFinal.a = newAlpha;
+			colorFinal = clamp(colorFinal, 0.0, 1.0);
+			
+			finalAlpha += colorAdd.a;
 		}
 	}
 	
-	gl_FragColor = max(colorFinal, texture2D(texture1, gl_TexCoord[0].xy));
+	gl_FragColor = colorFinal;
 }

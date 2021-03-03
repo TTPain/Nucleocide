@@ -44,7 +44,7 @@ public class ClientRenderablePlayer extends ClientRenderable{
 	@Override
 	public List<Light> getLights(){
 		ArrayList<Light> lights = new ArrayList<>();
-		lights.add(new Light(new HvlCoord(player.playerPos), hvlColor(1f, 1f, 1f, 1f), 300f));
+		lights.add(new Light(new HvlCoord(player.playerPos), hvlColor(0f, 0f, 1f, 1f), 300f));
 		for(ClientBullet bullet : player.bulletTotal)
 			lights.add(new Light(bullet.bulletPos, new Color(1f, 0f, 0f, 1f), 200f));
 		return lights;
