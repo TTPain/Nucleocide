@@ -79,17 +79,17 @@ public class HvlShader {
 		setCurrentShader(null);
 	}
 
-	public void sendInt(String key, int value){
+	public void send(String key, int value){
 		int loc = GL20.glGetUniformLocation(shaderID, key);
 		GL20.glUniform1i(loc, value);
 	}
 	
-	public void sendFloat(String key, float value){
+	public void send(String key, float value){
 		int loc = GL20.glGetUniformLocation(shaderID, key);
 		GL20.glUniform1f(loc, value);
 	}
 	
-	public void sendIntArray(String key, int[] value){
+	public void send(String key, int[] value){
 		IntBuffer buffer = BufferUtils.createIntBuffer(value.length);
 		buffer.put(value);
 		buffer.rewind();
@@ -97,7 +97,7 @@ public class HvlShader {
 		GL20.glUniform1(loc, buffer);
 	}
 	
-	public void sendFloatArray(String key, float[] value){
+	public void send(String key, float[] value){
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(value.length);
 		buffer.put(value);
 		buffer.rewind();
@@ -105,29 +105,35 @@ public class HvlShader {
 		GL20.glUniform1(loc, buffer);
 	}
 	
-	public void sendRenderFrame(String key, int id, HvlRenderFrame renderFrame){
-		sendInt(key, id);
+	public void send(String key, int id, HvlRenderFrame renderFrame){
+		send(key, id);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + id);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, renderFrame.getTextureID());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 	}
 	
-	public void sendTexture(String key, int id, Texture texture){
-		sendInt(key, id);
+	public void send(String key, int id, Texture texture){
+		send(key, id);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + id);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 	}
 	
-	public void sendCoord(String key, HvlCoord value){
+	public void send(String key, HvlCoord value){
 		int loc = GL20.glGetUniformLocation(shaderID, key);
 		GL20.glUniform2f(loc, value.x, value.y);
 	}
 	
-	public void sendColor(String key, Color value){
+	public void send(String key, Color value){
 		int loc = GL20.glGetUniformLocation(shaderID, key);
 		GL20.glUniform4f(loc, value.r, value.g, value.b, value.a);
 	}
+	
+	public void send(String key, HvlAction.A1<Integer> sendCommand){
+		sendCommand.run(GL20.glGetUniformLocation(shaderID, key));
+	}
+	
+	// TODO send array
 	
 	private String readFile(String file){
 		StringBuilder builder = new StringBuilder();
