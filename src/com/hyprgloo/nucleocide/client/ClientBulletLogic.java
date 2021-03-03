@@ -12,7 +12,7 @@ import org.newdawn.slick.Color;
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
-public class PlayerClientBullet{
+public class ClientBulletLogic{
 
 	private float bulletTimer = 0;
 	int bulletSpeed = 8;

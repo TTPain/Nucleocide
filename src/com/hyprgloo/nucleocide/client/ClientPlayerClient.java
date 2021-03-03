@@ -7,14 +7,14 @@ import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayerClient extends ClientPlayer {
 
-	public PlayerClientBullet weapon;
+	public ClientBulletLogic weapon;
 
 
 	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg, float degRotArg) {
 		super(playerPosArg, healthArg, degRotArg);
 		// TODO Auto-generated constructor stub
 
-		weapon = new PlayerClientBullet();
+		weapon = new ClientBulletLogic();
 
 	}
 
