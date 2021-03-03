@@ -72,7 +72,7 @@ void main(){
 			// === FINAL COLOR ============================================
 			
 			vec4 colorAdd = vec4(colorLightVolume.rgb, multiplierLightSurface * colorLightVolume.a);
-			//colorAdd.rgb = colorAdd.rgb * colorAdd.a;
+			colorAdd.rgb = colorAdd.rgb * colorAdd.a;
 			colorAdd = clamp(colorAdd, 0.0, 1.0);
 			
 			colorFinal = clamp(colorFinal + colorAdd, 0.0, 1.0);
