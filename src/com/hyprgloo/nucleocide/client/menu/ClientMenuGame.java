@@ -13,6 +13,7 @@ import org.newdawn.slick.Color;
 import com.hyprgloo.nucleocide.client.ClientLobby;
 import com.hyprgloo.nucleocide.client.ClientMain;
 import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
+import com.hyprgloo.nucleocide.client.render.ClientRenderManager;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.osreboot.ridhvl2.menu.HvlEnvironment;
 import com.osreboot.ridhvl2.menu.HvlFont;
@@ -49,6 +50,7 @@ public class ClientMenuGame extends ClientMenu{
 	public void draw(float delta){
 		if(HvlMenu.top() == arranger && Keyboard.isKeyDown(Keyboard.KEY_TAB)){
 			hvlFont(ClientMain.INDEX_FONT).draw(Math.round(ClientMain.newest().getTimer().getTickRate()) + "", 2f, 2f, Color.white, 1f);
+			hvlFont(ClientMain.INDEX_FONT).draw(ClientRenderManager.debugLastRenderableSize + "", 128f, 2f, Color.white, 1f);
 			
 			hvlDraw(hvlQuad(PADDING_LIST, PADDING_LIST, Display.getWidth() - PADDING_LIST * 2f, Display.getHeight() - PADDING_LIST * 2f), hvlColor(0f, 0.4f));
 			HvlEnvironment e = new HvlEnvironment(PADDING_LIST, PADDING_LIST, Display.getWidth() - PADDING_LIST * 2f, Display.getHeight() - PADDING_LIST * 2f, false);
