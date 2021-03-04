@@ -1,15 +1,9 @@
 package com.hyprgloo.nucleocide.client;
 
-import static com.osreboot.ridhvl2.HvlStatics.hvlCirclec;
-import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
-
 import java.io.Serializable;
-
-import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.osreboot.ridhvl2.HvlCoord;
-import com.osreboot.ridhvl2.HvlMath;
 
 public class ClientBullet implements Serializable{
 
@@ -33,7 +27,6 @@ public class ClientBullet implements Serializable{
 
 		bulletPos.x += bulletVelocity.x;
 		bulletPos.y += bulletVelocity.y;
-		hvlDraw(hvlCirclec(bulletPos.x, bulletPos.y, 20, 50), Color.red);
 	}
 	/*
 	 * Need to add more arguments for modifier implementation.

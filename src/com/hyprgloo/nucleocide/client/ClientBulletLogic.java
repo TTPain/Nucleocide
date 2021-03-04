@@ -1,13 +1,9 @@
 package com.hyprgloo.nucleocide.client;
 
-import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
-import static com.osreboot.ridhvl2.HvlStatics.hvlLine;
-
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.newdawn.slick.Color;
 
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
@@ -29,9 +25,6 @@ public class ClientBulletLogic{
 		HvlCoord bulletDir = new HvlCoord(-bulletMagx, -bulletMagy);
 		bulletDir.normalize();
 		
-		//Draw the aim indicator
-		hvlDraw(hvlLine(player.playerPos.x + 20*bulletDir.x, player.playerPos.y + 20*bulletDir.y, player.playerPos.x + bulletDir.x*ClientPlayer.PLAYER_SIZE, player.playerPos.y + bulletDir.y*ClientPlayer.PLAYER_SIZE, 8), Color.red);
-
 		//Calculates the player's current degrees of rotation, to be sent to the server.
 		HvlCoord angle = new HvlCoord(player.playerPos.x + bulletDir.x, player.playerPos.y + bulletDir.y);
 		player.degRot = HvlMath.angle(player.playerPos, angle);

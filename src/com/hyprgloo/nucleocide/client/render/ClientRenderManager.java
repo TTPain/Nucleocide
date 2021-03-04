@@ -83,8 +83,7 @@ public final class ClientRenderManager {
 				lights.addAll(r.getLights());
 		});
 		lights.removeIf(light -> {
-			return light.location.x + light.range < locationCamera.x - Display.getWidth() / 2f || light.location.x - light.range > locationCamera.x + Display.getWidth() / 2f
-					|| light.location.y + light.range < locationCamera.y - Display.getHeight() / 2f || light.location.y - light.range > locationCamera.y + Display.getHeight() / 2f;
+			return !isVisible(light.location, light.range, locationCamera);
 		});
 		while(lights.size() > LIGHTS_MAX) lights.remove(lights.size() - 1);
 
@@ -108,8 +107,17 @@ public final class ClientRenderManager {
 				hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFrameOcclusion.getTexture());
 			});
 		});
+		
+		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+			renderables.forEach(r -> r.draw(Channel.ENTITY));
+		});
 
 		renderables.clear();
+	}
+	
+	private static boolean isVisible(HvlCoord location, float radius, HvlCoord locationCamera){
+		return location.x + radius >= locationCamera.x - Display.getWidth() / 2f && location.x - radius <= locationCamera.x + Display.getWidth() / 2f &&
+				location.y + radius >= locationCamera.y - Display.getHeight() / 2f && location.y - radius <= locationCamera.y + Display.getHeight() / 2f;
 	}
 
 }

@@ -24,7 +24,7 @@ float map(float x, float inMin, float inMax, float outMin, float outMax){
 // Shadow casting algorithm derived (loosely) from: https://github.com/mattdesl/lwjgl-basics/wiki/2D-Pixel-Perfect-Shadows
 void main(){
 	vec4 colorFinal = vec4(0.0);
-	float finalAlpha = 0.0;
+	float alphaFinal = 0.0;
 	
 	for(int indexLight = 0; indexLight < lightsSize; indexLight++){
 		Light light = lights[indexLight];
@@ -59,10 +59,11 @@ void main(){
 				vec2 coordTest = sLocationLight - (sNormalLight * sDistanceTest);
 				vec4 colorTest = texture2D(texture1, coordTest);
 				colorLightVolume = min(colorLightVolume, 1.0 - colorTest);
+				if(colorLightVolume.a <= 0) break;
 			}
 			
 			if(wDistanceLight > light.range) colorLightVolume = vec4(0.0);
-			colorLightVolume.a = min(colorLightVolume.a, (light.range - wDistanceLight) / light.range);
+			colorLightVolume.a = colorLightVolume.a * (light.range - wDistanceLight) / light.range;
 		
 			// === CALCULATE NORMAL HIGHLIGHTS ============================================
 		
@@ -77,11 +78,11 @@ void main(){
 			colorAdd = clamp(colorAdd, 0.0, 1.0);
 			
 			float newAlpha = colorFinal.a + colorAdd.a;
-			colorFinal = mix(colorFinal, colorAdd, colorAdd.a / (colorAdd.a + finalAlpha));
+			colorFinal = mix(colorFinal, colorAdd, colorAdd.a / (colorAdd.a + alphaFinal));
 			colorFinal.a = newAlpha;
 			colorFinal = clamp(colorFinal, 0.0, 1.0);
 			
-			finalAlpha += colorAdd.a;
+			alphaFinal += colorAdd.a;
 		}
 	}
 	

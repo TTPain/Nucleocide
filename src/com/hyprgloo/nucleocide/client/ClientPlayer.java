@@ -13,7 +13,7 @@ import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayer {
 	
-	public static final int PLAYER_SIZE = 30;
+	public static final int PLAYER_SIZE = 20;
 	
 	protected int pixPerSec = 70;
 	
