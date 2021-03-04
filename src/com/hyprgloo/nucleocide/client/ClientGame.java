@@ -41,7 +41,10 @@ public class ClientGame {
 	private ClientPlayer player;
 	private String id;
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
-	private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
+	//private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
+	
+	//Separate ArrayList of ClientEnemies using the same data received from ServerEnemy.
+	private HashMap<String, ClientEnemy> clientEnemies = new HashMap<String, ClientEnemy>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -71,7 +74,7 @@ public class ClientGame {
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
 
 			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
-
+/*
 				if(!enemies.containsKey(enemyId)) {
 					enemies.put(enemyId, enemyPacket.collectiveServerEnemyStatus.get(enemyId));
 				}else {
@@ -80,9 +83,22 @@ public class ClientGame {
 					enemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
 					enemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
 				}
+*/		
+				if(!clientEnemies.containsKey(enemyId)) {
+					clientEnemies.put(enemyId, new ClientEnemy(enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos,
+							enemyPacket.collectiveServerEnemyStatus.get(enemyId).health, enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID, 
+							enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID));
+				}else {
+					clientEnemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
+					clientEnemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
+					clientEnemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
+					clientEnemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
+				}
+				
+				
 			}
 
-			enemies.keySet().removeIf(e->{
+			clientEnemies.keySet().removeIf(e->{
 				return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
 			});
 
@@ -136,10 +152,10 @@ public class ClientGame {
 
 		//Creation of EnemyDamageEvent packet
 		for(ClientBullet b : player.bulletTotal) {
-			for(String key : enemies.keySet()){
+			for(String key : clientEnemies.keySet()){
 
 				//Need to replace with a more precise contact check
-				if(HvlMath.distance(b.bulletPos, enemies.get(key).enemyPos) < 20) {
+				if(HvlMath.distance(b.bulletPos, clientEnemies.get(key).enemyPos) < 20) {
 					System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
 
 					//If damage has already been registered for this enemy this frame, increase the damage dealt.
@@ -159,11 +175,11 @@ public class ClientGame {
 		}						
 
 		//Drawing all enemies
-		enemies.values().removeIf(e ->{
+		clientEnemies.values().removeIf(e ->{
 			return e.health <= 0;
 		});
-		for(String enemyKey : enemies.keySet()){
-			enemies.get(enemyKey).draw();
+		for(String enemyKey : clientEnemies.keySet()){
+			clientEnemies.get(enemyKey).draw();
 		}
 
 		ClientRenderManager.update(delta);

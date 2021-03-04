@@ -64,6 +64,9 @@ public class ServerGame {
 				}
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
 			}
+			
+			//TODO: Receive PlayerBulletRemovalEvent packages, create CollectivePlayerBulletRemovalEvent package.
+			
 		}
 
 		//Send packets to clients
