@@ -67,17 +67,6 @@ public class ClientBulletLogic{
 		}
 		
 		//Remove bullets after a specified decay time, or if they reach a certain distance from the player.
-		if(player.bulletTotal.size() > 0) {
-			for(ClientBullet b: player.bulletTotal) {
-				b.bulletLifespan-=delta;
-			}
-			player.bulletTotal.removeIf(stinkybullet ->{
-				return HvlMath.distance(stinkybullet.bulletPos, player.playerPos)> 1000000;
-			});
-			player.bulletTotal.removeIf(stinkybullet ->{
-				return stinkybullet.bulletLifespan <= 0;
-			});
-		}
 	}
 
 	//Method to create a bullet, used in shotgun firing

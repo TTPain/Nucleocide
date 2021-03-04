@@ -15,7 +15,7 @@ public class ClientBullet implements Serializable {
 	public HvlCoord bulletPos = new HvlCoord();
 	private HvlCoord lastBulletPos = new HvlCoord();
 	public HvlCoord bulletVelocity = new HvlCoord();
-	public float bulletLifespan = 15;
+	public float bulletLifespan = 3;
 	public boolean isDead;
 	// TODO: Need to incorporate bullet UUIDs with server communication
 	public String uuid = NetworkUtil.generateUUID();
@@ -66,14 +66,16 @@ public class ClientBullet implements Serializable {
 			if (HvlMath.intersection(topLeft, bottomLeft, bulletPos, lastBulletPos) != null
 					|| HvlMath.intersection(topLeft, topRight, bulletPos, lastBulletPos) != null
 					|| HvlMath.intersection(topRight, bottomRight, bulletPos, lastBulletPos) != null
-					|| HvlMath.intersection(bottomLeft, bottomRight, bulletPos, lastBulletPos) != null) {
+					|| HvlMath.intersection(bottomLeft, bottomRight, bulletPos, lastBulletPos) != null) 
 				
 				this.isDead = true;
 				
 			}
 			
 			
-
+ 
+		if(HvlMath.distance(bulletPos, player.playerPos)> 1000000 || bulletLifespan <= 0) {		
+			this.isDead = true;	
 		}
 
 		lastBulletPos = new HvlCoord(bulletPos);
