@@ -37,6 +37,7 @@ public class ClientMenuServerBrowser extends ClientMenuPopup{
 		addButtonServer("Local Host", "localhost", 25565);
 		addButtonServer("OS's Server", "73.239.1.166", 25565);
 		addButtonServer("Tristin's Server", "50.82.229.245", 25565);
+		addButtonServer("Sam's Server", "70.237.14.109", 25565);
 		
 		addButton("Back", b -> HvlMenu.set(ClientMenuManager.menuMain));
 	}

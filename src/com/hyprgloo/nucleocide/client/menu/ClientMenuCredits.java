@@ -20,6 +20,7 @@ public class ClientMenuCredits extends ClientMenu{
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("- Development Team -").align(0.5f, 0.5f));
 		arranger.<HvlArranger>find("arranger").add(new HvlSpacer(64f));
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("Basset").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));
+		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("HaveANiceDay").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("os_reboot").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("RetrogradeBurn").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));
 		arranger.<HvlArranger>find("arranger").add(HvlLabel.fromDefault().scale(2f).text("TTPain").align(0.5f, 0.5f).overrideHeight(HEIGHT_CREDIT));

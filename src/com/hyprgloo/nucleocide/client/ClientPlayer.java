@@ -45,9 +45,15 @@ public class ClientPlayer {
 	
 	
 	public void update(float delta, World world, ClientGame game, boolean acceptInput){
-		render();
+		
 		for(ClientBullet b: bulletTotal) {
-			b.update(delta, null);
+			if(!b.isDead) {
+				b.update(delta, world, null);
+			}
 		}
+		bulletTotal.removeIf(b -> {
+			return b.isDead;
+		});
+		render();
 	}
 }

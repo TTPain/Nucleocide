@@ -11,7 +11,7 @@ import com.osreboot.ridhvl2.HvlMath;
 public class ClientBulletLogic{
 
 	private float bulletTimer = 0;
-	int bulletSpeed = 8;
+	int bulletSpeed = 800;
 
 	public void update(float delta, ClientPlayer player, ClientGame game, boolean acceptInput) {
 		//ArrayList of bullets to be sent to server on this frame
