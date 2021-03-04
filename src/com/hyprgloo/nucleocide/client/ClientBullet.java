@@ -68,9 +68,9 @@ public class ClientBullet implements Serializable {
 					|| HvlMath.intersection(bottomLeft, bottomRight, bulletPos, lastBulletPos) != null) 	
 				this.isDead = true;	
 			}
-			
+		
 		bulletLifespan -= delta;
-		if(HvlMath.distance(bulletPos, player.playerPos)> 1000000 || bulletLifespan <= 0) {		
+		if(HvlMath.distance(bulletPos, player.playerPos) > 1000000 || bulletLifespan <= 0) {		
 			this.isDead = true;	
 		}
 		
