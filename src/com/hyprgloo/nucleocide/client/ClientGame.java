@@ -16,7 +16,6 @@ import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
-import com.hyprgloo.nucleocide.server.ServerEnemy;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
@@ -73,17 +72,7 @@ public class ClientGame {
 			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
 
-			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){
-/*
-				if(!enemies.containsKey(enemyId)) {
-					enemies.put(enemyId, enemyPacket.collectiveServerEnemyStatus.get(enemyId));
-				}else {
-					enemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
-					enemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
-					enemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
-					enemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
-				}
-*/		
+			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){	
 				if(!clientEnemies.containsKey(enemyId)) {
 					clientEnemies.put(enemyId, new ClientEnemy(enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos,
 							enemyPacket.collectiveServerEnemyStatus.get(enemyId).health, enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID, 
@@ -95,13 +84,11 @@ public class ClientGame {
 					clientEnemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
 				}
 				
-				
 			}
 
 			clientEnemies.keySet().removeIf(e->{
 				return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
 			});
-
 		}
 
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
