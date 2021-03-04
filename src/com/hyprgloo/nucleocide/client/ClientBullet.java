@@ -74,7 +74,6 @@ public class ClientBullet implements Serializable {
 
 		bulletLifespan -= delta;
 		if(bulletLifespan <= 0) {
-
 			this.isDead = true;	
 		}
 
