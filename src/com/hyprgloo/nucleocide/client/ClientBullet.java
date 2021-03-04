@@ -31,7 +31,7 @@ public class ClientBullet implements Serializable {
 	// Updating bullet positions and drawing them every frame.
 	public void update(float delta, World world, ClientPlayer player) {
 		ArrayList<Tile> solidTiles = new ArrayList<Tile>();
-		
+
 		for (int x = (int)((bulletPos.x - World.BLOCK_SIZE * 2)/World.BLOCK_SIZE); x < (int) ((bulletPos.x + World.BLOCK_SIZE * 2)/World.BLOCK_SIZE); x++) {
 			for (int y = (int) ((bulletPos.y - World.BLOCK_SIZE * 2)/World.BLOCK_SIZE); y < (int) ((bulletPos.y + World.BLOCK_SIZE * 2)/World.BLOCK_SIZE); y++) {
 				if (world.isSolid(x, y)) {
@@ -61,7 +61,7 @@ public class ClientBullet implements Serializable {
 			// BAD if-statement ahead, checks left wall, top wall, right wall, and then
 			// bottom wall for collision with line created with last position and current
 			// position
-			
+
 			if (HvlMath.intersection(topLeft, bottomLeft, bulletPos, lastBulletPos) != null
 					|| HvlMath.intersection(topLeft, topRight, bulletPos, lastBulletPos) != null
 					|| HvlMath.intersection(topRight, bottomRight, bulletPos, lastBulletPos) != null
@@ -69,13 +69,21 @@ public class ClientBullet implements Serializable {
 				this.isDead = true;	
 			}
 		
-		bulletLifespan -= delta;
 		if(HvlMath.distance(bulletPos, player.playerPos) > 1000000 || bulletLifespan <= 0) {		
+		}
+
+		bulletLifespan -= delta;
+		if(bulletLifespan <= 0) {
+
 			this.isDead = true;	
 		}
+
 		
+
+
+
 		lastBulletPos = new HvlCoord(bulletPos);
-		
+
 		bulletPos.x += bulletVelocity.x * delta;
 		bulletPos.y += bulletVelocity.y * delta;
 	}
