@@ -72,8 +72,6 @@ public class ClientBullet implements Serializable {
 				
 			}
 			
-			
- 
 		if(HvlMath.distance(bulletPos, player.playerPos)> 1000000 || bulletLifespan <= 0) {		
 			this.isDead = true;	
 		}
