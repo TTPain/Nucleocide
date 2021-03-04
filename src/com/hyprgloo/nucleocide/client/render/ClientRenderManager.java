@@ -28,6 +28,7 @@ public final class ClientRenderManager {
 	LIGHTS_MAX = 32;
 
 	public static ArrayList<ClientRenderable> renderables;
+	public static int debugLastRenderableSize;
 
 	private static HvlCoord lastDisplaySize;
 
@@ -36,6 +37,8 @@ public final class ClientRenderManager {
 
 	public static void initialize(){
 		initializeRenderFrames();
+		
+		debugLastRenderableSize = 0;
 		
 		shaderLight = new HvlShader("res/shader/Light.frag");
 	}
@@ -61,6 +64,8 @@ public final class ClientRenderManager {
 	}
 
 	public static void draw(float delta, World world, HvlCoord locationCamera){
+		debugLastRenderableSize = renderables.size();
+		
 		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
 			renderables.forEach(r -> r.draw(Channel.COLOR));
 		});
