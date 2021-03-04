@@ -57,7 +57,7 @@ public final class ClientRenderManager {
 		}
 
 		renderables.forEach(r -> r.update(delta));
-		System.out.println(shaderLight.getFragLog());
+//		System.out.println(shaderLight.getFragLog());
 	}
 
 	public static void draw(float delta, World world, HvlCoord locationCamera){
