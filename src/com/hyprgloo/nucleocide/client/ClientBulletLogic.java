@@ -65,8 +65,6 @@ public class ClientBulletLogic{
 		if(bulletsToSend.size()>0) {
 			game.createAndSendPlayerBulletEventPackage(bulletsToSend);
 		}
-		
-		//Remove bullets after a specified decay time, or if they reach a certain distance from the player.
 	}
 
 	//Method to create a bullet, used in shotgun firing
