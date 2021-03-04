@@ -47,7 +47,7 @@ public class ClientRenderablePlayer extends ClientRenderable{
 			}
 			
 			hvlDraw(hvlCirclec(player.playerPos.x, player.playerPos.y, ClientPlayer.PLAYER_SIZE), spriteColor1);
-			hvlRotate(player.playerPos.x, player.playerPos.y, player.degRot, ()->{
+			hvlRotate(player.playerPos.x, player.playerPos.y, player.degRot, () -> {
 				hvlDraw(hvlQuadc(player.playerPos.x + ClientPlayer.PLAYER_SIZE, player.playerPos.y, 10, 4), spriteColor2);
 			});
 			
