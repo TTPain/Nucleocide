@@ -1,12 +1,8 @@
 package com.hyprgloo.nucleocide.client;
 
-import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
-import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
-
 import java.util.HashMap;
 
-import org.newdawn.slick.Color;
-
+import com.hyprgloo.nucleocide.client.render.entity.ClientRenderableEnemy;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.osreboot.ridhvl2.HvlCoord;
@@ -20,17 +16,21 @@ public class ClientEnemy {
 	public int size = 20;
 	public String id;
 	
+	public ClientRenderableEnemy renderable;
+	
 	public ClientEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
 		enemyPos = enemyPosArg;
 		health = healthArg;
 		textureID = textureIDArg;
 		pathfindingID = pathfindingIDArg;
+		
+		renderable = new ClientRenderableEnemy(this);
 	}
 	
 	public void update(float delta, World world, HashMap<String, PacketPlayerStatus> collectivePlayerStatus) {} // TODO extend this class and implement basic AI (???)
 	
 	public void draw() {
-		hvlDraw(hvlQuadc(enemyPos.x, enemyPos.y, size, size), Color.blue);
+		renderable.enqueue();
 	}
 	
 }

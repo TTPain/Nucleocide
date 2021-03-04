@@ -17,7 +17,8 @@ public final class ClientLoader {
 	INDEX_MATERIAL_TILE_C = 9,
 	INDEX_MATERIAL_TILE_N = 10,
 	INDEX_MATERIAL_WALL_C = 11,
-	INDEX_MATERIAL_WALL_N = 12;
+	INDEX_MATERIAL_WALL_N = 12,
+	INDEX_ENTITY_ORB = 13;
 	
 	private ClientLoader(){}
 	
@@ -36,6 +37,8 @@ public final class ClientLoader {
 		hvlLoad("/materials/Nucleocide_Tile_NORMAL.png");	// 10
 		hvlLoad("/materials/Nucleocide_Wall_COLOR.png");	// 11
 		hvlLoad("/materials/Nucleocide_Wall_NORMAL.png");	// 12
+		
+		hvlLoad("/entity/Orb.png");		// 13
 	}
 	
 }
