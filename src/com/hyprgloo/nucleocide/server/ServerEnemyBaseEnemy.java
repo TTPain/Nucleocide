@@ -45,7 +45,6 @@ public class ServerEnemyBaseEnemy extends ServerEnemy {
 		}
 
 	}
-
 	public boolean LOS(HvlCoord playerLoc, HvlCoord enemyPos, World world) {
 		if (HvlMath.distance(playerLoc, enemyPos) < SEEK_SIZE) {
 			for (int x = (int) (Math.min(enemyPos.x, playerLoc.x)/ World.BLOCK_SIZE); x < (int) (Math.max(enemyPos.x, playerLoc.x) / World.BLOCK_SIZE); x++) {
