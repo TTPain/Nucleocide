@@ -6,10 +6,12 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
+import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
 import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
@@ -38,18 +40,22 @@ public class ServerGame {
 	public void update(float delta){
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
-
+		HashMap<String, PacketPlayerBulletRemovalEvent> collectivePlayerBulletRemovalEvent = new HashMap<String, PacketPlayerBulletRemovalEvent>();
 		PacketEnemyDamageEvent enemyDamageEventPacket;
 
 		//Receive packets from clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
+			
+			//Create CollectivePlayerStatus packet...
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
 				collectivePlayerStatus.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_STATUS));
 			}
+			//Create CollectivePlayerBulletEvent packet...
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_EVENT)) {
 				collectivePlayerBulletEvent.put(i.getName(),HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_PLAYER_BULLET_EVENT);
 			}
+			//Create EnemyDamageEvent packet...
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT)) {
 				System.out.println("Enemy damage packet received...");
 				enemyDamageEventPacket = HvlDirect.getValue(i, NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
@@ -63,19 +69,26 @@ public class ServerGame {
 				}
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
 			}
+			//Create CollectivePlayerBulletRemovalEventPacket...
+			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT)) {
+				collectivePlayerBulletRemovalEvent.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT));
+				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT);
+			}
 			
-			//TODO: Receive PlayerBulletRemovalEvent packages, create CollectivePlayerBulletRemovalEvent package.
 			
 		}
 
 		//Send packets to clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
 			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(collectivePlayerStatus));
+			if(collectivePlayerBulletRemovalEvent.size() > 0) {
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT, new PacketCollectivePlayerBulletRemovalEvent(collectivePlayerBulletRemovalEvent));
+			}
 			if(collectivePlayerBulletEvent.size() > 0) {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));
 			}
 			if(enemies.size() > 0) {
-				HvlDirect.writeUDP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
 			}
 		}
 

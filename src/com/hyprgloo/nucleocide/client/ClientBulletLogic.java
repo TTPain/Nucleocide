@@ -16,6 +16,7 @@ public class ClientBulletLogic{
 	public void update(float delta, ClientPlayer player, ClientGame game, boolean acceptInput) {
 		//ArrayList of bullets to be sent to server on this frame
 		ArrayList<ClientBullet> bulletsToSend = new ArrayList<ClientBullet>();
+		ArrayList<ClientBullet> bulletsToRemove = new ArrayList<ClientBullet>();
 		
 		//Velocity of bullet relative to the max bullet speed
 		float bulletMagx;

@@ -107,6 +107,25 @@ public class ClientGame {
 		
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT)) {
 			//Process bullet removal packet
+			bulletRemovalPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
+			
+			//TODO Iterate through all packets and remove all bullets marked for removal
+			for(String name: bulletRemovalPacket.collectiveBulletsToRemove.keySet()) {
+				if(otherPlayers.containsKey(name)) {
+					for(ClientBullet b : bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove) {
+						
+						otherPlayers.get(name).bulletTotal.removeIf(bulletToRemove->{
+							return bulletToRemove.uuid.equals(b.uuid);
+						});
+						
+					}
+					//otherPlayers.get(name).bulletTotal.removeIf(b->{
+						//return b.uuid == bulletRemovalPacket.collectiveBulletsToRemove.get(name).
+						//return bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove.contains(b);								
+				//	});
+				}
+			}			
 		}
 
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
@@ -144,13 +163,14 @@ public class ClientGame {
 		}	
 
 		//Creation of EnemyDamageEvent packet
+		ArrayList<ClientBullet> bulletsToRemove = new ArrayList<ClientBullet>();
 		for(ClientBullet b : player.bulletTotal) {
 			for(String key : clientEnemies.keySet()){
 
-				//Need to replace with a more precise contact check
+				//Need to replace with a more precise contact check, also probably shouldn't be in this class
 				if(HvlMath.distance(b.bulletPos, clientEnemies.get(key).enemyPos) < 20) {
 					System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
-
+					bulletsToRemove.add(b);
 					//If damage has already been registered for this enemy this frame, increase the damage dealt.
 					if(enemyDamageEvents.containsKey(key)) {
 						enemyDamageEvents.put(key, enemyDamageEvents.get(key) + 5);
@@ -161,7 +181,15 @@ public class ClientGame {
 				}
 			}
 		}
+		
+		player.bulletTotal.removeIf(b ->{
+			return bulletsToRemove.contains(b);
+		});
 
+		if(bulletsToRemove.size() > 0) {
+			HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemove));
+		}
+		
 		//Write enemy damage event to server if it exists.
 		if(enemyDamageEvents.size() > 0) {
 			HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(id, enemyDamageEvents));
