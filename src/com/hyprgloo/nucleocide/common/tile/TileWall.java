@@ -21,9 +21,14 @@ public class TileWall extends Tile {
 	
 	@Override
 	public int getTextureIndex() {
-		return ClientLoader.INDEX_MATERIAL_WALL_C;
+		return this.type == 0 ? ClientLoader.INDEX_MATERIAL_WALL_C : ClientLoader.INDEX_MATERIAL_CLIFF_C;
 	}
 
+	@Override
+	public float getMetalness(){
+		return this.type == 0 ? 0.5f : 0f;
+	}
+	
 	@Override
 	public boolean isSolid() {
 		return true;

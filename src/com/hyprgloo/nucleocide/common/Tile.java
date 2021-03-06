@@ -37,6 +37,7 @@ public abstract class Tile implements Serializable{
 	}
 
 	public abstract int getTextureIndex();
+	public abstract float getMetalness();
 	public abstract boolean isSolid();
 	public abstract char addonTileInfo();
 }

@@ -10,9 +10,10 @@ import java.util.List;
 import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientEnemy;
-import com.hyprgloo.nucleocide.client.render.ClientRenderable;
+import com.hyprgloo.nucleocide.client.render.ClientRenderableAdvanced;
+import com.hyprgloo.nucleocide.common.World;
 
-public class ClientRenderableEnemy extends ClientRenderable{
+public class ClientRenderableEnemy extends ClientRenderableAdvanced{
 	
 	private ClientEnemy enemy;
 	
@@ -21,7 +22,7 @@ public class ClientRenderableEnemy extends ClientRenderable{
 	}
 	
 	@Override
-	public void update(float delta){}
+	public void update(float delta, World world){}
 	
 	@Override
 	public void draw(Channel channel){

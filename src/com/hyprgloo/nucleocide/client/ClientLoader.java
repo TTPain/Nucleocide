@@ -15,13 +15,13 @@ public final class ClientLoader {
 	INDEX_MATERIAL_STONE_C = 7,
 	INDEX_MATERIAL_STONE_N = 8,
 	INDEX_MATERIAL_TILE_C = 9,
-	INDEX_MATERIAL_TILE_N = 10,
 	INDEX_MATERIAL_WALL_C = 11,
-	INDEX_MATERIAL_WALL_N = 12,
-	INDEX_ENTITY_ORB = 13;
-	
+	INDEX_MATERIAL_CLIFF_C = 13,
+	INDEX_ENTITY_ORB = 15,
+	INDEX_ENTITY_PLASMA = 16;
+
 	private ClientLoader(){}
-	
+
 	public static void loadTextures(){
 		hvlLoad("/tileset/tile0.png");			// 0
 		hvlLoad("/tileset/tile1.png");			// 1
@@ -37,8 +37,11 @@ public final class ClientLoader {
 		hvlLoad("/materials/Nucleocide_Tile_NORMAL.png");	// 10
 		hvlLoad("/materials/Nucleocide_Wall_COLOR.png");	// 11
 		hvlLoad("/materials/Nucleocide_Wall_NORMAL.png");	// 12
-		
-		hvlLoad("/entity/Orb.png");		// 13
+		hvlLoad("/materials/Nucleocide_Cliff_COLOR.png");	// 13
+		hvlLoad("/materials/Nucleocide_Cliff_NORMAL.png");	// 14
+
+		hvlLoad("/entity/Orb.png");							// 15
+		hvlLoad("/entity/Nucleocide_Plasma_COLOR.png");		// 16
 	}
-	
+
 }

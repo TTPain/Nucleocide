@@ -210,6 +210,9 @@ public class MainMapEditor extends HvlTemplateI {
 				if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
 						importer.tiles[xOffset + yOffset * 4] = new TileFloor(hold, 0);
 				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_6)) {
+					importer.tiles[xOffset + yOffset * 4] = new TileWall(hold, 1);
+			}
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
