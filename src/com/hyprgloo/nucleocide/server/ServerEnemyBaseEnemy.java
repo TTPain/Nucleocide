@@ -17,10 +17,13 @@ public class ServerEnemyBaseEnemy extends ServerEnemy {
 	private static final long serialVersionUID = 289191286699264122L;
 	private static final int SEEK_SIZE = 500;
 	private int baseSpeed = 30;
+	private HvlCoord startPos;
+	private HvlCoord lastPos;
 
 	public ServerEnemyBaseEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
 		super(enemyPosArg, healthArg, textureIDArg, pathfindingIDArg);
-
+		lastPos = new HvlCoord(enemyPosArg);
+		startPos = new HvlCoord(enemyPosArg);
 	}
 
 	@Override
@@ -28,11 +31,14 @@ public class ServerEnemyBaseEnemy extends ServerEnemy {
 		
 		for (String key : playerArg.keySet()) {
 			if (playerArg.get(key).health > 0) {
-				if (HvlMath.distance(playerArg.get(key).location, enemyPos) < SEEK_SIZE && LOS(playerArg.get(key).location, enemyPos, world)) {
-					HvlCoord lastPos = new HvlCoord(playerArg.get(key).location);
+				if (HvlMath.distance(playerArg.get(key).location, enemyPos) < SEEK_SIZE) {
+					if(LOS(playerArg.get(key).location, enemyPos, world)) {
+						lastPos = new HvlCoord(playerArg.get(key).location);
+					} else {
+						lastPos = new HvlCoord(startPos);
+					}
 					enemyPos.x = HvlMath.stepTowards(enemyPos.x, baseSpeed * delta, lastPos.x);
 					enemyPos.y = HvlMath.stepTowards(enemyPos.y, baseSpeed * delta, lastPos.y);
-					
 				}
 				
 			}
