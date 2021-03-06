@@ -25,6 +25,11 @@ public class TileWater extends Tile {
 	}
 	
 	@Override
+	public float getMetalness(){
+		return 0f;
+	}
+	
+	@Override
 	public boolean isSolid() {
 		return false;
 	}

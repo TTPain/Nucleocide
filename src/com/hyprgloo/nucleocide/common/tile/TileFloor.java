@@ -25,6 +25,11 @@ public class TileFloor extends Tile {
 	}
 	
 	@Override
+	public float getMetalness(){
+		return this.type == 0 ? 0f : 0.3f;
+	}
+	
+	@Override
 	public boolean isSolid() {
 		return false;
 	}

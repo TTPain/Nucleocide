@@ -4,6 +4,8 @@
 #define LIGHT_INTENSITY 1.5
 #define LIGHTS_MAX 32
 
+#define METALNESS_MAX 0.5
+
 struct Light{
 	float range;
 	vec4 color;
@@ -12,6 +14,7 @@ struct Light{
 
 uniform sampler2D texture1;
 uniform sampler2D textureNormal;
+uniform sampler2D textureMetalness;
 uniform vec2 resolution;
 
 uniform int lightsSize;
@@ -71,10 +74,25 @@ void main(){
 			normalSurface.y *= -1.0;
 			float multiplierLightSurface = dot((wLocationLight - wLocationPixel) / light.range, normalSurface) / 2.0 + 0.5;
 		
+			// === CALCULATE LIGHT-ABSORBING NORMAL HIGHLIGHTS ============================================
+		
+			vec4 absorbedLight = multiplierLightSurface * texture2D(texture1, sLocationPixel) * (((light.range * 0.5) - wDistanceLight) / (light.range * 0.5)) * 2.0;
+			absorbedLight = clamp(absorbedLight, 0.0, 1.0);
+			//absorbedLight = 3.0 * (absorbedLight - 0.5) + 0.5;
+			//absorbedLight = clamp(absorbedLight, 0.0, 1.0);
+			absorbedLight *= light.color;
+			absorbedLight = clamp(absorbedLight, 0.0, 1.0);
+		
+			// === METALNESS ============================================
+			
+			float metalnessMultiplier = METALNESS_MAX * texture2D(textureMetalness, sLocationPixel).r + 1.0;
+			
 			// === FINAL COLOR ============================================
 			
 			vec4 colorAdd = vec4(colorLightVolume.rgb, multiplierLightSurface * colorLightVolume.a * LIGHT_INTENSITY);
-			//colorAdd.rgb = colorAdd.rgb * colorAdd.a;
+			colorAdd += absorbedLight;
+			colorAdd = clamp(colorAdd, 0.0, 1.0);
+			colorAdd.a = metalnessMultiplier * (colorAdd.a - 0.5) + 0.5;
 			colorAdd = clamp(colorAdd, 0.0, 1.0);
 			
 			float newAlpha = colorFinal.a + colorAdd.a;

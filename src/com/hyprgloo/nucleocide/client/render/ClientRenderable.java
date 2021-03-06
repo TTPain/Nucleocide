@@ -1,10 +1,6 @@
 package com.hyprgloo.nucleocide.client.render;
 
-import java.util.List;
-
-import org.newdawn.slick.Color;
-
-import com.osreboot.ridhvl2.HvlCoord;
+import com.hyprgloo.nucleocide.common.World;
 
 /**
  * @author os_reboot
@@ -12,33 +8,17 @@ import com.osreboot.ridhvl2.HvlCoord;
 public abstract class ClientRenderable {
 
 	public enum Channel {
-		COLOR, OCCLUSION, NORMAL, ENTITY
+		COLOR, OCCLUSION, NORMAL, METALNESS, ENTITY, PLASMA
 	}
 
 	public ClientRenderable(){}
 	
-	public final void enqueue(){
+	public void enqueue(){
 		ClientRenderManager.renderables.add(this);
 	}
 	
-	public abstract void update(float delta);
+	public abstract void update(float delta, World world);
 	
 	public abstract void draw(Channel channel);
-	
-	public abstract List<Light> getLights();
-	
-	public static class Light {
-		
-		public HvlCoord location;
-		public Color color;
-		public float range;
-		
-		public Light(HvlCoord locationArg, Color colorArg, float rangeArg){
-			location = locationArg;
-			color = colorArg;
-			range = rangeArg;
-		}
-		
-	}
 	
 }

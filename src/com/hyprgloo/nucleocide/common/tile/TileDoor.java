@@ -20,6 +20,11 @@ public class TileDoor extends Tile {
 	}
 	
 	@Override
+	public float getMetalness(){
+		return 0.5f;
+	}
+	
+	@Override
 	public boolean isSolid() {
 		return false;
 	}

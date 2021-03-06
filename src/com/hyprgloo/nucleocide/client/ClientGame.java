@@ -175,7 +175,7 @@ public class ClientGame {
 			clientEnemies.get(enemyKey).draw();
 		}
 
-		ClientRenderManager.update(delta);
+		ClientRenderManager.update(delta, world);
 		ClientRenderManager.draw(delta, world, player.playerPos);
 	}
 

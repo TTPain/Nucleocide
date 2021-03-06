@@ -25,6 +25,11 @@ public class TileFallback extends Tile {
 	}
 	
 	@Override
+	public float getMetalness(){
+		return 0;
+	}
+	
+	@Override
 	public boolean isSolid() {
 		return false;
 	}
