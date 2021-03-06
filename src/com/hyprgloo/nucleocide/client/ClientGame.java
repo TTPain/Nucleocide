@@ -10,6 +10,7 @@ import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
@@ -59,6 +60,7 @@ public class ClientGame {
 
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
+		PacketCollectivePlayerBulletRemovalEvent bulletRemovalPacket;
 		PacketServerEnemyStatus enemyPacket;
 
 
@@ -101,6 +103,10 @@ public class ClientGame {
 					otherPlayers.get(name).bulletTotal.addAll(bulletPacket.collectivePlayerBulletStatus.get(name).bulletsToFire);
 				}
 			}
+		}
+		
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT)) {
+			//Process bullet removal packet
 		}
 
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
