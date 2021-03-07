@@ -12,6 +12,7 @@ import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
@@ -43,7 +44,7 @@ public class ClientGame {
 	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
 	//private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
 	
-	//Separate ArrayList of ClientEnemies using the same data received from ServerEnemy.
+	//Separate ArrayList of ClientEnemies using the same data received from CollectiveServerEnemyStatus.
 	private HashMap<String, ClientEnemy> clientEnemies = new HashMap<String, ClientEnemy>();
 
 	public ClientGame(String id){
@@ -61,7 +62,7 @@ public class ClientGame {
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
 		PacketCollectivePlayerBulletRemovalEvent bulletRemovalPacket;
-		PacketServerEnemyStatus enemyPacket;
+		PacketCollectiveServerEnemyStatus enemyPacket;
 
 
 		HashMap<String, Float> enemyDamageEvents = new HashMap<String, Float>();
@@ -70,20 +71,17 @@ public class ClientGame {
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
 
 		//Receive and update server enemy data
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_SERVER_ENEMY_STATUS)) {
-			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
-			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_ENEMY_STATUS);
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS)) {
+			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
 
 			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){	
 				if(!clientEnemies.containsKey(enemyId)) {
 					clientEnemies.put(enemyId, new ClientEnemy(enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos,
-							enemyPacket.collectiveServerEnemyStatus.get(enemyId).health, enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID, 
-							enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID));
+							enemyPacket.collectiveServerEnemyStatus.get(enemyId).health, /*Texture ID and Pathfinding ID*/0, 0));
 				}else {
 					clientEnemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
 					clientEnemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
-					clientEnemies.get(enemyId).textureID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).textureID;
-					clientEnemies.get(enemyId).pathfindingID = enemyPacket.collectiveServerEnemyStatus.get(enemyId).pathfindingID;
 				}
 				
 			}

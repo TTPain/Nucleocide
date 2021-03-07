@@ -1,5 +1,6 @@
 package com.hyprgloo.nucleocide.server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -8,6 +9,7 @@ import com.hyprgloo.nucleocide.common.WorldGenerator;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
@@ -19,29 +21,49 @@ import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
+//TODO
+//Each enemy has its own PacketServerEnemyStatus
+//Compile these into a PacketCollectiveServerEnemyStatus
+//Send this to client, use the data to construct ClientEnemy objects on the client's end
+
 public class ServerGame {
 
 	private World world;
 	//HashMap that will store enemy data created by the server
-	private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
+	private ArrayList<ServerEnemy> enemies = new ArrayList<ServerEnemy>();
 
 	public ServerGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
 
 		// TODO spawn enemies somehow (???)
 		//Need to generate a real UUID before adding into 'enemies'.
+		
+		//Put 15 enemies into the "enemies" ArrayList
 		for(int i = 0; i < 15; i++) {
-			enemies.put("placeholder", new ServerEnemyBaseEnemy(new HvlCoord(HvlMath.randomInt(100, 1000),HvlMath.randomInt(100, 1000)), 1, 0, 0));
-			enemies.put(enemies.get("placeholder").id, enemies.get("placeholder"));
-			enemies.remove("placeholder");
+			enemies.add(new ServerEnemyBaseEnemy(new HvlCoord(HvlMath.randomInt(100, 1000),HvlMath.randomInt(100, 1000)), 1, 0, 0));
 		}
+		
 	}
 
 	public void update(float delta){
+		
+		
+		
+
+		
+		HashMap<String, PacketServerEnemyStatus> collectiveServerEnemies = new HashMap<String, PacketServerEnemyStatus>();
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
 		HashMap<String, PacketPlayerBulletRemovalEvent> collectivePlayerBulletRemovalEvent = new HashMap<String, PacketPlayerBulletRemovalEvent>();
 		PacketEnemyDamageEvent enemyDamageEventPacket;
+		
+		//Create CollectiveServerEnemyStatus packet...
+		
+		//Use the "enemies" ArrayList to create PacketServerEnemyStatus packets
+		//for each enemy and put into a collectiveServerEnemies HashMap
+		for(ServerEnemy e : enemies) {
+			collectiveServerEnemies.put(e.id,new PacketServerEnemyStatus(e.enemyPos, e.health));
+		}
 
 		//Receive packets from clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
@@ -59,11 +81,11 @@ public class ServerGame {
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT)) {
 				System.out.println("Enemy damage packet received...");
 				enemyDamageEventPacket = HvlDirect.getValue(i, NetworkUtil.KEY_ENEMY_DAMAGE_EVENT);
-				for(String enemyKey : enemies.keySet()){
+				for(ServerEnemy e : enemies){
 					for(String damagedEnemy : enemyDamageEventPacket.enemiesHitAndDamageDealt.keySet()){
-						if(enemyKey.equals(damagedEnemy)) {
-							enemies.get(enemyKey).health -= enemyDamageEventPacket.enemiesHitAndDamageDealt.get(damagedEnemy);
-							System.out.println("Enemy " + enemyKey + " hit by player " + enemyDamageEventPacket.playerUUID);
+						if(e.id.equals(damagedEnemy)) {
+							e.health -= enemyDamageEventPacket.enemiesHitAndDamageDealt.get(damagedEnemy);
+							System.out.println("Enemy " + e.id + " hit by player " + enemyDamageEventPacket.playerUUID);
 						}
 					}
 				}
@@ -88,17 +110,17 @@ public class ServerGame {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));
 			}
 			if(enemies.size() > 0) {
-				HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_ENEMY_STATUS, new PacketServerEnemyStatus(enemies));
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS, new PacketCollectiveServerEnemyStatus(collectiveServerEnemies));
 			}
 		}
 
 		//Enemy data updated by server
-		enemies.values().removeIf(e ->{
+		enemies.removeIf(e ->{
 			return e.health <= 0;
 		});
 
-		for(String enemyKey : enemies.keySet()){
-			enemies.get(enemyKey).update(delta, world, collectivePlayerStatus);
+		for(ServerEnemy e : enemies){
+			e.update(delta, world, collectivePlayerStatus);
 		}
 
 	}

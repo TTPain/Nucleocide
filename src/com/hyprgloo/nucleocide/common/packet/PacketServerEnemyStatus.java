@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.hyprgloo.nucleocide.server.ServerEnemy;
+import com.osreboot.ridhvl2.HvlCoord;
 
 public class PacketServerEnemyStatus implements Serializable{
 	private static final long serialVersionUID = 1886558939659502043L;
 	
-	public HashMap<String,ServerEnemy> collectiveServerEnemyStatus;
+	public HvlCoord enemyPos;
+	public float health;
 	
-	public PacketServerEnemyStatus(HashMap<String,ServerEnemy> collectiveServerEnemyStatusArg) {
-		collectiveServerEnemyStatus = collectiveServerEnemyStatusArg;
+	public PacketServerEnemyStatus(HvlCoord enemyPosArg, float healthArg) {
+		enemyPos = enemyPosArg;
+		health = healthArg;
 	}
+	
 }
