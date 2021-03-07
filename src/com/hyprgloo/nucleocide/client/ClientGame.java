@@ -194,9 +194,6 @@ public class ClientGame {
 		}						
 
 		//Drawing all enemies
-		clientEnemies.values().removeIf(e ->{
-			return e.health <= 0;
-		});
 		for(String enemyKey : clientEnemies.keySet()){
 			clientEnemies.get(enemyKey).draw();
 		}
