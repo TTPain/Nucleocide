@@ -1,7 +1,11 @@
 package com.hyprgloo.nucleocide.common;
 
+import static com.osreboot.ridhvl2.HvlStatics.hvlColor;
+import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlFont;
 import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
+import static com.osreboot.ridhvl2.HvlStatics.hvlQuad;
+import static com.osreboot.ridhvl2.HvlStatics.hvlTexture;
 import static com.osreboot.ridhvl2.HvlStatics.hvlTranslate;
 
 import java.util.ArrayList;
@@ -15,6 +19,13 @@ import com.hyprgloo.nucleocide.client.ClientLoader;
 import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
 import com.osreboot.ridhvl2.HvlConfig;
 import com.osreboot.ridhvl2.HvlCoord;
+import com.osreboot.ridhvl2.menu.HvlDefault;
+import com.osreboot.ridhvl2.menu.HvlMenu;
+import com.osreboot.ridhvl2.menu.component.HvlArranger;
+import com.osreboot.ridhvl2.menu.component.HvlButton.HvlButtonState;
+import com.osreboot.ridhvl2.menu.component.HvlButtonLabeled;
+import com.osreboot.ridhvl2.menu.component.HvlLabel;
+import com.osreboot.ridhvl2.menu.component.HvlSpacer;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
 import com.osreboot.ridhvl2.template.HvlTemplateI;
 
@@ -95,8 +106,9 @@ public class MainMapEditor extends HvlTemplateI {
 
 	@Override
 	public void initialize() {
-		hvlLoad("INOF.hvlft");
 
+
+		hvlLoad("INOF.hvlft");
 		ClientLoader.loadTextures();
 
 		coord = new HvlCoord();
@@ -123,19 +135,91 @@ public class MainMapEditor extends HvlTemplateI {
 		yOffset = 0;
 		chunkNum = 0;
 		chunkNumOld = 0;
+		HvlDefault.put(new HvlArranger(true, 0.5f, 0.5f));
+		HvlDefault.put(new HvlSpacer(16f));
+		HvlDefault.put(new HvlLabel(hvlFont(0), "DEFAULT TEXT", Color.white, .5f).align(0.5f, 1.0f));
+		HvlDefault.put(new HvlButtonLabeled(hvlFont(0), "DEFAULT TEXT", Color.white, .5f, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlColor(0.4f, 1f));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlColor(0.4f, 1f));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlColor(0.4f, 1f));
+		}).align(0f, 0f).overrideSize(256f, 256f));
+		//-_--_--_--_--_--_--_--_--_
+		none = new HvlArranger(true, 0.5f, 0.0f);
+		//-_--_--_--_--_--_--_--_--_
+		tileMenu = new HvlArranger(false, 0.5f, 0.0f);
+		//HvlArranger tileMenuA = new HvlArranger(true, 0.5f, 0.5f);
+		tileMenu.add(HvlLabel.fromDefault().text("Tile Selection toggle: esc"));
+		HvlArranger tileMenuB = new HvlArranger(true, 0.5f, 0.5f);
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.0f).clicked((button) ->{
+			tileTypeSelected = 0;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(ClientLoader.INDEX_MATERIAL_STONE_C));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(ClientLoader.INDEX_MATERIAL_STONE_C));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(ClientLoader.INDEX_MATERIAL_STONE_C));
+		}));
+		tileMenuB.add(new HvlSpacer(Display.getWidth()/8));
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.5f).clicked((button) ->{
+			tileTypeSelected = 1;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(1));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(1));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(1));
+		}));
+		tileMenuB.add(new HvlSpacer(Display.getWidth()/8));
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.5f).clicked((button) ->{
+			tileTypeSelected = 2;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(2));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(2));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(2));
+		}));
+		tileMenuB.add(new HvlSpacer(Display.getWidth()/8));
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.5f).clicked((button) ->{
+			tileTypeSelected = 3;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(3));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(3));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(3));
+		}));
+		tileMenuB.add(new HvlSpacer(Display.getWidth()/8));
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.5f).clicked((button) ->{
+			tileTypeSelected = 4;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(4));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(4));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(4));
+		}));
+		tileMenuB.add(new HvlSpacer(Display.getWidth()/8));
+		tileMenuB.add(HvlButtonLabeled.fromDefault().text(" ").align(0.5f, 0.5f).clicked((button) ->{
+			tileTypeSelected = 5;
+		}).set(HvlButtonLabeled.TAG_DRAW_STATE, (d, e, b, s) -> {
+			if(s == HvlButtonState.OFF) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(5));
+			if(s == HvlButtonState.HOVER) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(5));
+			if(s == HvlButtonState.ON) hvlDraw(hvlQuad(e.getX(), e.getY(), e.getWidth(), e.getHeight()), hvlTexture(5));
+		}));
+		//tileMenu.add(tileMenuA);
+		//tileMenu.add(new HvlSpacer(Display.getHeight()/3-128f));
+		tileMenu.add(tileMenuB);
+		HvlMenu.set(none);
+		escl = false;
+		tileTypeSelected = 0;
 	}
+
 
 	Chunk importer = new Chunk(0, 0);
 	ArrayList<Chunk> chunkListRead;
 	World worldRead;
 	HvlCoord coord;
+	HvlArranger tileMenu, none;
+	boolean escl;
 
 	float saveMenu;
 	int chunkNum, chunkNumOld;
-	public int xChunk, yChunk, xOffset, yOffset;
+	public int xChunk, yChunk, xOffset, yOffset, tileTypeSelected;
 
 	@Override
 	public void update(float delta) {
+
 		int size = chunkListRead.size();
 		whatTile(Mouse.getX(), Display.getHeight() - Mouse.getY());
 
@@ -155,7 +239,9 @@ public class MainMapEditor extends HvlTemplateI {
 			chunkNum = chunkNumOld;
 			importer = bucket;
 		}
+		
 		drawWorld(delta);
+		HvlMenu.operate(delta);
 		hvlFont(0).drawc(
 				"tile selected at x: " + (xOffset + importer.chunkx * 4) + " y: " + (yOffset + importer.chunky * 4),
 				Display.getWidth() / 2, 100, Color.white, 5f);
@@ -207,6 +293,59 @@ public class MainMapEditor extends HvlTemplateI {
 				}
 			}
 		}
+	
+		/*hvlFont(0).drawc(
+				"tile selected at x: " + (xOffset + importer.chunkx * 4) + " y: " + (yOffset + importer.chunky * 4),
+				Display.getWidth() / 2, 100, Color.white, 5f);
+			hvlFont(0).drawc("file saved", Display.getWidth() / 2, 200, Color.white, 5f);
+			saveMenu = saveMenu - delta;
+		}*/
+		//
+
+		//
+		
+		if(Mouse.isButtonDown(0) == true) {
+			switch(tileTypeSelected){
+				case(0):
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_FLOOR;
+				break;
+				case(1):
+					importer.tiles[xOffset + yOffset * 4].material = Material.STONE_FLOOR;
+				break;
+				case(2):
+					importer.tiles[xOffset + yOffset * 4].material = Material.WATER_FLOOR;
+				break;
+				case(3):
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_WALL;
+				break;
+				case(4):
+					importer.tiles[xOffset + yOffset * 4].material = Material.STONE_WALL;
+				break;
+				case(5):
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_DOOR;
+				break;
+				case(6):
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_FLOOR;
+				break;
+				default:
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_FLOOR;
+				break;
+			}
+
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && HvlMenu.get().get(0) == none && escl == false) {
+			HvlMenu.set(tileMenu);
+			System.out.println("menu");
+			escl = true;
+		}else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && HvlMenu.get().get(0) == tileMenu && escl == false) {
+			HvlMenu.set(none);
+			System.out.println("none");
+			escl = true;
+		}else if(!Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && escl == true) {
+			escl = false;
+			System.out.println("clear");
+		}
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			coord.add(-MOVE_SPEED * delta, 0);
 		}
