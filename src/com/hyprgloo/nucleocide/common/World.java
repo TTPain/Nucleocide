@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.hyprgloo.nucleocide.client.ClientMain;
-import com.hyprgloo.nucleocide.common.tile.TileFallback;
 import com.osreboot.ridhvl2.HvlCoord;
 
 /**
@@ -62,7 +61,7 @@ public class World implements Serializable{
 			return false;
 		if(xChunkOffset < 0 || yChunkOffset < 0)
 			return false;
-		return bucket.tiles[xChunkOffset+yChunkOffset*4].isSolid();
+		return bucket.tiles[xChunkOffset+yChunkOffset*4].material.isSolid;
 
 	}
 

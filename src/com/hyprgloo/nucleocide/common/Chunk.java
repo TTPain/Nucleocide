@@ -2,8 +2,6 @@ package com.hyprgloo.nucleocide.common;
 
 import java.io.Serializable;
 
-import com.hyprgloo.nucleocide.common.tile.TileFloor;
-
 public class Chunk implements Serializable{
 	private static final long serialVersionUID = -3935483448512019767L;
 	Tile[] tiles;
@@ -27,7 +25,7 @@ public class Chunk implements Serializable{
 		this.chunky = y;
 		this.tiles = new Tile[16]; 
 		for (int l = 0; l < 16; l++) {
-			this.tiles[l] = new TileFloor(x*4 + l%4, y*4 + l/4,'0');	
+			this.tiles[l] = new Tile(x*4 + l%4, y*4 + l/4, Material.METAL_FLOOR, '0');	
 		}
 		//this.addt = new int[16];
 	} 
