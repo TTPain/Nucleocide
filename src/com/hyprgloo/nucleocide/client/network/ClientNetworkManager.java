@@ -21,7 +21,7 @@ public final class ClientNetworkManager {
 	}
 	
 	public static void connect(String ip, int port){
-		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentClientAnarchy(NetworkUtil.GAME_INFO, ip, port, id));
+		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentClientAnarchy(NetworkUtil.GAME_INFO, ip, port, id, true));
 		HvlDirect.connect();
 		
 		lobby = new ClientLobby(id);

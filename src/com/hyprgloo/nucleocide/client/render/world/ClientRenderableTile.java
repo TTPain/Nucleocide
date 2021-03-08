@@ -58,15 +58,15 @@ public class ClientRenderableTile extends ClientRenderable{
 	@Override
 	public void draw(Channel channel){
 		if(channel == Channel.COLOR){
-			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.getTextureIndex()));
+			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.material.textureIndex));
 		}else if(channel == Channel.OCCLUSION){
-			if(tile.isSolid()){
+			if(tile.material.isSolid){
 				hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), Color.white);
 			}
 		}else if(channel == Channel.NORMAL){
-			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.getTextureIndex() + 1));
+			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlTexture(tile.material.textureIndex + 1));
 		}else if(channel == Channel.METALNESS){
-			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlColor(tile.getMetalness(), 1f));
+			hvlDraw(hvlQuad(tile.globalX * World.BLOCK_SIZE, tile.globalY * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE), hvlColor(tile.material.metalness, 1f));
 		}
 	}
 

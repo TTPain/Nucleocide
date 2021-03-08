@@ -13,10 +13,6 @@ import org.newdawn.slick.Color;
 
 import com.hyprgloo.nucleocide.client.ClientLoader;
 import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
-import com.hyprgloo.nucleocide.common.tile.TileDoor;
-import com.hyprgloo.nucleocide.common.tile.TileFloor;
-import com.hyprgloo.nucleocide.common.tile.TileWall;
-import com.hyprgloo.nucleocide.common.tile.TileWater;
 import com.osreboot.ridhvl2.HvlConfig;
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.template.HvlDisplayWindowed;
@@ -73,7 +69,7 @@ public class MainMapEditor extends HvlTemplateI {
 		float yTileFloat = (coord.y + ymouse) / BLOCK_SIZE;
 		xTileInt = (int) xTileFloat;
 		yTileInt = (int) yTileFloat;
-	//	System.out.println(xTileInt);
+		//	System.out.println(xTileInt);
 		whatTileInt(xTileInt, yTileInt);
 	}
 
@@ -102,7 +98,7 @@ public class MainMapEditor extends HvlTemplateI {
 		hvlLoad("INOF.hvlft");
 
 		ClientLoader.loadTextures();
-		
+
 		coord = new HvlCoord();
 		Chunk importer = new Chunk(0, 0);
 		try {
@@ -142,7 +138,7 @@ public class MainMapEditor extends HvlTemplateI {
 	public void update(float delta) {
 		int size = chunkListRead.size();
 		whatTile(Mouse.getX(), Display.getHeight() - Mouse.getY());
-	
+
 		chunkNumOld = chunkNum;
 		chunkNum = 0;
 		Chunk bucket = importer;
@@ -167,7 +163,6 @@ public class MainMapEditor extends HvlTemplateI {
 			hvlFont(0).drawc("file saved", Display.getWidth() / 2, 200, Color.white, 5f);
 			saveMenu = saveMenu - delta;
 		}
-		Tile hold = importer.tiles[xOffset + yOffset * 4];
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (xOffset > -1 && xOffset < 4 && yOffset > -1 && yOffset < 4 && xChunk > -1 && yChunk > -1) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
@@ -192,27 +187,24 @@ public class MainMapEditor extends HvlTemplateI {
 		} else {
 			if (xOffset > -1 && xOffset < 4 && yOffset > -1 && yOffset < 4 && xChunk > -1 && yChunk > -1) {
 
+				if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_FLOOR;
+				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileWall(hold);
+					importer.tiles[xOffset + yOffset * 4].material = Material.STONE_FLOOR;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileWater(hold, 0);
+					importer.tiles[xOffset + yOffset * 4].material = Material.WATER_FLOOR;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileDoor(hold);
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_WALL;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileFloor(hold, 1);
+					importer.tiles[xOffset + yOffset * 4].material = Material.STONE_WALL;
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_5)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileWater(hold, 1);
+					importer.tiles[xOffset + yOffset * 4].material = Material.METAL_DOOR;
 				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-						importer.tiles[xOffset + yOffset * 4] = new TileFloor(hold, 0);
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_6)) {
-					importer.tiles[xOffset + yOffset * 4] = new TileWall(hold, 1);
-			}
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {

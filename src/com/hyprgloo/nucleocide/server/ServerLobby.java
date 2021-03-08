@@ -44,7 +44,7 @@ public class ServerLobby {
 	}
 
 	public void update(float delta){
-		drawStatusInfo();
+		if(!ServerMain.HEADLESS) drawStatusInfo();
 		
 		for(ServerLobbyModule module : modules)
 			state = module.update(delta, state);
