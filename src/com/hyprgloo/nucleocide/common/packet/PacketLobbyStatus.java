@@ -9,7 +9,7 @@ public class PacketLobbyStatus implements Serializable{
 	public String username;
 	public boolean isReady;
 	
-	public long ping, pingTimeStart;
+	public long ping, pingTimeStart, pingTimeServerReceive, pingTimeServerWrite;
 	
 	public PacketLobbyStatus(String usernameArg, boolean isReadyArg){
 		this(usernameArg, isReadyArg, -1, new Date().getTime());
@@ -20,6 +20,8 @@ public class PacketLobbyStatus implements Serializable{
 		isReady = isReadyArg;
 		ping = pingArg;
 		pingTimeStart = pingTimeStartArg;
+		pingTimeServerReceive = -1;
+		pingTimeServerWrite = -1;
 	}
 
 }

@@ -8,6 +8,7 @@ import com.hyprgloo.nucleocide.common.NetworkUtil.LobbyState;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveLobbyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketLobbyStatus;
 import com.hyprgloo.nucleocide.server.network.ServerLobbyModule;
+import com.osreboot.hvol2.base.anarchy.HvlAgentServerAnarchy;
 import com.osreboot.hvol2.base.anarchy.HvlIdentityAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 
@@ -30,6 +31,10 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 			for(HvlIdentityAnarchy identity : lobbyStatus.keySet()){
 				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
 					lobbyStatus.put(identity, HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS));
+					
+					lobbyStatus.get(identity).pingTimeServerReceive = new Date().getTime(); // Update ping values
+					
+					((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(identity).remove(NetworkUtil.KEY_LOBBY_STATUS);
 				}
 			}
 		}else{
@@ -38,8 +43,11 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
 					PacketLobbyStatus packetReceived = HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS);
 					PacketLobbyStatus packetExisting = lobbyStatus.get(identity);
-					System.out.println(new Date().getTime() - packetReceived.pingTimeStart);
 					lobbyStatus.put(identity, new PacketLobbyStatus(packetExisting.username, packetExisting.isReady, packetReceived.ping, packetReceived.pingTimeStart));
+					
+					lobbyStatus.get(identity).pingTimeServerReceive = new Date().getTime(); // Update ping values
+					
+					((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(identity).remove(NetworkUtil.KEY_LOBBY_STATUS);
 				}
 			}
 		}
@@ -48,7 +56,9 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 		HashMap<String, PacketLobbyStatus> collectiveLobbyStatus = new HashMap<>();
 		for(HvlIdentityAnarchy identity : lobbyStatus.keySet()){
 			if(lobbyStatus.get(identity) != null){
-				collectiveLobbyStatus.put(identity.getName(), lobbyStatus.get(identity));
+				PacketLobbyStatus packet = lobbyStatus.get(identity);
+				packet.pingTimeServerWrite = new Date().getTime(); // Update ping values
+				collectiveLobbyStatus.put(identity.getName(), packet);
 			}
 		}
 		PacketCollectiveLobbyStatus packet = new PacketCollectiveLobbyStatus(collectiveLobbyStatus, state);

@@ -16,7 +16,7 @@ public final class ServerNetworkManager {
 	private static ServerLobby lobby; // TODO convert this to an ArrayList
 
 	public static void initialize(){
-		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentServerAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.SERVER_HOST_PORT));
+		HvlDirect.initialize(NetworkUtil.TICK_RATE, new HvlAgentServerAnarchy(NetworkUtil.GAME_INFO, NetworkUtil.SERVER_HOST_PORT, true));
 		HvlDirect.connect();
 
 		HvlDirect.bindOnMessageReceived((m, i) -> {
