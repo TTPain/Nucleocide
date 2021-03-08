@@ -1,5 +1,6 @@
 package com.hyprgloo.nucleocide.server.network.module;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -37,6 +38,7 @@ public class ServerLobbyModuleStatus extends ServerLobbyModule{
 				if(HvlDirect.getKeys(identity).contains(NetworkUtil.KEY_LOBBY_STATUS)){
 					PacketLobbyStatus packetReceived = HvlDirect.getValue(identity, NetworkUtil.KEY_LOBBY_STATUS);
 					PacketLobbyStatus packetExisting = lobbyStatus.get(identity);
+					System.out.println(new Date().getTime() - packetReceived.pingTimeStart);
 					lobbyStatus.put(identity, new PacketLobbyStatus(packetExisting.username, packetExisting.isReady, packetReceived.ping, packetReceived.pingTimeStart));
 				}
 			}
