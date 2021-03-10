@@ -73,6 +73,8 @@ public class ClientMenuGame extends ClientMenu{
 					yOffset += HEIGHT_LIST_ITEM + SPACING_LIST_ITEM;
 				}
 			}
+		}else{
+			hvlFont(ClientMain.INDEX_FONT).draw(Math.round(ClientMain.newest().getTimer().getTickRate()) + "", 2f, 2f, hvlColor(1f, 0.5f), 1f);
 		}
 	}
 
