@@ -17,6 +17,8 @@ import com.osreboot.hvol2.direct.HvlDirect;
  */
 public class ClientLobbyModuleStatus extends ClientLobbyModule {
 
+	public static final boolean DEBUG = false;
+
 	public PacketCollectiveLobbyStatus lastPacket;
 	private long ping = -1;
 
@@ -29,9 +31,15 @@ public class ClientLobbyModuleStatus extends ClientLobbyModule {
 			if(lobby.lobbyStatus.collectiveLobbyStatus.containsKey(lobby.id)){
 				PacketLobbyStatus packet = lobby.lobbyStatus.collectiveLobbyStatus.get(lobby.id);
 				ping = (new Date().getTime() - packet.pingTimeStart) - (packet.pingTimeServerWrite - packet.pingTimeServerReceive);
-//				System.out.println(packet.pingTimeServerWrite + "                " + (packet.pingTimeServerWrite - packet.pingTimeServerReceive));
+
+				if(DEBUG){
+					long trip0 = packet.pingTimeServerReceive - packet.pingTimeStart;
+					long trip1 = packet.pingTimeServerWrite - packet.pingTimeServerReceive;
+					long trip2 = new Date().getTime() - packet.pingTimeServerWrite;
+					System.out.println("S->r  " + trip0 + "		| r->s  " + trip1 + "		| s->R  " + trip2 + "		| p  " + (trip0 + trip2));
+				}
 			}
-			
+
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_LOBBY_STATUS);
 		}
 

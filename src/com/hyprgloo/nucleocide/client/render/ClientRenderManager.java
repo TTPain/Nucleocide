@@ -34,11 +34,11 @@ public final class ClientRenderManager {
 	public static int debugLastRenderableSize, debugLastRenderableAdvancedSize;
 
 	public static ArrayList<Particle> particles;
-	
+
 	private static HvlCoord lastDisplaySize;
 
-	private static HvlRenderFrame renderFrameOcclusion, renderFrameNormal, renderFrameMetalness, renderFramePlasma;
-	private static HvlShader shaderLight, shaderPlasma;
+	private static HvlRenderFrame renderFrameOcclusion, renderFrameNormal, renderFrameMetalness, renderFramePlasma, renderFramePost, renderFrameDisplace;
+	private static HvlShader shaderLight, shaderPlasma, shaderPost;
 
 	public static void initialize(){
 		initializeRenderFrames();
@@ -48,6 +48,7 @@ public final class ClientRenderManager {
 
 		shaderLight = new HvlShader("res/shader/Light.frag");
 		shaderPlasma = new HvlShader("res/shader/Plasma.frag");
+		shaderPost = new HvlShader("res/shader/Post.frag");
 	}
 
 	private static void initializeRenderFrames(){
@@ -57,12 +58,14 @@ public final class ClientRenderManager {
 		renderFrameNormal = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 		renderFrameMetalness = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 		renderFramePlasma = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
+		renderFramePost = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
+		renderFrameDisplace = new HvlRenderFrame(Display.getWidth(), Display.getHeight());
 	}
 
 	public static void reset(){
 		renderables = new ArrayList<>();
 		renderablesAdvanced = new ArrayList<>();
-		
+
 		particles = new ArrayList<>();
 	}
 
@@ -73,10 +76,10 @@ public final class ClientRenderManager {
 
 		particles.removeIf(p -> !p.isAlive());
 		particles.forEach(Particle::enqueue);
-		
+
 		renderables.forEach(r -> r.update(delta, world));
-		
-//		System.out.println(shaderLight.getFragLog());
+
+		System.out.println(shaderLight.getFragLog());
 	}
 
 	public static void draw(float delta, World world, HvlCoord locationCamera){
@@ -85,10 +88,12 @@ public final class ClientRenderManager {
 
 		// ===== WORLD ========================================
 
-		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
-			renderables.forEach(r -> r.draw(Channel.COLOR));
+		renderFramePost.doCapture(() -> {
+			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+				renderables.forEach(r -> r.draw(Channel.COLOR));
+			});
+			hvlDraw(hvlQuad(0, 0, Display.getWidth(), Display.getHeight()), hvlColor(0f, 0.7f));
 		});
-		hvlDraw(hvlQuad(0, 0, Display.getWidth(), Display.getHeight()), hvlColor(0f, 0.7f));
 
 		renderFrameOcclusion.doCapture(() -> {
 			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
@@ -118,25 +123,27 @@ public final class ClientRenderManager {
 		});
 		while(lights.size() > LIGHTS_MAX) lights.remove(lights.size() - 1);
 
-		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
-			shaderLight.doShade(() -> {
-				shaderLight.send("textureNormal", 1, renderFrameNormal);
-				shaderLight.send("textureMetalness", 2, renderFrameMetalness);
-				shaderLight.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
-				shaderLight.send("lightsSize", lights.size());
+		renderFramePost.doCapture(false, () -> {
+			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+				shaderLight.doShade(() -> {
+					shaderLight.send("textureNormal", 1, renderFrameNormal);
+					shaderLight.send("textureMetalness", 2, renderFrameMetalness);
+					shaderLight.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
+					shaderLight.send("lightsSize", lights.size());
 
-				for(int i = 0; i < lights.size(); i++){
-					shaderLight.send("lights[" + i + "].range", lights.get(i).range);
-					shaderLight.send("lights[" + i + "].color", lights.get(i).color);
+					for(int i = 0; i < lights.size(); i++){
+						shaderLight.send("lights[" + i + "].range", lights.get(i).range);
+						shaderLight.send("lights[" + i + "].color", lights.get(i).color);
 
-					HvlCoord locationLight = new HvlCoord(lights.get(i).location).subtract(locationCamera);
-					locationLight.x = HvlMath.map(locationLight.x, -Display.getWidth() / 2, Display.getWidth() / 2, 0f, 1f);
-					locationLight.y = HvlMath.map(locationLight.y, -Display.getHeight() / 2, Display.getHeight() / 2, 0f, 1f);
+						HvlCoord locationLight = new HvlCoord(lights.get(i).location).subtract(locationCamera);
+						locationLight.x = HvlMath.map(locationLight.x, -Display.getWidth() / 2, Display.getWidth() / 2, 0f, 1f);
+						locationLight.y = HvlMath.map(locationLight.y, -Display.getHeight() / 2, Display.getHeight() / 2, 0f, 1f);
 
-					shaderLight.send("lights[" + i + "].location", locationLight);
-				}
+						shaderLight.send("lights[" + i + "].location", locationLight);
+					}
 
-				hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFrameOcclusion.getTexture());
+					hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFrameOcclusion.getTexture());
+				});
 			});
 		});
 
@@ -148,21 +155,40 @@ public final class ClientRenderManager {
 			});
 		});
 
-		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
-			shaderPlasma.doShade(() -> {
-				shaderPlasma.send("textureMaterial", 1, hvlTexture(ClientLoader.INDEX_ENTITY_PLASMA));
-				shaderPlasma.send("textureOcclusion", 2, renderFrameOcclusion);
-				shaderPlasma.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
-				shaderPlasma.send("locationCamera", locationCamera);
+		renderFramePost.doCapture(false, () -> {
+			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+				shaderPlasma.doShade(() -> {
+					shaderPlasma.send("textureMaterial", 1, hvlTexture(ClientLoader.INDEX_ENTITY_PLASMA));
+					shaderPlasma.send("textureOcclusion", 2, renderFrameOcclusion);
+					shaderPlasma.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
+					shaderPlasma.send("locationCamera", locationCamera);
 
-				hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFramePlasma.getTexture());
+					hvlDraw(hvlQuad(locationCamera.x - Display.getWidth() / 2, locationCamera.y - Display.getHeight() / 2, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFramePlasma.getTexture());
+				});
 			});
 		});
 
 		// ===== ENTITIES ========================================
 
-		hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
-			renderablesAdvanced.forEach(r -> r.draw(Channel.ENTITY));
+		renderFramePost.doCapture(false, () -> {
+			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+				renderablesAdvanced.forEach(r -> r.draw(Channel.ENTITY));
+			});
+		});
+		
+		// ==== DISPLACE ========================================
+		
+		renderFrameDisplace.doCapture(() -> {
+			hvlTranslate(-locationCamera.x + Display.getWidth() / 2, -locationCamera.y + Display.getHeight() / 2, () -> {
+				renderablesAdvanced.forEach(r -> r.draw(Channel.DISPLACE));
+			});
+		});
+		
+		shaderPost.doShade(() -> {
+			shaderPost.send("textureDisplace", 1, renderFrameDisplace);
+			shaderPost.send("resolution", new HvlCoord(Display.getWidth(), Display.getHeight()));
+			
+			hvlDraw(hvlQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 1, 1, 0), renderFramePost.getTexture());
 		});
 
 		renderables.clear();

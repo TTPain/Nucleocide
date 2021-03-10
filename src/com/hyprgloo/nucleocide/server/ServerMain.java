@@ -2,6 +2,8 @@ package com.hyprgloo.nucleocide.server;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlLoad;
 
+import org.lwjgl.opengl.Display;
+
 import com.hyprgloo.nucleocide.server.network.ServerNetworkManager;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.loader.HvlLoader;
@@ -40,6 +42,7 @@ public class ServerMain extends HvlTemplateI{
 	@Override
 	public void update(float delta){
 		ServerNetworkManager.update(delta);
+		if(HEADLESS) Display.sync(144);
 	}
 	
 }
