@@ -23,7 +23,14 @@ public class ClientPlayerClient extends ClientPlayer {
 	public void update(float delta, World world, ClientGame game, boolean acceptInput) {
 		super.update(delta, world, game, acceptInput);
 		weapon.update(delta, this, game, acceptInput);
-
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			pixPerSec = 180;	
+		}
+		else {
+			pixPerSec = 70;
+		}
+		
 		if(acceptInput){ // This freezes player movement while the pause menu is open
 			if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 				playerPos.y -= delta*pixPerSec;
