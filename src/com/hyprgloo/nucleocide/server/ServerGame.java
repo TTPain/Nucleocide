@@ -38,9 +38,13 @@ public class ServerGame {
 		// TODO spawn enemies somehow (???)
 		//Need to generate a real UUID before adding into 'enemies'.
 		
-		//Put 15 enemies into the "enemies" ArrayList
-		for(int i = 0; i < 15; i++) {
-			enemies.add(new ServerEnemyBaseEnemy(new HvlCoord(HvlMath.randomInt(100, 1000),HvlMath.randomInt(100, 1000)), 1, 0, 0));
+		//Put 30 enemies into the "enemies" ArrayList
+		for(int i = 0; i < 30; i++) {
+			HvlCoord locationEnemySpawn = null;
+			do{
+				locationEnemySpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
+			}while(world.isSolidCord(locationEnemySpawn.x, locationEnemySpawn.y));
+			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 1, 0, 0));
 		}
 		
 	}

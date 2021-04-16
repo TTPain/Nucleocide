@@ -8,7 +8,7 @@ import com.hyprgloo.nucleocide.common.World;
 public abstract class ClientRenderable {
 
 	public enum Channel {
-		COLOR, OCCLUSION, NORMAL, METALNESS, ENTITY, PLASMA
+		COLOR, OCCLUSION, NORMAL, METALNESS, ENTITY, PLASMA, DISPLACE
 	}
 
 	public ClientRenderable(){}

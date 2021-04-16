@@ -18,7 +18,8 @@ public final class ClientLoader {
 	INDEX_MATERIAL_WALL_C = 11,
 	INDEX_MATERIAL_CLIFF_C = 13,
 	INDEX_ENTITY_ORB = 15,
-	INDEX_ENTITY_PLASMA = 16;
+	INDEX_ENTITY_ORB2 = 16,
+	INDEX_ENTITY_PLASMA = 17;
 
 	private ClientLoader(){}
 
@@ -41,7 +42,8 @@ public final class ClientLoader {
 		hvlLoad("/materials/Nucleocide_Cliff_NORMAL.png");	// 14
 
 		hvlLoad("/entity/Orb.png");							// 15
-		hvlLoad("/entity/Nucleocide_Plasma_COLOR.png");		// 16
+		hvlLoad("/entity/Orb2.png");						// 16
+		hvlLoad("/entity/Nucleocide_Plasma_COLOR.png");		// 17
 	}
 
 }

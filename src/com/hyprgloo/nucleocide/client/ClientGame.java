@@ -17,7 +17,6 @@ import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
-import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
@@ -86,6 +85,15 @@ public class ClientGame {
 				
 			}
 
+			// TODO better way to handle this, used by enemy particles after enemy death
+			clientEnemies.keySet().forEach(id -> {
+				if(!enemyPacket.collectiveServerEnemyStatus.keySet().contains(id)){
+					ClientEnemy enemy = clientEnemies.get(id);
+					enemy.health = 0f;
+					enemy.renderable.onKilled();
+				}
+			});
+			
 			clientEnemies.keySet().removeIf(e->{
 				return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
 			});
