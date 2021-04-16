@@ -60,7 +60,7 @@ public class ServerGame {
 		//Create CollectiveServerEnemyStatus packet...
 		
 		//Use the "enemies" ArrayList to create PacketServerEnemyStatus packets
-		//for each enemy and put into a collectiveServerEnemies HashMap
+		//for each enemy and put each into a collectiveServerEnemies HashMap
 		for(ServerEnemy e : enemies) {
 			collectiveServerEnemies.put(e.id,new PacketServerEnemyStatus(e.enemyPos, e.health));
 		}
