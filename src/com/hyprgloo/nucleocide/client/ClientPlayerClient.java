@@ -9,6 +9,9 @@ public class ClientPlayerClient extends ClientPlayer {
 
 	public ClientBulletLogic weapon;
 	boolean CanMove = true;
+	public HvlCoord playerVelocity = new HvlCoord(0,0);
+	private float speedMod = 0;
+	public float playerSpeed = pixPerSec + speedMod; 
 
 	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg, float degRotArg) {
 		super(playerPosArg, healthArg, degRotArg);
@@ -23,18 +26,35 @@ public class ClientPlayerClient extends ClientPlayer {
 	public void update(float delta, World world, ClientGame game, boolean acceptInput) {
 		super.update(delta, world, game, acceptInput);
 		weapon.update(delta, this, game, acceptInput);
-		
-		
-		
-		
+
+
+		if(playerVelocity.x != 0 && playerVelocity.y != 0) {
+			playerVelocity.normalize();
+		}
+
+		playerPos.x += playerVelocity.x*delta*playerSpeed;
+		playerPos.y += playerVelocity.y*delta*playerSpeed;
+
+
+
+		System.out.println("Velocity X: " + playerVelocity.x);
+		System.out.println("Velocity Y: " + playerVelocity.y);
+
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			pixPerSec = 180;	
+			playerSpeed = (pixPerSec + speedMod)*2;
 		}
 		else {
-			pixPerSec = 70;
+			if(playerSpeed > (pixPerSec + speedMod)) {
+				playerSpeed -= delta*5;
+			}
+			else{
+				playerSpeed = pixPerSec + speedMod;
+			}
 		}
-		
+
 		if(acceptInput){ // This freezes player movement while the pause menu is open
+			/*
 			if(Keyboard.isKeyDown(Keyboard.KEY_W) && CanMove == true) {
 				playerPos.y -= delta*pixPerSec;
 			}
@@ -42,40 +62,63 @@ public class ClientPlayerClient extends ClientPlayer {
 				playerPos.y += delta*pixPerSec;
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_A) && CanMove == true) {
-				playerPos.x -= delta*pixPerSec;
+				playerVelocity.x = -1;
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_D) && CanMove == true) {
 				playerPos.x += delta*pixPerSec;
 			}
-		}
 
-		//Basic wall collision code, needs to be perfected in the future.
+			 */
+
+
+			if((Keyboard.isKeyDown(Keyboard.KEY_W) && (Keyboard.isKeyDown(Keyboard.KEY_S)))){
+				playerVelocity.y= 0;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_W) && CanMove == true) {
+				playerVelocity.y = -1;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_S) && CanMove == true) {
+				playerVelocity.y = 1;
+			}
+			else
+				playerVelocity.y = 0;
+			if((Keyboard.isKeyDown(Keyboard.KEY_D) && (Keyboard.isKeyDown(Keyboard.KEY_A)))){
+				playerVelocity.x = 0;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
+				playerVelocity.x = -1;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_D) && CanMove == true) {
+				playerVelocity.x = 1;
+			}
+			else
+				playerVelocity.x = 0;
+		}
+		System.out.println(playerVelocity);
+		//Wall collision code, only corners clip now.
 		//Player is :
-		
+
 		//On the Left Side
 		if(world.isSolidCord((playerPos.x + ClientPlayer.PLAYER_SIZE) + 1, playerPos.y)) {
-			playerPos.x -= delta*pixPerSec;
+			playerPos.x -= delta*playerSpeed;
 			CanMove = false;
 		}
-		else
-			CanMove = true;
+
 		//On the Right Side
-		if(world.isSolidCord((playerPos.x - ClientPlayer.PLAYER_SIZE) - 1, playerPos.y)) {
-			playerPos.x += delta*pixPerSec;
+		else if(world.isSolidCord((playerPos.x - ClientPlayer.PLAYER_SIZE) - 1, playerPos.y)) {
+			playerPos.x += delta*playerSpeed;
 			CanMove = false;
 		}
-		else
-			CanMove = true;
+
 		//On the Bottom
-		if(world.isSolidCord(playerPos.x, (playerPos.y - ClientPlayer.PLAYER_SIZE) - 1)) {
-			playerPos.y += delta*pixPerSec;
+		else if(world.isSolidCord(playerPos.x, (playerPos.y - ClientPlayer.PLAYER_SIZE) - 1)) {
+			playerPos.y += delta*playerSpeed;
 			CanMove = false;
 		}
-		else
-			CanMove = true;
+
 		//On the Top
-		if(world.isSolidCord(playerPos.x, (playerPos.y + ClientPlayer.PLAYER_SIZE) + 1)) {
-			playerPos.y -= delta*pixPerSec;
+		else if(world.isSolidCord(playerPos.x, (playerPos.y + ClientPlayer.PLAYER_SIZE) + 1)) {
+			playerPos.y -= delta*playerSpeed;
 			CanMove = false;
 		}
 		else

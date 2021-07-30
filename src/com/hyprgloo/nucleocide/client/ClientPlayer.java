@@ -15,7 +15,7 @@ public class ClientPlayer {
 	
 	public static final int PLAYER_SIZE = 20;
 	
-	protected int pixPerSec = 70;
+	protected int pixPerSec = 100;
 	
 	public HvlCoord playerPos = new HvlCoord();
 	public float health;
