@@ -46,7 +46,7 @@ public class ClientPlayerClient extends ClientPlayer {
 		}
 		else {
 			if(playerSpeed > (pixPerSec + speedMod)) {
-				playerSpeed -= delta*5;
+				playerSpeed -= delta*pixPerSec;
 			}
 			else{
 				playerSpeed = pixPerSec + speedMod;
