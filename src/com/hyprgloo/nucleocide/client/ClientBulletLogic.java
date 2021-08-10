@@ -35,7 +35,7 @@ public class ClientBulletLogic{
 			if(Mouse.isButtonDown(0)) {
 				if(bulletTimer <= 0) {
 					//Create and fire a bullet (M1)
-					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)));
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)), ClientBullet.DEFAULT_DAMAGE * player.damageMod);
 					player.bulletTotal.add(bullet);
 					bulletsToSend.add(bullet);
 					bulletTimer = 40*delta;	
@@ -46,7 +46,7 @@ public class ClientBulletLogic{
 			else if(Mouse.isButtonDown(1)) {
 				if(bulletTimer <= 0) {
 					//Shotgun bullets (M2)
-					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)));
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)), ClientBullet.DEFAULT_DAMAGE * player.damageMod);
 					player.bulletTotal.add(bullet);
 					bulletsToSend.add(bullet);
 					for(int i = 0; i < 2; i++) {
@@ -72,6 +72,6 @@ public class ClientBulletLogic{
 	public ClientBullet createBullet(ClientPlayer player, float degRot, float spread) {
 		degRot += HvlMath.map((float)Math.random(), 0, 1, -spread, spread);
 		HvlCoord unitCir = new HvlCoord((float) (Math.cos(HvlMath.toRadians(degRot))), (float) (Math.sin(HvlMath.toRadians(degRot))));
-		return new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((unitCir.x*bulletSpeed), (unitCir.y*bulletSpeed)));
+		return new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((unitCir.x*bulletSpeed), (unitCir.y*bulletSpeed)), ClientBullet.DEFAULT_DAMAGE * player.damageMod);
 	}
 }

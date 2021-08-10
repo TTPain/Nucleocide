@@ -15,16 +15,19 @@ public class ClientBullet implements Serializable {
 	public HvlCoord bulletPos = new HvlCoord();
 	private HvlCoord lastBulletPos = new HvlCoord();
 	public HvlCoord bulletVelocity = new HvlCoord();
+	public static final float DEFAULT_DAMAGE = 1;
 	public float bulletLifespan = 3;
+	public float bulletDamage;
 	public boolean isDead;
 	// TODO: Need to incorporate bullet UUIDs with server communication
 	public String uuid = NetworkUtil.generateUUID();
 
 	// Defining the bullet object and specifying its specific attributes
-	public ClientBullet(HvlCoord bulletPosArg, HvlCoord bulletVelocityArg) {
+	public ClientBullet(HvlCoord bulletPosArg, HvlCoord bulletVelocityArg, float damageArg) {
 		bulletPos = bulletPosArg;
 		lastBulletPos = new HvlCoord(bulletPosArg);
 		bulletVelocity = bulletVelocityArg;
+		bulletDamage = damageArg;
 		isDead = false;
 	}
 

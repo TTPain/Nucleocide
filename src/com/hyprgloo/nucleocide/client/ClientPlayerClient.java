@@ -10,8 +10,11 @@ public class ClientPlayerClient extends ClientPlayer {
 	public ClientBulletLogic weapon;
 	boolean CanMove = true;
 	public HvlCoord playerVelocity = new HvlCoord(0,0);
-	private float speedMod = 0;
+
 	public float playerSpeed = pixPerSec + speedMod; 
+	public float playerHealth = health + healthMod;
+	
+	
 
 	public ClientPlayerClient(HvlCoord playerPosArg, float healthArg, float degRotArg) {
 		super(playerPosArg, healthArg, degRotArg);
@@ -37,9 +40,6 @@ public class ClientPlayerClient extends ClientPlayer {
 
 
 
-		System.out.println("Velocity X: " + playerVelocity.x);
-		System.out.println("Velocity Y: " + playerVelocity.y);
-
 
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			playerSpeed = (pixPerSec + speedMod)*2;
@@ -54,21 +54,6 @@ public class ClientPlayerClient extends ClientPlayer {
 		}
 
 		if(acceptInput){ // This freezes player movement while the pause menu is open
-			/*
-			if(Keyboard.isKeyDown(Keyboard.KEY_W) && CanMove == true) {
-				playerPos.y -= delta*pixPerSec;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_S) && CanMove == true) {
-				playerPos.y += delta*pixPerSec;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_A) && CanMove == true) {
-				playerVelocity.x = -1;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_D) && CanMove == true) {
-				playerPos.x += delta*pixPerSec;
-			}
-
-			 */
 
 
 			if((Keyboard.isKeyDown(Keyboard.KEY_W) && (Keyboard.isKeyDown(Keyboard.KEY_S)))){
@@ -94,7 +79,6 @@ public class ClientPlayerClient extends ClientPlayer {
 			else
 				playerVelocity.x = 0;
 		}
-		System.out.println(playerVelocity);
 		//Wall collision code, only corners clip now.
 		//Player is :
 

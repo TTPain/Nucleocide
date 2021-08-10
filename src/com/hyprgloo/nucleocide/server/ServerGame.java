@@ -44,7 +44,7 @@ public class ServerGame {
 			do{
 				locationEnemySpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
 			}while(world.isSolidCord(locationEnemySpawn.x, locationEnemySpawn.y));
-			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 1, 0, 0));
+			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 5, 0, 0));
 		}
 		
 	}

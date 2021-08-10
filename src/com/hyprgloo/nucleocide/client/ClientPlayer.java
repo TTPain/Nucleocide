@@ -21,6 +21,9 @@ public class ClientPlayer {
 	public float health;
 	public float degRot;
 	public String username;
+	public float speedMod = 0;
+	public float healthMod = 0;
+	public float damageMod = 1;
 	
 	public ArrayList<ClientBullet> bulletTotal = new ArrayList<>();
 	

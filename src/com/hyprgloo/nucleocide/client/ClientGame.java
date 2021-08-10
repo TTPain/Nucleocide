@@ -175,14 +175,14 @@ public class ClientGame {
 
 				//Need to replace with a more precise contact check, also probably shouldn't be in this class
 				if(HvlMath.distance(b.bulletPos, clientEnemies.get(key).enemyPos) < 20) {
-					System.out.println("A hit has occurred on enemy " + key + " for 5 damage by player " + id);
+					System.out.println("A hit has occurred on enemy " + key + " for " + b.bulletDamage + " damage by player " + id);
 					bulletsToRemove.add(b);
 					//If damage has already been registered for this enemy this frame, increase the damage dealt.
 					if(enemyDamageEvents.containsKey(key)) {
-						enemyDamageEvents.put(key, enemyDamageEvents.get(key) + 5);
+						enemyDamageEvents.put(key, enemyDamageEvents.get(key) + b.bulletDamage);
 						//If not, create the damage event.
 					}else {
-						enemyDamageEvents.put(key, 5f);
+						enemyDamageEvents.put(key, b.bulletDamage);
 					}
 				}
 			}
