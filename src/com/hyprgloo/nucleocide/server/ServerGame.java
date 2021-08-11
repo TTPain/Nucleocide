@@ -31,6 +31,7 @@ public class ServerGame {
 	private World world;
 	//HashMap that will store enemy data created by the server
 	private ArrayList<ServerEnemy> enemies = new ArrayList<ServerEnemy>();
+	private ArrayList<ServerUpgrade> upgrades = new ArrayList<ServerUpgrade>();
 
 	public ServerGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -45,6 +46,14 @@ public class ServerGame {
 				locationEnemySpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
 			}while(world.isSolidCord(locationEnemySpawn.x, locationEnemySpawn.y));
 			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 5, 0, 0));
+		}
+		
+		for(int i = 0; i < HvlMath.randomInt(1, 3); i++) {
+			HvlCoord locationUpgradeSpawn = null;
+			do{
+				locationUpgradeSpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
+			}while(world.isSolidCord(locationUpgradeSpawn.x, locationUpgradeSpawn.y));
+			upgrades.add(new ServerUpgrade(locationUpgradeSpawn, 0));
 		}
 		
 	}
