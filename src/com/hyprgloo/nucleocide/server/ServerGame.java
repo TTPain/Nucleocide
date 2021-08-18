@@ -121,7 +121,6 @@ public class ServerGame {
 			
 			if(!powerupsExist) {
 				PacketCollectiveServerUpgradeSpawn upgradePacket = new PacketCollectiveServerUpgradeSpawn(upgrades);			
-				powerupsExist = true;
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN, upgradePacket);
 			}
 			
@@ -135,6 +134,9 @@ public class ServerGame {
 			HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS, new PacketCollectiveServerEnemyStatus(collectiveServerEnemies));
 		}
 
+		
+		if(!powerupsExist) powerupsExist = true;
+		
 		//Enemy data updated by server
 		enemies.removeIf(e ->{
 			return e.health <= 0;
