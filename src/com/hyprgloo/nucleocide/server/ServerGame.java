@@ -10,6 +10,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerUpgradeSpawn;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
@@ -32,6 +33,8 @@ public class ServerGame {
 	//HashMap that will store enemy data created by the server
 	private ArrayList<ServerEnemy> enemies = new ArrayList<ServerEnemy>();
 	private ArrayList<ServerUpgrade> upgrades = new ArrayList<ServerUpgrade>();
+	
+	private boolean powerupsExist = false;
 
 	public ServerGame(){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -115,6 +118,13 @@ public class ServerGame {
 
 		//Send packets to clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
+			
+			if(!powerupsExist) {
+				PacketCollectiveServerUpgradeSpawn upgradePacket = new PacketCollectiveServerUpgradeSpawn(upgrades);			
+				powerupsExist = true;
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN, upgradePacket);
+			}
+			
 			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(collectivePlayerStatus));
 			if(collectivePlayerBulletRemovalEvent.size() > 0) {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT, new PacketCollectivePlayerBulletRemovalEvent(collectivePlayerBulletRemovalEvent));

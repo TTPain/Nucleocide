@@ -3,13 +3,16 @@ package com.hyprgloo.nucleocide.server;
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Color;
 
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
-public class ServerUpgrade {
+public class ServerUpgrade implements Serializable{
 	
+	private static final long serialVersionUID = -5954449491133570001L;
 	public int ID;
 	public String name;
 	public int textID;

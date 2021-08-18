@@ -13,10 +13,12 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerUpgradeSpawn;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
+import com.hyprgloo.nucleocide.server.ServerUpgrade;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
 import com.osreboot.ridhvl2.HvlCoord;
@@ -45,6 +47,8 @@ public class ClientGame {
 	
 	//Separate ArrayList of ClientEnemies using the same data received from CollectiveServerEnemyStatus.
 	private HashMap<String, ClientEnemy> clientEnemies = new HashMap<String, ClientEnemy>();
+	
+	private ArrayList<ServerUpgrade> upgrades = new ArrayList<ServerUpgrade>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -57,6 +61,10 @@ public class ClientGame {
 	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInput){
 		world.draw(delta, player.playerPos);
 		player.update(delta, world, this, acceptInput);
+		
+		for(ServerUpgrade upgrade : upgrades) {
+			upgrade.draw();
+		}
 
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
@@ -69,6 +77,14 @@ public class ClientGame {
 		//Send this client's player packet to the server.
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
 
+		//Receive server upgrade packet
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN)) {
+			PacketCollectiveServerUpgradeSpawn upgradePacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN);
+			for(ServerUpgrade upgrade : upgradePacket.upgrades) {
+				upgrades.add(upgrade);
+			}
+		}
+		
 		//Receive and update server enemy data
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS)) {
 			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
