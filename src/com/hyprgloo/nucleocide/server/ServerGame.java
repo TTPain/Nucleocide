@@ -48,7 +48,7 @@ public class ServerGame {
 			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 5, 0, 0));
 		}
 		
-		for(int i = 0; i < HvlMath.randomInt(1, 3); i++) {
+		for(int i = 0; i < HvlMath.randomInt(10, 20); i++) {
 			HvlCoord locationUpgradeSpawn = null;
 			do{
 				locationUpgradeSpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
