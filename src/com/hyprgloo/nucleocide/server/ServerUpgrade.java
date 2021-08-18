@@ -2,11 +2,14 @@ package com.hyprgloo.nucleocide.server;
 
 import static com.osreboot.ridhvl2.HvlStatics.hvlDraw;
 import static com.osreboot.ridhvl2.HvlStatics.hvlQuadc;
+import static com.osreboot.ridhvl2.HvlStatics.hvlTranslate;
 
 import java.io.Serializable;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
 import com.osreboot.ridhvl2.HvlCoord;
 import com.osreboot.ridhvl2.HvlMath;
 
@@ -46,7 +49,7 @@ public class ServerUpgrade implements Serializable{
 		
 	}
 	public void draw() {
-		hvlDraw(hvlQuadc(position.x, position.y,12f,12f), Color.white);
+		hvlDraw(hvlQuadc(position.x, position.y,12f,12f), Color.white);		
 	}
 	
 }

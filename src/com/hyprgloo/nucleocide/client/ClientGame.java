@@ -1,11 +1,16 @@
 package com.hyprgloo.nucleocide.client;
 
+import static com.osreboot.ridhvl2.HvlStatics.hvlTranslate;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.lwjgl.opengl.Display;
+
 import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.hyprgloo.nucleocide.client.render.ClientRenderManager;
+import com.hyprgloo.nucleocide.client.render.ClientRenderable.Channel;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
 import com.hyprgloo.nucleocide.common.World;
 import com.hyprgloo.nucleocide.common.WorldGenerator;
@@ -62,9 +67,10 @@ public class ClientGame {
 		world.draw(delta, player.playerPos);
 		player.update(delta, world, this, acceptInput);
 		
-		for(ServerUpgrade upgrade : upgrades) {
-			upgrade.draw();
-		}
+		//Render powerups. Should probably move this into ClientRenderManager somehow
+		hvlTranslate(-player.playerPos.x + Display.getWidth() / 2, -player.playerPos.y + Display.getHeight() / 2, () -> {
+			upgrades.forEach(r -> r.draw());
+		});
 
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
