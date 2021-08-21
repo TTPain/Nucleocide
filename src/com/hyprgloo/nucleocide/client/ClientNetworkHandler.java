@@ -1,8 +1,12 @@
+
 package com.hyprgloo.nucleocide.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import org.newdawn.slick.Game;
 
 import com.hyprgloo.nucleocide.client.network.ClientNetworkManager;
 import com.hyprgloo.nucleocide.common.NetworkUtil;
@@ -12,10 +16,12 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemoval
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerUpgradeSpawn;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveUpgradePickupEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketUpgradePickupEvent;
 import com.hyprgloo.nucleocide.server.ServerUpgrade;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
 import com.osreboot.hvol2.direct.HvlDirect;
@@ -23,7 +29,7 @@ import com.osreboot.ridhvl2.HvlMath;
 
 public class ClientNetworkHandler {
 
-	
+
 	public static void update(ClientGame game, Set<String> lobbyPlayers, float delta, World world) {
 		PacketCollectivePlayerStatus playerPacket;
 		PacketCollectivePlayerBulletEvent bulletPacket;
@@ -44,7 +50,21 @@ public class ClientNetworkHandler {
 			}
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN);
 		}
-		
+
+		//Receive and update upgrade pickup data
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_UPGRADE_PICKUP_EVENT)) {
+			PacketCollectiveUpgradePickupEvent upgradePickupPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_UPGRADE_PICKUP_EVENT);
+			for(Entry<String, PacketUpgradePickupEvent> entry : upgradePickupPacket.collectiveUpgradePickupEvent.entrySet()) {
+				for(ClientUpgrade upgrade : game.upgrades) {
+					if(upgrade.uuid.equals(entry.getValue().upgradeUUID) && !game.id.equals(entry.getKey())){
+						game.upgrades.remove(upgrade);
+						break;
+					}
+				}			
+			}
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_UPGRADE_PICKUP_EVENT);
+		}
+
 		//Receive and update server enemy data
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS)) {
 			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
@@ -58,7 +78,7 @@ public class ClientNetworkHandler {
 					game.clientEnemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
 					game.clientEnemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
 				}
-				
+
 			}
 
 			// TODO better way to handle this, used by enemy particles after enemy death
@@ -69,7 +89,7 @@ public class ClientNetworkHandler {
 					enemy.renderable.onKilled();
 				}
 			});
-			
+
 			game.clientEnemies.keySet().removeIf(e->{
 				return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
 			});
@@ -86,26 +106,26 @@ public class ClientNetworkHandler {
 				}
 			}
 		}
-		
+
 		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT)) {
 			//Process bullet removal packet
 			bulletRemovalPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
 			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
-			
+
 			//TODO Iterate through all packets and remove all bullets marked for removal
 			for(String name: bulletRemovalPacket.collectiveBulletsToRemove.keySet()) {
 				if(game.otherPlayers.containsKey(name)) {
 					for(ClientBullet b : bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove) {
-						
+
 						game.otherPlayers.get(name).bulletTotal.removeIf(bulletToRemove->{
 							return bulletToRemove.uuid.equals(b.uuid);
 						});
-						
+
 					}
 					//otherPlayers.get(name).bulletTotal.removeIf(b->{
-						//return b.uuid == bulletRemovalPacket.collectiveBulletsToRemove.get(name).
-						//return bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove.contains(b);								
-				//	});
+					//return b.uuid == bulletRemovalPacket.collectiveBulletsToRemove.get(name).
+					//return bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove.contains(b);								
+					//	});
 				}
 			}			
 		}
@@ -163,7 +183,7 @@ public class ClientNetworkHandler {
 				}
 			}
 		}
-		
+
 		game.player.bulletTotal.removeIf(b ->{
 			return bulletsToRemove.contains(b);
 		});
@@ -171,21 +191,25 @@ public class ClientNetworkHandler {
 		if(bulletsToRemove.size() > 0) {
 			HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemove));
 		}
-		
+
 		//Write enemy damage event to server if it exists.
 		if(enemyDamageEvents.size() > 0) {
 			HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(game.id, enemyDamageEvents));
 		}
-		
+
 	}
-	
+
+	public static void createAndSendUpgradePickupEventPacket(ClientUpgrade upgradeArg) {
+		HvlDirect.writeTCP(NetworkUtil.KEY_UPGRADE_PICKUP_EVENT, new PacketUpgradePickupEvent(upgradeArg.uuid));
+	}
+
 	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
 	public static void createAndSendPlayerBulletEventPackage(ArrayList<ClientBullet> bulletsToFireArg) {
 		//Package that will hold bullet update events for the client on this frame.
 		//To be called in PlayerClientBullet
 		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
 	}
-	
+
 	public static void createAndSendPlayerBulletRemovalPackage(ArrayList<ClientBullet> bulletsToRemoveArg) {
 		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemoveArg));
 	}

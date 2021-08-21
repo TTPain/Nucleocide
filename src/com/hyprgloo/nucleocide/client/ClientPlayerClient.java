@@ -118,11 +118,10 @@ public class ClientPlayerClient extends ClientPlayer {
 		for(ClientUpgrade i : game.upgrades) {
 			if((i.position.x < playerPos.x + 10)  && (i.position.x > playerPos.x - 10) && (i.position.y < playerPos.y  + 10) && (i.position.y > playerPos.y - 10)) {
 				onPowerUp = true;
-
 				speedMod += i.speedMod;
 				healthMod += i.healthMod;
-				damageMod += i.damageMod;
-				
+				damageMod += i.damageMod;			
+				ClientNetworkHandler.createAndSendUpgradePickupEventPacket(i);				
 				game.upgrades.remove(i);
 				break;
 			}

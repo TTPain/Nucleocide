@@ -11,8 +11,10 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerBulletRemoval
 import com.hyprgloo.nucleocide.common.packet.PacketCollectivePlayerStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerEnemyStatus;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerUpgradeSpawn;
+import com.hyprgloo.nucleocide.common.packet.PacketCollectiveUpgradePickupEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketUpgradePickupEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
@@ -61,16 +63,12 @@ public class ServerGame {
 		
 	}
 
-	public void update(float delta){
-		
-		
-		
-
-		
+	public void update(float delta){		
 		HashMap<String, PacketServerEnemyStatus> collectiveServerEnemies = new HashMap<String, PacketServerEnemyStatus>();
 		HashMap<String, PacketPlayerStatus> collectivePlayerStatus = new HashMap<String, PacketPlayerStatus>();
 		HashMap<String, PacketPlayerBulletEvent> collectivePlayerBulletEvent = new HashMap<String, PacketPlayerBulletEvent>();
 		HashMap<String, PacketPlayerBulletRemovalEvent> collectivePlayerBulletRemovalEvent = new HashMap<String, PacketPlayerBulletRemovalEvent>();
+		HashMap<String, PacketUpgradePickupEvent> collectiveUpgradePickupEvent = new HashMap<String, PacketUpgradePickupEvent>();
 		PacketEnemyDamageEvent enemyDamageEventPacket;
 		
 		//Create CollectiveServerEnemyStatus packet...
@@ -88,6 +86,11 @@ public class ServerGame {
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_STATUS)) {
 				collectivePlayerStatus.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_STATUS));
 			}
+			//Create CollectiveUpgradePickupEvent packet...
+			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_UPGRADE_PICKUP_EVENT)) {
+				collectiveUpgradePickupEvent.put(i.getName(),HvlDirect.getValue(i, NetworkUtil.KEY_UPGRADE_PICKUP_EVENT));
+				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_UPGRADE_PICKUP_EVENT);
+			}			
 			//Create CollectivePlayerBulletEvent packet...
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_EVENT)) {
 				collectivePlayerBulletEvent.put(i.getName(),HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_EVENT));
@@ -111,9 +114,7 @@ public class ServerGame {
 			if(HvlDirect.getKeys(i).contains(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT)) {
 				collectivePlayerBulletRemovalEvent.put(i.getName(), HvlDirect.getValue(i, NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT));
 				((HvlAgentServerAnarchy)HvlDirect.getAgent()).getTable(i).remove(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT);
-			}
-			
-			
+			}		
 		}
 
 		//Send packets to clients
@@ -130,6 +131,9 @@ public class ServerGame {
 			}
 			if(collectivePlayerBulletEvent.size() > 0) {
 				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT, new PacketCollectivePlayerBulletEvent(collectivePlayerBulletEvent));
+			}
+			if(collectiveUpgradePickupEvent.size() > 0) {
+				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_UPGRADE_PICKUP_EVENT, new PacketCollectiveUpgradePickupEvent(collectiveUpgradePickupEvent));
 			}
 			HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS, new PacketCollectiveServerEnemyStatus(collectiveServerEnemies));
 		}

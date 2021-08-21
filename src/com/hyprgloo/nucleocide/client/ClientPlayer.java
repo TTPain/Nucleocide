@@ -31,7 +31,6 @@ public class ClientPlayer {
 	
 	// TODO initialize player object here (tristin)
 
-	//Defines player object and it's specific attributes.
 	public ClientPlayer(HvlCoord playerPosArg, float healthArg, float degRotArg){
 		playerPos = playerPosArg;
 		health = healthArg;

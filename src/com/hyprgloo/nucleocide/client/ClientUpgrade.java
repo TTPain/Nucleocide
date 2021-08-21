@@ -10,8 +10,9 @@ import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientUpgrade {
 	
-	public int ID;
+	public int id;
 	public String name;
+	public String uuid;
 	public int textID;
 	public float damageMod;
 	public float speedMod;
@@ -19,8 +20,9 @@ public class ClientUpgrade {
 	public HvlCoord position;
 	
 	public ClientUpgrade(ServerUpgrade upgradeArg) {
-		ID = upgradeArg.ID;
+		id = upgradeArg.id;
 		name = upgradeArg.name;
+		uuid = upgradeArg.uuid;
 		textID = upgradeArg.textID;
 		damageMod = upgradeArg.damageMod;
 		speedMod = upgradeArg.speedMod;
