@@ -36,7 +36,7 @@ public class ClientLobbyModuleStatus extends ClientLobbyModule {
 					long trip0 = packet.pingTimeServerReceive - packet.pingTimeStart;
 					long trip1 = packet.pingTimeServerWrite - packet.pingTimeServerReceive;
 					long trip2 = new Date().getTime() - packet.pingTimeServerWrite;
-					System.out.println("S->r  " + trip0 + "		| r->s  " + trip1 + "		| s->R  " + trip2 + "		| p  " + (trip0 + trip2));
+					//System.out.println("S->r  " + trip0 + "		| r->s  " + trip1 + "		| s->R  " + trip2 + "		| p  " + (trip0 + trip2));
 				}
 			}
 

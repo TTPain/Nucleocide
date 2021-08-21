@@ -56,7 +56,7 @@ public class ServerGame {
 			do{
 				locationUpgradeSpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
 			}while(world.isSolidCord(locationUpgradeSpawn.x, locationUpgradeSpawn.y));
-			upgrades.add(new ServerUpgrade(locationUpgradeSpawn, 0));
+			upgrades.add(new ServerUpgrade(locationUpgradeSpawn, HvlMath.randomInt(0, 2)));
 		}
 		
 	}

@@ -35,7 +35,7 @@ public class ClientBulletLogic{
 			if(Mouse.isButtonDown(0)) {
 				if(bulletTimer <= 0) {
 					//Create and fire a bullet (M1)
-					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)), ClientBullet.DEFAULT_DAMAGE * player.damageMod);
+					ClientBullet bullet = new ClientBullet(new HvlCoord(player.playerPos), new HvlCoord((bulletDir.x*bulletSpeed), (bulletDir.y*bulletSpeed)), ClientBullet.DEFAULT_DAMAGE + player.damageMod);
 					player.bulletTotal.add(bullet);
 					bulletsToSend.add(bullet);
 					bulletTimer = 40*delta;	
@@ -64,7 +64,7 @@ public class ClientBulletLogic{
 		}
 		//If there are bullets to be sent to the server, create and send a packet.
 		if(bulletsToSend.size()>0) {
-			game.createAndSendPlayerBulletEventPackage(bulletsToSend);
+			ClientNetworkHandler.createAndSendPlayerBulletEventPackage(bulletsToSend);
 		}
 	}
 

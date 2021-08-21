@@ -57,7 +57,8 @@ public class ClientRenderablePlayer extends ClientRenderableAdvanced{
 	public void draw(Channel channel){
 		if(channel == Channel.PLASMA){
 			hvlDraw(hvlCirclec(player.playerPos.x, player.playerPos.y, ClientPlayer.PLAYER_SIZE * 1.1f), hvlTexture(ClientLoader.INDEX_ENTITY_ORB), spriteColor1);
-		}else if(channel == Channel.ENTITY){
+		}
+		else if(channel == Channel.ENTITY){
 			for(ClientBullet bullet : player.bulletTotal){
 				HvlCoord bulletDirectionSpriteOffset = new HvlCoord(bullet.bulletVelocity).normalize().multiply(16f);
 				hvlDraw(hvlLine(new HvlCoord(bullet.bulletPos).subtract(bulletDirectionSpriteOffset), new HvlCoord(bullet.bulletPos).add(bulletDirectionSpriteOffset), 6f), spriteColor1);

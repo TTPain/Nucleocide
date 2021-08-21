@@ -3,6 +3,7 @@ package com.hyprgloo.nucleocide.client;
 import org.lwjgl.input.Keyboard;
 
 import com.hyprgloo.nucleocide.common.World;
+import com.hyprgloo.nucleocide.server.ServerUpgrade;
 import com.osreboot.ridhvl2.HvlCoord;
 
 public class ClientPlayerClient extends ClientPlayer {
@@ -107,6 +108,31 @@ public class ClientPlayerClient extends ClientPlayer {
 		}
 		else
 			CanMove = true;
-	}	
+		
+		if(isStandingOnPowerup(game)) {
+			System.out.println("Powerup Acquired");
+		}
+	}
+	public boolean isStandingOnPowerup(ClientGame game) {
+		boolean onPowerUp = false;
+		for(ClientUpgrade i : game.upgrades) {
+			if((i.position.x < playerPos.x + 10)  && (i.position.x > playerPos.x - 10) && (i.position.y < playerPos.y  + 10) && (i.position.y > playerPos.y - 10)) {
+				onPowerUp = true;
+
+				speedMod += i.speedMod;
+				healthMod += i.healthMod;
+				damageMod += i.damageMod;
+				
+				game.upgrades.remove(i);
+				break;
+			}
+		}
+		
+		
+		if(onPowerUp) {
+			return true;
+		}
+		return false;
+	}
 }
 //TODO make fire rate a variable

@@ -38,18 +38,12 @@ public class ServerUpgrade implements Serializable{
 		if(ID== 1) {
 			name = "Speed Up";
 			textID = 1;
-			speedMod = HvlMath.randomFloat(1.0f, 2.0f);
+			speedMod = HvlMath.randomFloat(10.0f, 50.0f);
 		}
 		if(ID== 2) {
 			name = "Health Up";
 			textID = 1;
 			healthMod = HvlMath.randomFloat(1.0f, 2.0f);
-		}
-		
-		
+		}	
 	}
-	public void draw() {
-		hvlDraw(hvlQuadc(position.x, position.y,12f,12f), Color.white);		
-	}
-	
 }

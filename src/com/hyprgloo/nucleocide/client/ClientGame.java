@@ -44,16 +44,16 @@ public class ClientGame {
 	 * Add UUIDs to bullets, use a BulletRemovalEvent package to despawn bullets client-side.
 	 */
 
-	private World world;
-	private ClientPlayer player;
-	private String id;
-	private HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
+	World world;
+	ClientPlayer player;
+	String id;
+	HashMap<String, ClientPlayer> otherPlayers = new HashMap<String, ClientPlayer>();
 	//private HashMap<String, ServerEnemy> enemies = new HashMap<String, ServerEnemy>();
 	
 	//Separate ArrayList of ClientEnemies using the same data received from CollectiveServerEnemyStatus.
-	private HashMap<String, ClientEnemy> clientEnemies = new HashMap<String, ClientEnemy>();
+	HashMap<String, ClientEnemy> clientEnemies = new HashMap<String, ClientEnemy>();
 	
-	private ArrayList<ServerUpgrade> upgrades = new ArrayList<ServerUpgrade>();
+	ArrayList<ClientUpgrade> upgrades = new ArrayList<ClientUpgrade>();
 
 	public ClientGame(String id){
 		world = WorldGenerator.generate(""); // TODO get seed from lobby (os_reboot)
@@ -66,162 +66,17 @@ public class ClientGame {
 	public void update(float delta, Set<String> lobbyPlayers, boolean acceptInput){
 		world.draw(delta, player.playerPos);
 		player.update(delta, world, this, acceptInput);
+		ClientNetworkHandler.update(this, lobbyPlayers, delta, world);
+		
+		
+		System.out.println(upgrades.size());
+		
 		
 		//Render powerups. Should probably move this into ClientRenderManager somehow
 		hvlTranslate(-player.playerPos.x + Display.getWidth() / 2, -player.playerPos.y + Display.getHeight() / 2, () -> {
 			upgrades.forEach(r -> r.draw());
 		});
-
-		PacketCollectivePlayerStatus playerPacket;
-		PacketCollectivePlayerBulletEvent bulletPacket;
-		PacketCollectivePlayerBulletRemovalEvent bulletRemovalPacket;
-		PacketCollectiveServerEnemyStatus enemyPacket;
-
-
-		HashMap<String, Float> enemyDamageEvents = new HashMap<String, Float>();
-
-		//Send this client's player packet to the server.
-		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(player.playerPos, player.health, player.degRot));		
-
-		//Receive server upgrade packet
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN)) {
-			PacketCollectiveServerUpgradeSpawn upgradePacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN);
-			for(ServerUpgrade upgrade : upgradePacket.upgrades) {
-				upgrades.add(upgrade);
-			}
-		}
-		
-		//Receive and update server enemy data
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS)) {
-			enemyPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
-			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS);
-
-			for (String enemyId : enemyPacket.collectiveServerEnemyStatus.keySet()){	
-				if(!clientEnemies.containsKey(enemyId)) {
-					clientEnemies.put(enemyId, new ClientEnemy(enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos,
-							enemyPacket.collectiveServerEnemyStatus.get(enemyId).health, /*Texture ID and Pathfinding ID*/0, 0));
-				}else {
-					clientEnemies.get(enemyId).enemyPos = enemyPacket.collectiveServerEnemyStatus.get(enemyId).enemyPos;
-					clientEnemies.get(enemyId).health = enemyPacket.collectiveServerEnemyStatus.get(enemyId).health;
-				}
-				
-			}
-
-			// TODO better way to handle this, used by enemy particles after enemy death
-			clientEnemies.keySet().forEach(id -> {
-				if(!enemyPacket.collectiveServerEnemyStatus.keySet().contains(id)){
-					ClientEnemy enemy = clientEnemies.get(id);
-					enemy.health = 0f;
-					enemy.renderable.onKilled();
-				}
-			});
-			
-			clientEnemies.keySet().removeIf(e->{
-				return !enemyPacket.collectiveServerEnemyStatus.keySet().contains(e);
-			});
-		}
-
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT)) {
-			//Initialize the packet of bullet events
-			bulletPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
-			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_EVENT);
-
-			for(String name: bulletPacket.collectivePlayerBulletStatus.keySet()) {
-				if(otherPlayers.containsKey(name)) {
-					otherPlayers.get(name).bulletTotal.addAll(bulletPacket.collectivePlayerBulletStatus.get(name).bulletsToFire);
-				}
-			}
-		}
-		
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT)) {
-			//Process bullet removal packet
-			bulletRemovalPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
-			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_PLAYER_BULLET_REMOVAL_EVENT);
-			
-			//TODO Iterate through all packets and remove all bullets marked for removal
-			for(String name: bulletRemovalPacket.collectiveBulletsToRemove.keySet()) {
-				if(otherPlayers.containsKey(name)) {
-					for(ClientBullet b : bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove) {
 						
-						otherPlayers.get(name).bulletTotal.removeIf(bulletToRemove->{
-							return bulletToRemove.uuid.equals(b.uuid);
-						});
-						
-					}
-					//otherPlayers.get(name).bulletTotal.removeIf(b->{
-						//return b.uuid == bulletRemovalPacket.collectiveBulletsToRemove.get(name).
-						//return bulletRemovalPacket.collectiveBulletsToRemove.get(name).bulletsToRemove.contains(b);								
-				//	});
-				}
-			}			
-		}
-
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS)) {
-			playerPacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS);
-
-			//Looping through all keys in the packet
-			for (String name : playerPacket.collectivePlayerStatus.keySet()){
-				if(lobbyPlayers.contains(name)) {
-					//Check if the detected player is already in the HashMap otherPlayers.
-					if(!otherPlayers.containsKey(name)) {
-						//Add the player if not. Skip the current client.
-						if(!id.equals(name)) {
-							otherPlayers.put(name, new ClientPlayer(playerPacket.collectivePlayerStatus.get(name).location,
-									playerPacket.collectivePlayerStatus.get(name).health,playerPacket.collectivePlayerStatus.get(name).degRot));
-						}
-						//If player is already loaded, update its parameters.
-					}else{
-						otherPlayers.get(name).playerPos = playerPacket.collectivePlayerStatus.get(name).location;
-						otherPlayers.get(name).health = playerPacket.collectivePlayerStatus.get(name).health;
-						otherPlayers.get(name).degRot = playerPacket.collectivePlayerStatus.get(name).degRot;
-					}
-				}
-			}
-
-			//Handles player disconnection
-			otherPlayers.keySet().removeIf(p->{
-				return !lobbyPlayers.contains(p);
-			});
-
-			//Use the information to render ClientPlayer representations, UUIDs, and aim indicators for every other player.
-			for (String otherUuid : otherPlayers.keySet()){
-				otherPlayers.get(otherUuid).update(delta, world, this, true);
-				otherPlayers.get(otherUuid).username = ClientNetworkManager.getLobby().lobbyStatus.getUsername(otherUuid);
-			}
-		}	
-
-		//Creation of EnemyDamageEvent packet
-		ArrayList<ClientBullet> bulletsToRemove = new ArrayList<ClientBullet>();
-		for(ClientBullet b : player.bulletTotal) {
-			for(String key : clientEnemies.keySet()){
-
-				//Need to replace with a more precise contact check, also probably shouldn't be in this class
-				if(HvlMath.distance(b.bulletPos, clientEnemies.get(key).enemyPos) < 20) {
-					System.out.println("A hit has occurred on enemy " + key + " for " + b.bulletDamage + " damage by player " + id);
-					bulletsToRemove.add(b);
-					//If damage has already been registered for this enemy this frame, increase the damage dealt.
-					if(enemyDamageEvents.containsKey(key)) {
-						enemyDamageEvents.put(key, enemyDamageEvents.get(key) + b.bulletDamage);
-						//If not, create the damage event.
-					}else {
-						enemyDamageEvents.put(key, b.bulletDamage);
-					}
-				}
-			}
-		}
-		
-		player.bulletTotal.removeIf(b ->{
-			return bulletsToRemove.contains(b);
-		});
-
-		if(bulletsToRemove.size() > 0) {
-			HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemove));
-		}
-		
-		//Write enemy damage event to server if it exists.
-		if(enemyDamageEvents.size() > 0) {
-			HvlDirect.writeTCP(NetworkUtil.KEY_ENEMY_DAMAGE_EVENT,new PacketEnemyDamageEvent(id, enemyDamageEvents));
-		}						
 
 		//Drawing all enemies
 		for(String enemyKey : clientEnemies.keySet()){
@@ -230,17 +85,6 @@ public class ClientGame {
 
 		ClientRenderManager.update(delta, world);
 		ClientRenderManager.draw(delta, world, player.playerPos);
-	}
-
-	//Create a bullet package whenever a new bullet is created and fired by the client, and write as TCP.
-	public void createAndSendPlayerBulletEventPackage(ArrayList<ClientBullet> bulletsToFireArg) {
-		//Package that will hold bullet update events for the client on this frame.
-		//To be called in PlayerClientBullet
-		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_EVENT,new PacketPlayerBulletEvent(bulletsToFireArg));
-	}
-	
-	public void createAndSendPlayerBulletRemovalPackage(ArrayList<ClientBullet> bulletsToRemoveArg) {
-		HvlDirect.writeTCP(NetworkUtil.KEY_PLAYER_BULLET_REMOVAL_EVENT,new PacketPlayerBulletRemovalEvent(bulletsToRemoveArg));
 	}
 
 }
