@@ -23,13 +23,15 @@ public class ServerEnemy implements Serializable{
 	public int textureID;
 	public int pathfindingID;
 	public int size = 20;
+	public boolean hasUpgrade = false;
 	public String id = NetworkUtil.generateUUID();
 	
-	public ServerEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
+	public ServerEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg, boolean hasUpgradeArg) {
 		enemyPos = enemyPosArg;
 		health = healthArg;
 		textureID = textureIDArg;
 		pathfindingID = pathfindingIDArg;
+		hasUpgrade = hasUpgradeArg;
 	}
 	
 	public void update(float delta, World world, HashMap<String, PacketPlayerStatus> collectivePlayerStatus) {} // TODO extend this class and implement basic AI (???)

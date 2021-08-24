@@ -20,8 +20,8 @@ public class ServerEnemyBaseEnemy extends ServerEnemy {
 	private HvlCoord startPos;
 	private HvlCoord lastPos;
 
-	public ServerEnemyBaseEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg) {
-		super(enemyPosArg, healthArg, textureIDArg, pathfindingIDArg);
+	public ServerEnemyBaseEnemy(HvlCoord enemyPosArg, float healthArg, int textureIDArg, int pathfindingIDArg, boolean hasUpgradeArg) {
+		super(enemyPosArg, healthArg, textureIDArg, pathfindingIDArg, hasUpgradeArg);
 		lastPos = new HvlCoord(enemyPosArg);
 		startPos = new HvlCoord(enemyPosArg);
 	}
