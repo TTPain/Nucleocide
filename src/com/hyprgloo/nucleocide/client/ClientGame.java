@@ -69,7 +69,7 @@ public class ClientGame {
 		ClientNetworkHandler.update(this, lobbyPlayers, delta, world);
 		
 		
-		System.out.println(upgrades.size());
+		//System.out.println(upgrades.size());
 		
 		
 		//Render powerups. Should probably move this into ClientRenderManager somehow

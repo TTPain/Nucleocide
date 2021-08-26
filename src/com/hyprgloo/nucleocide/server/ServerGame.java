@@ -14,6 +14,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketCollectiveServerUpgradeSpawn;
 import com.hyprgloo.nucleocide.common.packet.PacketCollectiveUpgradePickupEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketServerEnemyStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketServerUpgradeDrop;
 import com.hyprgloo.nucleocide.common.packet.PacketUpgradePickupEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
@@ -35,7 +36,6 @@ public class ServerGame {
 	//HashMap that will store enemy data created by the server
 	private ArrayList<ServerEnemy> enemies = new ArrayList<ServerEnemy>();
 	private ArrayList<ServerUpgrade> upgrades = new ArrayList<ServerUpgrade>();
-	public int tick;
 	
 	private boolean powerupsExist = false;
 
@@ -52,7 +52,7 @@ public class ServerGame {
 				locationEnemySpawn = new HvlCoord(HvlMath.randomInt(100, 2000),HvlMath.randomInt(100, 1000));
 			}while(world.isSolidCord(locationEnemySpawn.x, locationEnemySpawn.y));
 			boolean hasUpgrade = false;
-			if(HvlMath.randomInt(0, 5) == 5) {
+			if(HvlMath.randomInt(4, 5) == 5) {
 				hasUpgrade=true;
 			}
 			enemies.add(new ServerEnemyBaseEnemy(locationEnemySpawn, 5, 0, 0, hasUpgrade));
@@ -126,12 +126,16 @@ public class ServerGame {
 
 		//Send packets to clients
 		for(HvlIdentityAnarchy i : HvlDirect.<HvlIdentityAnarchy>getConnections()) {
-			
-			if(tick == 30) {
-				PacketCollectiveServerUpgradeSpawn upgradePacket = new PacketCollectiveServerUpgradeSpawn(upgrades);			
-				HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN, upgradePacket);
-				upgrades.removeAll(upgrades);
+			for(ServerEnemy e : enemies) {
+				if(e.health <= 0 && e.hasUpgrade) {
+					PacketServerUpgradeDrop upgradePacket = new PacketServerUpgradeDrop(new ServerUpgrade(e.enemyPos, HvlMath.randomInt(1, 1)));
+					upgrades.add(upgradePacket.upgrade);
+					System.out.println("Upgrade Spawned");		
+					HvlDirect.writeTCP(i, NetworkUtil.KEY_SERVER_UPGRADE_DROP, upgradePacket);
+					
+				}
 			}
+			
 			
 			HvlDirect.writeUDP(i, NetworkUtil.KEY_COLLECTIVE_PLAYER_STATUS, new PacketCollectivePlayerStatus(collectivePlayerStatus));
 			if(collectivePlayerBulletRemovalEvent.size() > 0) {
@@ -146,12 +150,7 @@ public class ServerGame {
 			HvlDirect.writeTCP(i, NetworkUtil.KEY_COLLECTIVE_SERVER_ENEMY_STATUS, new PacketCollectiveServerEnemyStatus(collectiveServerEnemies));
 		}
 
-		for(ServerEnemy e : enemies) {
-			if(e.health <= 0 && e.hasUpgrade) {
-				upgrades.add(new ServerUpgrade(e.enemyPos, HvlMath.randomInt(1, 1)));
-				System.out.println("Upgrade Spawned");
-			}
-		}
+
 		if(!powerupsExist) powerupsExist = true;
 		
 		//Enemy data updated by server
@@ -162,11 +161,6 @@ public class ServerGame {
 
 		for(ServerEnemy e : enemies){
 			e.update(delta, world, collectivePlayerStatus);
-		}
-
-		tick++;
-		if(tick > 30) {
-			tick = 0;
 		}
 	}
 }

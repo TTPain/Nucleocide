@@ -21,6 +21,7 @@ import com.hyprgloo.nucleocide.common.packet.PacketEnemyDamageEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerBulletRemovalEvent;
 import com.hyprgloo.nucleocide.common.packet.PacketPlayerStatus;
+import com.hyprgloo.nucleocide.common.packet.PacketServerUpgradeDrop;
 import com.hyprgloo.nucleocide.common.packet.PacketUpgradePickupEvent;
 import com.hyprgloo.nucleocide.server.ServerUpgrade;
 import com.osreboot.hvol2.base.anarchy.HvlAgentClientAnarchy;
@@ -43,12 +44,10 @@ public class ClientNetworkHandler {
 		HvlDirect.writeUDP(NetworkUtil.KEY_PLAYER_STATUS, new PacketPlayerStatus(game.player.playerPos, game.player.health, game.player.degRot));		
 
 		//Receive server upgrade packet
-		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN)) {
-			PacketCollectiveServerUpgradeSpawn upgradePacket = HvlDirect.getValue(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN);
-			for(ServerUpgrade upgrade : upgradePacket.upgrades) {
-				game.upgrades.add(new ClientUpgrade(upgrade));
-			}
-			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN);
+		if(HvlDirect.getKeys().contains(NetworkUtil.KEY_SERVER_UPGRADE_DROP)) {
+			PacketServerUpgradeDrop upgradePacket = HvlDirect.getValue(NetworkUtil.KEY_SERVER_UPGRADE_DROP);
+				game.upgrades.add(new ClientUpgrade(upgradePacket.upgrade));
+			((HvlAgentClientAnarchy)HvlDirect.getAgent()).getTable().remove(NetworkUtil.KEY_SERVER_UPGRADE_DROP);
 		}
 
 		//Receive and update upgrade pickup data

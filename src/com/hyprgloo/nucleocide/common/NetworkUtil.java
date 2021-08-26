@@ -39,6 +39,7 @@ public class NetworkUtil {
 	public static final String KEY_COLLECTIVE_SERVER_UPGRADE_SPAWN = "game.collectiveserverupgradespawn";
 	public static final String KEY_UPGRADE_PICKUP_EVENT = "game.upgradepickupevent";
 	public static final String KEY_COLLECTIVE_UPGRADE_PICKUP_EVENT = "game.collectiveupgradepickupevent";
+	public static final String KEY_SERVER_UPGRADE_DROP = "game.serverupgradedrop";
 	
 	public static String generateUUID() {
 		return UUID.randomUUID().toString().replace("-", "");
